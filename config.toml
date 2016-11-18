@@ -1,23 +1,23 @@
-baseurl = "/"
+baseurl = "http://suryu.me/"
 relativeurls = true
-languageCode = "en-us"
-title = "Hugo Future Imperfect"
+languageCode = "ja-JP"
+title = "suryu.me"
 theme = "hugo-future-imperfect"
 preserveTaxonomyNames = true
-paginate = 3
-disqusShortname = "shortname"
+paginate = 5
+disqusShortname = "urishy"
 googleAnalytics = ""
 
 [params]
     # Sets the meta tag description, usually reserved for the main page
-    description          = "HTML5 UP theme, Future Imperfect with some extra goodies, ported by Julio Pescador. Powered by Hugo"
+    description          = "Tips for R and Python"
     # This will appear on the top left of the navigation bar
-    navbarTitle          = "Future Imperfect"
+    navbarTitle          = "Wonderful R World"
     # Social media buttons that appear on the sidebar
     socialAppearAtTop    = true
-    socialAppearAtBottom = true
+    socialAppearAtBottom = false
     # set this to the section name if section is not post
-    viewMorePostLink     = "/blog/"
+    viewMorePostLink     = "/post/"
 
 # Optional Params
     categoriesByCount    = true
@@ -42,11 +42,11 @@ googleAnalytics = ""
 # parms.intro will appear on the sidebar
 # This is optional, but it's suggested to use
 [params.intro]
-    header    = "Hugo Future Imperfect"
+    header    = "Sincere Pumpkin Patch"
 
-    paragraph = "Another fine responsive site template by <a href=\"http://html5up.net\">HTML5 UP</a>. Ported by Julio Pescador with some extra goodies <i class='fa fa-hand-peace-o'></i>"
+    paragraph = ""
 
-    about     = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tellus lacus, auctor vehicula molestie quis, tempor quis velit. Quisque in quam ac leo efficitur vulputate. Phasellus ullamcorper aliquam sodales. Maecenas sit amet condimentum ipsum. Proin sit amet ligula elit. Mauris."
+    about     = "Howdy, I'm Shinya. Engineer, Data Science Enthusiast and Ecologist. This blog is my knowledge work for R that data science language. Most of my work is in the open source R code, which you can find and install on my GitHub https://github.com/uribo ."
 
 # This will also appear on the sidebar.
 # A width of less than 100px is recommended
@@ -57,46 +57,54 @@ googleAnalytics = ""
     # future imperfect's hexagonal shape
     circle    = false
     imperfect = true
-    width     = ""
-    alt       = "Hugo Future Imperfect"
+    width     = "8"
+    alt       = "me"
 
 # Adjust the amount of recent posts on the sidebar.
 # This is optional. The default value 5 will be used
 [params.postAmount]
-    sidebar = 2
+    sidebar = 4
 
 # Set up your menu items in the navigation bar
 # You can use identifier to prepend a font awesome icon to your text
 [[menu.main]]
     name = "Blog"
-    url = "/blog"
+    url = "/post"
     identifier = "fa fa-newspaper-o"
     weight = 1
 
 [[menu.main]]
     name = "Categories"
     url = "/categories"
+    identifier = "fa fa-list-alt"
     weight = 2
 
 [[menu.main]]
     name = "About"
     url = "/about"
+    identifier = "fa fa-user"
+    weight = 4
+
+[[menu.main]]
+    name = "Project"
+    url  = "/project"
+    identifier = "fa fa-diamond"
     weight = 3
 
 # Insert your username and the icon will apear on the page as long as
 # socialAppearAtTop or socialAppearAtBottom is set to true in the params area
 # The social media icons will appear on the sidebar
 [social]
-    github          = "jpescador"
+    github          = "uribo"
     bitbucket       = ""
     jsfiddle        = ""
     codepen         = ""
-    foursquare      = ""
+    foursquare      = "u_ribo"
     dribbble        = ""
     deviantart      = ""
     behance         = ""
-    flickr          = ""
-    instagram       = ""
+    flickr          = "_suika"
+    instagram       = "u_ribo"
     youtube         = ""
     vimeo           = ""
     vine            = ""
@@ -110,8 +118,8 @@ googleAnalytics = ""
     reddit          = ""
     pinterest       = ""
     googleplus      = ""
-    facebook        = ""
+    facebook        = "ur1bo"
     facebook_admin  = ""
     twitter_domain  = ""
-    twitter         = "julio_pescador"
-    email           = ""
+    twitter         = "u_ribo"
+    email           = "suika1127@gmail.com"
