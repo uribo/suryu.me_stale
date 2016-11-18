@@ -1,0 +1,11 @@
+---
+title: "About Me and This Site"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+<span class="image left"><img src="img/main/logo.jpg"></span>
+
+Hi! I'm Shinya Uryu, a engineer working with [Nightley, Inc.](http://nightley.jp/), and member of HOXO-M that Japanese young data scientist group. Passionate about data science, management and statistics. My favorite open-source language is [R](https://www.r-project.org/). I'm a [RStudio](https://www.rstudio.com/) fanboy. I got my MS in Plant Ecology, Yokohama National University. I love to plants, especially oak (*Quercus*) trees. I currently live in Japan <i class="fa fa-globe"></i>.

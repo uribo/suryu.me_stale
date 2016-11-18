@@ -1,0 +1,48 @@
+---
+title: "日本語でもおk"
+author: "Shinya Uryu"
+date: 2016-11-19
+categories: ["R", "note"]
+featured: "pic02.jpg"
+featuredalt: ""
+featuredpath: "date"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
+# ブログの引っ越し
+
+https://github.com/jpescador/hugo-future-imperfect
+
+R Markdownによる[website構築機能](http://rmarkdown.rstudio.com/rmarkdown_websites.html)を使ったブログの更新では、微妙に面倒な箇所があったので**`{blogdown}`**の登場は嬉しい知らせ。
+
+この一年、振り返るとほとんどブログを書かなかった。
+
+## 構築
+
+```{r, eval = FALSE, echo = TRUE}
+devtools::install_github("rstudio/blogdown")
+```
+
+Knitしないで`blogdown::render_site()`
+
+## チラシの裏
+
+意識を高くして英語ブログにしようかとも思ったけど、まだまだ思考を英語の文章にすることに時間がかかるので日本語で書く（英語版があっても良いかもしれない）。
+
+
+
+# R Markdown
+
+
+ああああ
+aaa
+
+```{r}
+library(ggplot2)
+
+print("hello")
+```
+
