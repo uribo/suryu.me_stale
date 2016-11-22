@@ -3,12 +3,63 @@
   
   <url>
     <loc>/</loc>
-    <lastmod>2016-11-19T06:30:00+00:00</lastmod>
+    <lastmod>2016-09-11T09:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/datacamp_tutorial/</loc>
+    <lastmod>2016-09-11T09:20:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/tabulizer_fantastic_extract_data_from_pdf/</loc>
+    <lastmod>2016-08-24T08:10:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/rstan_rcpp_troubles/</loc>
+    <lastmod>2016-08-19T10:25:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/mesh_code_mapping/</loc>
+    <lastmod>2016-08-09T11:30:11+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/geohash/</loc>
+    <lastmod>2016-08-05T10:00:05+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/iot_flex_dashboard/</loc>
+    <lastmod>2016-06-24T08:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/post/amazon_wish_list/</loc>
+    <lastmod>2016-06-21T09:30:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/post/hello-world/</loc>
-    <lastmod>2016-11-19T06:30:00+00:00</lastmod>
+    <lastmod>2016-06-10T06:30:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/apps/myroom/</loc>
+  </url>
+  
+  <url>
+    <loc>/demo/Hoxom/</loc>
+  </url>
+  
+  <url>
+    <loc>/demo/hoxom_follows_out/</loc>
+  </url>
+  
+  <url>
+    <loc>/demo/moves_demo/</loc>
   </url>
   
   <url>

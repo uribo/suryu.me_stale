@@ -1,0 +1,212 @@
+---
+title:  "標準地域メッシュによる地図の塗り分け"
+author: "Shinya Uryu"
+date: 2016-08-09T11:30:11
+description: 前回の記事でGeohashをRから取得して可視化まで行ったが、日本には地域区画のための標準機構として「標準地域メッシュ」と呼ばれるものがある。今回は前回に引き続いて、緯度経度のメッシュ区画化を、この標準地域メッシュで行ってみる。
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p><a href="../geohash/">前回の記事</a>でGeohashをRから取得して可視化まで行ったが、日本には地域区画のための標準機構として「標準地域メッシュ」と呼ばれるものがある。</p>
+<p>これはGeohashのように対象の緯度経度区画を数値化したもので、第1次地域区画（4桁）、第2次地域区画（6桁）、第3次地域区画（8桁）となるにつれ細かな領域を指すようになる。特に第3次地域区画は<strong>標準地域メッシュ</strong>あるいは基準メッシュと呼ばれ、全国的規模での調査における区画を表現するために用いられている。</p>
+<p>今回は前回に引き続いて、緯度経度のメッシュ区画化を、この標準地域メッシュで行ってみる。まずは用いるパッケージを読み込んでおく。</p>
+<pre class="r"><code>library(pacman)
+p_load(magrittr, foreach) # 補助系
+p_load(readr, dplyr, tidyr, kokudosuuchi, jpmesh) # データ取得、データ処理
+# devtools::install_github(&quot;yutannihilation/kokudosuuchi&quot;)
+p_load(sp, rgdal, geojsonio) # 地理データ処理
+p_load(ggplot2, viridis, gganimate) # 可視化
+library(purrr)
+library(tibble)
+library(broom)</code></pre>
+<div class="section level2">
+<h2>メッシュコードの入手と領域の定義</h2>
+<p>標準地域メッシュはおよそ1辺の長さが1kmとなっており、日本の領域を全て覆うと40万近くになる。それだけ多いと日本全体を標準地域メッシュで表そうとすると細かいので、今回は都道府県単位のメッシュコードを用いる。各都道府県のメッシュコードは<a href="http://www.stat.go.jp/data/mesh/m_itiran.htm">総務省統計局によりcsvファイルとして公開されており</a>、それを利用する。なお今回の対象にするのは岡山県とする。</p>
+<pre class="r"><code># 総務省統計局からのファイルのダウンロード
+dir.create(&quot;data/20160809_mesh_code_mapping&quot;)
+download.file(&quot;http://www.stat.go.jp/data/mesh/csv/city-mesh_33.csv&quot;,
+              destfile = &quot;data/20160809_mesh_code_mapping/city-mesh_33.csv&quot;)
+
+# csvファイルの読み込み
+# 市区町村ごとにメッシュコードが与えられているため、メッシュコードの列だけを選択し、
+# ユニークな値にする
+df.pref &lt;- read_csv(&quot;data/20160809_mesh_code_mapping/city-mesh_33.csv&quot;,
+                             locale = locale(encoding = &quot;cp932&quot;)) %&gt;% 
+  select(mesh_code = `基準メッシュコード`) %&gt;% 
+  unique() %&gt;% 
+  arrange(mesh_code)</code></pre>
+<p>続いてメッシュコードを緯度経度に変換する。ここで用いている<code>meshcode_to_latlong()</code>という関数は、<a href="http://takenaka-akio.org/etc/meshcode/r_code.html">竹中明夫さんのRコード</a>を参考にちょっと手を加えたもの。前回同様、<strong><code>{purrr}</code></strong>と<code>tidyr::unnest()</code>の組み合わせが有効。そして緯度経度の誤差範囲から、各メッシュの領域を示す４点の緯度経度を求める。</p>
+<pre class="r"><code>df.pref %&lt;&gt;% 
+  # メッシュコードを緯度経度に変換
+  mutate(mesh_area = map(mesh_code, meshcode_to_latlon)) %&gt;% 
+  unnest() %&gt;% 
+  # メッシュコードを覆う長方形の角の座標を取得
+  mutate(lng1 = long_center - long_error,
+         lat1 = lat_center - lat_error,
+         lng2 = long_center + long_error,
+         lat2 = lat_center + lat_error) %&gt;%
+  # 後の処理のため行番号を与えておく
+  rownames_to_column()</code></pre>
+<p>前回のように<strong><code>{leaflet}</code></strong>で長方形を可視化するのであればこのデータを用いると良い。以下コードだけ載せておく。</p>
+<pre class="r"><code>library(leaflet)
+
+leaflet() %&gt;% 
+  addTiles() %&gt;% 
+  setView(lng = df.pref$long_center[1216], lat = df.pref$lat_center[1216], zoom = 15) %&gt;% 
+  addRectangles(lng1 = df.pref$lng1[1216],
+                lat1 = df.pref$lat1[1216],
+                lng2 = df.pref$lng2[1216],
+                lat2 = df.pref$lat2[1216])</code></pre>
+</div>
+<div class="section level2">
+<h2>ポリゴンの作成</h2>
+<p>メッシュをカバーするポリゴンを作成する。メッシュの各点を示す座標を次のように与えていくことで、長方形を描画するPolygonsクラスオブジェクトが作成されるので、これを全てのメッシュコードに対して実行していく。</p>
+<pre class="r"><code>Polygons(
+    list(Polygon(
+      cbind(
+        # 順番に注意
+        c(df.pref$lng1[1], df.pref$lng1[1], df.pref$lng2[1], df.pref$lng2[1], df.pref$lng1[1]),
+        c(df.pref$lat2[1], df.pref$lat1[1], df.pref$lat1[1], df.pref$lat2[1], df.pref$lat2[1])))), 
+    # IDにはメッシュコードを用いる
+    df.pref$mesh_code[1])
+## An object of class &quot;Polygons&quot;
+## Slot &quot;Polygons&quot;:
+## [[1]]
+## An object of class &quot;Polygon&quot;
+## Slot &quot;labpt&quot;:
+## [1] 133.53125  34.29583
+## 
+## Slot &quot;area&quot;:
+## [1] 0.0001041667
+## 
+## Slot &quot;hole&quot;:
+## [1] FALSE
+## 
+## Slot &quot;ringDir&quot;:
+## [1] 1
+## 
+## Slot &quot;coords&quot;:
+##          [,1]     [,2]
+## [1,] 133.5250 34.30000
+## [2,] 133.5375 34.30000
+## [3,] 133.5375 34.29167
+## [4,] 133.5250 34.29167
+## [5,] 133.5250 34.30000
+## 
+## 
+## 
+## Slot &quot;plotOrder&quot;:
+## [1] 1
+## 
+## Slot &quot;labpt&quot;:
+## [1] 133.53125  34.29583
+## 
+## Slot &quot;ID&quot;:
+## [1] &quot;51333452&quot;
+## 
+## Slot &quot;area&quot;:
+## [1] 0.0001041667</code></pre>
+<pre class="r"><code>list.polygons &lt;- foreach(i = 1:nrow(df.pref)) %do% {
+  Polygons(
+    list(Polygon(
+      cbind(
+        c(df.pref$lng1[i], df.pref$lng1[i], df.pref$lng2[i], df.pref$lng2[i], df.pref$lng1[i]),
+        c(df.pref$lat2[i], df.pref$lat1[i], df.pref$lat1[i], df.pref$lat2[i], df.pref$lat2[i])))), 
+    df.pref$mesh_code[i])
+}</code></pre>
+<p>できたPolygonsクラスオブジェクトを次のようにして<code>json</code>形式に変換したのち、<code>readOGR()</code>によりSpatialPolygonsDataFrameクラスオブジェクトにし、<strong><code>{broom}</code></strong>パッケージの<code>tidy()</code>関数でデータフレーム化。ここら辺の処理はQiitaに書いた<a href="http://qiita.com/uri/items/5e696b7e36ecfd4745bc">【まとめ用】ggplot2を使って地図を書く</a>という記事を参考。</p>
+<pre class="r"><code>map &lt;- SpatialPolygons(Srl = list.polygons, pO = 1:nrow(df.pref)) %&gt;% 
+  geojson_json(geometry = &quot;polygon&quot;) %&gt;% 
+  readOGR(dsn              = ., 
+          layer            = &quot;OGRGeoJSON&quot;, 
+          stringsAsFactors = FALSE) %&gt;% 
+  tidy(.)</code></pre>
+<p>描画はいつもの<strong><code>{ggplot2}</code></strong>。メッシュが細かいのでほとんど黒く塗りつぶされているようになった。</p>
+<pre class="r"><code>plot_map &lt;- ggplot() + 
+  geom_map(data = map, 
+           map = map,
+           aes(x = long, y = lat, map_id = id), 
+           fill = &quot;white&quot;, color = &quot;black&quot;) + 
+  coord_map(projection = &quot;mercator&quot;)
+
+plot_map</code></pre>
+<p><img src="#####../content/post/mesh_code_mapping_files/figure-html/160809_mesh_code_mapping-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div class="section level2">
+<h2>平均値メッシュによる塗り分け</h2>
+<p>さていよいよ本題。せっかく標準地域メッシュでの地図の塗り分けを行ってみる。今回は国土数値情報が提供している「平均値メッシュデータ」 <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02.html</a> を使う。概要は下記の通り</p>
+<blockquote>
+<p>降水量、気温、最深積雪、日照時間、全天日射量の５種類の気象要素について、過去30年間の観測値から1kmメッシュ（3次メッシュ）ごとの平年値を推定・算出したものである。</p>
+</blockquote>
+<p>ファイルのダウンロードは省略。岡山県が該当する第1次地域区画の６メッシュをダウンロードしてくる。なお国土数値情報のデータダウンロードには <strong><code>{kokudosuuchi}</code></strong>パッケージを使うと便利。</p>
+<p><a href="http://notchained.hatenablog.com/entry/2015/12/09/021131">Rから国土数値情報ダウンロードサービス Web APIを使うパッケージをつくりました - Technically, technophobic.</a></p>
+<pre class="r"><code>df &lt;- getKSJSummary()
+filter(df, stringr::str_detect(title, &quot;平年値メッシュ&quot;))
+urls &lt;- getKSJURL(&quot;G02&quot;) %&gt;% filter(areaCode %in% c(5333, 5334, 5233, 5234, 5133, 5134)) %&gt;% use_series(zipFileUrl)</code></pre>
+<pre class="r"><code>KsjTmplt.5133 &lt;- readOGR(&quot;data/20160809_mesh_code_mapping/160808_平均値メッシュ_33_岡山県/G02-12_5133-jgd_GML/G02-12_5133-jgd.shp&quot;, &quot;G02-12_5133-jgd&quot;)
+KsjTmplt.5134 &lt;- readOGR(&quot;data/20160809_mesh_code_mapping/160808_平均値メッシュ_33_岡山県/G02-12_5134-jgd_GML/G02-12_5134-jgd.shp&quot;,
+                 &quot;G02-12_5134-jgd&quot;)
+KsjTmplt.5233 &lt;- readOGR(&quot;data/20160809_mesh_code_mapping/160808_平均値メッシュ_33_岡山県/G02-12_5233-jgd_GML/G02-12_5233-jgd.shp&quot;,
+                 &quot;G02-12_5233-jgd&quot;)
+KsjTmplt.5234 &lt;- readOGR(&quot;data/20160809_mesh_code_mapping/160808_平均値メッシュ_33_岡山県/G02-12_5234-jgd_GML/G02-12_5234-jgd.shp&quot;,
+                 &quot;G02-12_5234-jgd&quot;)
+KsjTmplt.5333 &lt;- readOGR(&quot;data/20160809_mesh_code_mapping/160808_平均値メッシュ_33_岡山県/G02-12_5333-jgd_GML/G02-12_5333-jgd.shp&quot;,
+                 &quot;G02-12_5333-jgd&quot;)
+KsjTmplt.5334 &lt;- readOGR(&quot;data/20160809_mesh_code_mapping/160808_平均値メッシュ_33_岡山県/G02-12_5334-jgd_GML/G02-12_5334-jgd.shp&quot;,
+                 &quot;G02-12_5334-jgd&quot;)</code></pre>
+<p>変数名は <a href="http://nlftp.mlit.go.jp/ksj/gml/codelist/ClimateCd.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/codelist/ClimateCd.html</a> のものと対応している。例えばメッシュコードはG002_001という変数に格納されている。今回は降水量のデータをマッピングしてみることにするので、必要な変数を選択してくる。</p>
+<pre class="r"><code># http://nlftp.mlit.go.jp/ksj/gml/codelist/ClimateCd.html
+KsjTmplt.5133@data %&gt;% names()
+##  [1] &quot;G02_001&quot; &quot;G02_002&quot; &quot;G02_003&quot; &quot;G02_004&quot; &quot;G02_005&quot; &quot;G02_006&quot; &quot;G02_007&quot;
+##  [8] &quot;G02_008&quot; &quot;G02_009&quot; &quot;G02_010&quot; &quot;G02_011&quot; &quot;G02_012&quot; &quot;G02_013&quot; &quot;G02_014&quot;
+## [15] &quot;G02_015&quot; &quot;G02_016&quot; &quot;G02_017&quot; &quot;G02_018&quot; &quot;G02_019&quot; &quot;G02_020&quot; &quot;G02_021&quot;
+## [22] &quot;G02_022&quot; &quot;G02_023&quot; &quot;G02_024&quot; &quot;G02_025&quot; &quot;G02_026&quot; &quot;G02_027&quot; &quot;G02_028&quot;
+## [29] &quot;G02_029&quot; &quot;G02_030&quot; &quot;G02_031&quot; &quot;G02_032&quot; &quot;G02_033&quot; &quot;G02_034&quot; &quot;G02_035&quot;
+## [36] &quot;G02_036&quot; &quot;G02_037&quot; &quot;G02_038&quot; &quot;G02_039&quot; &quot;G02_040&quot; &quot;G02_041&quot; &quot;G02_042&quot;
+## [43] &quot;G02_043&quot; &quot;G02_044&quot; &quot;G02_045&quot; &quot;G02_046&quot; &quot;G02_047&quot; &quot;G02_048&quot; &quot;G02_049&quot;
+## [50] &quot;G02_050&quot; &quot;G02_051&quot; &quot;G02_052&quot; &quot;G02_053&quot; &quot;G02_054&quot; &quot;G02_055&quot; &quot;G02_056&quot;
+## [57] &quot;G02_057&quot; &quot;G02_058&quot; &quot;G02_059&quot; &quot;G02_060&quot; &quot;G02_061&quot; &quot;G02_062&quot; &quot;G02_063&quot;
+## [64] &quot;G02_064&quot; &quot;G02_065&quot; &quot;G02_066&quot; &quot;G02_067&quot; &quot;G02_068&quot; &quot;G02_069&quot; &quot;G02_070&quot;
+## [71] &quot;G02_071&quot; &quot;G02_072&quot; &quot;G02_073&quot; &quot;G02_074&quot; &quot;G02_075&quot; &quot;G02_076&quot; &quot;G02_077&quot;
+## [78] &quot;G02_078&quot; &quot;G02_079&quot; &quot;G02_080&quot; &quot;G02_081&quot; &quot;G02_082&quot; &quot;G02_083&quot; &quot;G02_084&quot;
+KsjTmplt.5133@data$G02_001[1]
+## [1] 51330000
+## 4181 Levels: 51330000 51330001 51330002 51330003 51330004 ... 51337799</code></pre>
+<pre class="r"><code>df.KsjTmplt &lt;- bind_rows(KsjTmplt.5133@data, KsjTmplt.5134@data, 
+                         KsjTmplt.5233@data, KsjTmplt.5234@data,
+                         KsjTmplt.5333@data, KsjTmplt.5334@data)</code></pre>
+<pre class="r"><code># 岡山県に含まれるメッシュだけを抽出
+# メッシュコードおよび降水量のデータを収める変数を選択、
+# 月を表す変数名に変更
+df.KsjTmplt %&lt;&gt;% filter(G02_001 %in% unique(map$id)) %&gt;% 
+  select(G02_001, one_of(sprintf(&quot;G02_%03d&quot;, 2:13))) %&gt;% 
+  set_colnames(c(&quot;G02_001&quot;, sprintf(&quot;%02d月&quot;, 1:12)))
+
+df.KsjTmplt %&lt;&gt;% gather(month, precipitation, -G02_001)</code></pre>
+<p>マッピング。せっかくなので <strong><code>{gganimate}</code></strong>パッケージを使ってgif画像化。月別の降水量の推移を描画する。</p>
+<pre class="r"><code>quartzFonts(YuGo = quartzFont(rep(&quot;YuGo-Medium&quot;, 4)))
+theme_set(theme_classic(base_size = 12, base_family = &quot;YuGo&quot;))
+p &lt;- plot_map + geom_map(data = df.KsjTmplt, 
+           map = map,
+           aes(fill = precipitation, map_id = G02_001, stat = &quot;identity&quot;, frame = month)) +
+  ggtitle(&quot;岡山県メッシュ降水量: &quot;) +
+  scale_fill_viridis()
+gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot;)</code></pre>
+<p><img src="../../img/160809_mesh_code_mapping_okayama_pref_precipitation.gif" style="display: block; margin: auto;"></p>
+<p>岡山県は、特に南部は瀬戸内海式気候で降水量が少ないことで有名だが、こうして地図に落としてみることで細かな挙動をみるのも楽しい。</p>
+<p>Enjoy!</p>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->

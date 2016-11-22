@@ -1,0 +1,664 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>我が家のあたたかみ、明るさ、そして生活費についてflex dashboardを使って確認できるようになりました</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17" />
+        
+
+
+        
+            <meta name="author" content="Shinya Uryu">
+        
+        
+            <meta name="description" content="こんな話があります。我が家のあたたかみ、そして明るさについてのデータを公開しました - 盆栽日記\n素敵な話ですね。我が家にも室温と温度、光の強さ、空気の質を計測できるIoT機器を導入したので、引越しを境に記録をとりはじめました。このデータを確認するためにR Markdownの新機能`flexdashboard`を使って管理画面を作成しましたので公開しておきます。">
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="我が家のあたたかみ、明るさ、そして生活費についてflex dashboardを使って確認できるようになりました"/>
+<meta name="twitter:description" content="こんな話があります。我が家のあたたかみ、そして明るさについてのデータを公開しました - 盆栽日記\n素敵な話ですね。我が家にも室温と温度、光の強さ、空気の質を計測できるIoT機器を導入したので、引越しを境に記録をとりはじめました。このデータを確認するためにR Markdownの新機能`flexdashboard`を使って管理画面を作成しましたので公開しておきます。"/>
+<meta name="twitter:site" content="@u_ribo"/>
+
+
+        <meta property="og:title" content="我が家のあたたかみ、明るさ、そして生活費についてflex dashboardを使って確認できるようになりました" />
+<meta property="og:description" content="こんな話があります。我が家のあたたかみ、そして明るさについてのデータを公開しました - 盆栽日記\n素敵な話ですね。我が家にも室温と温度、光の強さ、空気の質を計測できるIoT機器を導入したので、引越しを境に記録をとりはじめました。このデータを確認するためにR Markdownの新機能`flexdashboard`を使って管理画面を作成しましたので公開しておきます。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/iot_flex_dashboard/" />
+
+
+<meta property="og:updated_time" content="2016-06-24T08:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="我が家のあたたかみ、明るさ、そして生活費についてflex dashboardを使って確認できるようになりました">
+<meta itemprop="description" content="こんな話があります。我が家のあたたかみ、そして明るさについてのデータを公開しました - 盆栽日記\n素敵な話ですね。我が家にも室温と温度、光の強さ、空気の質を計測できるIoT機器を導入したので、引越しを境に記録をとりはじめました。このデータを確認するためにR Markdownの新機能`flexdashboard`を使って管理画面を作成しましたので公開しておきます。">
+
+
+<meta itemprop="dateModified" content="2016-06-24T08:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="246">
+
+
+
+<meta itemprop="keywords" content="R," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="../../css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+
+
+
+
+
+
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="../../">Wonderful R World</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="../../post">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../categories">
+                        
+                            <i class="fa fa-list-alt">&nbsp;</i>Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../project">
+                        
+                            <i class="fa fa-diamond">&nbsp;</i>Project
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../about">
+                        
+                            <i class="fa fa-user">&nbsp;</i>About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="../../post">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../categories">
+                            <h3>
+                                
+                                    <i class="fa fa-list-alt">&nbsp;</i>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../project">
+                            <h3>
+                                
+                                    <i class="fa fa-diamond">&nbsp;</i>
+                                
+                                Project
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../about">
+                            <h3>
+                                
+                                    <i class="fa fa-user">&nbsp;</i>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/tabulizer_fantastic_extract_data_from_pdf/"><p>tabulizerパッケージによるPDF表データからのデータ取得</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/rstan_rcpp_troubles/"><p>Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/mesh_code_mapping/"><p>標準地域メッシュによる地図の塗り分け</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=%2fpost%2fiot_flex_dashboard%2f&text=%e6%88%91%e3%81%8c%e5%ae%b6%e3%81%ae%e3%81%82%e3%81%9f%e3%81%9f%e3%81%8b%e3%81%bf%e3%80%81%e6%98%8e%e3%82%8b%e3%81%95%e3%80%81%e3%81%9d%e3%81%97%e3%81%a6%e7%94%9f%e6%b4%bb%e8%b2%bb%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6flex%20dashboard%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e7%a2%ba%e8%aa%8d%e3%81%a7%e3%81%8d%e3%82%8b%e3%82%88%e3%81%86%e3%81%ab%e3%81%aa%e3%82%8a%e3%81%be%e3%81%97%e3%81%9f&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=%2fpost%2fiot_flex_dashboard%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fiot_flex_dashboard%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=%2fpost%2fiot_flex_dashboard%2f&title=%e6%88%91%e3%81%8c%e5%ae%b6%e3%81%ae%e3%81%82%e3%81%9f%e3%81%9f%e3%81%8b%e3%81%bf%e3%80%81%e6%98%8e%e3%82%8b%e3%81%95%e3%80%81%e3%81%9d%e3%81%97%e3%81%a6%e7%94%9f%e6%b4%bb%e8%b2%bb%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6flex%20dashboard%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e7%a2%ba%e8%aa%8d%e3%81%a7%e3%81%8d%e3%82%8b%e3%82%88%e3%81%86%e3%81%ab%e3%81%aa%e3%82%8a%e3%81%be%e3%81%97%e3%81%9f" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fiot_flex_dashboard%2f&title=%e6%88%91%e3%81%8c%e5%ae%b6%e3%81%ae%e3%81%82%e3%81%9f%e3%81%9f%e3%81%8b%e3%81%bf%e3%80%81%e6%98%8e%e3%82%8b%e3%81%95%e3%80%81%e3%81%9d%e3%81%97%e3%81%a6%e7%94%9f%e6%b4%bb%e8%b2%bb%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6flex%20dashboard%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e7%a2%ba%e8%aa%8d%e3%81%a7%e3%81%8d%e3%82%8b%e3%82%88%e3%81%86%e3%81%ab%e3%81%aa%e3%82%8a%e3%81%be%e3%81%97%e3%81%9f" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fiot_flex_dashboard%2f&title=%e6%88%91%e3%81%8c%e5%ae%b6%e3%81%ae%e3%81%82%e3%81%9f%e3%81%9f%e3%81%8b%e3%81%bf%e3%80%81%e6%98%8e%e3%82%8b%e3%81%95%e3%80%81%e3%81%9d%e3%81%97%e3%81%a6%e7%94%9f%e6%b4%bb%e8%b2%bb%e3%81%ab%e3%81%a4%e3%81%84%e3%81%a6flex%20dashboard%e3%82%92%e4%bd%bf%e3%81%a3%e3%81%a6%e7%a2%ba%e8%aa%8d%e3%81%a7%e3%81%8d%e3%82%8b%e3%82%88%e3%81%86%e3%81%ab%e3%81%aa%e3%82%8a%e3%81%be%e3%81%97%e3%81%9f" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fiot_flex_dashboard%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="../../post/iot_flex_dashboard/">我が家のあたたかみ、明るさ、そして生活費についてflex dashboardを使って確認できるようになりました</a></h1>
+            
+        
+        
+            <p>こんな話があります。我が家のあたたかみ、そして明るさについてのデータを公開しました - 盆栽日記\n素敵な話ですね。我が家にも室温と温度、光の強さ、空気の質を計測できるIoT機器を導入したので、引越しを境に記録をとりはじめました。このデータを確認するためにR Markdownの新機能`flexdashboard`を使って管理画面を作成しましたので公開しておきます。</p>
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-06-24'>
+            June 24, 2016</time>
+        <span class="author">Shinya Uryu</span>
+        
+            <p>1 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+
+    
+
+    <div id="content">
+
+
+<p>こんな話があります。</p>
+<p><a href="http://d.hatena.ne.jp/dichika/20150212/p1">我が家のあたたかみ、そして明るさについてのデータを公開しました - 盆栽日記</a></p>
+<blockquote>
+<p>Arduinoとセンサーを使って室温と照度を測定し始めた。その結果を15分後ごとにRで読み込んでgithub上にアップしている。これで歩数データに引き続いて、私の生活サイクルが世の中に大公開された。</p>
+</blockquote>
+<p>素敵な話ですね。</p>
+<p>我が家にも室温と温度、光の強さ、空気の質を計測できるIoT機器を導入したので、引越しを境に記録をとりはじめました。このデータを確認するためにR Markdownの新機能<code>flexdashboard</code>を使って管理画面を作成しましたので公開しておきます。</p>
+<p><a href="https://suryu.me/apps/myroom.html" class="uri">https://suryu.me/apps/myroom.html</a></p>
+<p>ついでなので光熱費のデータもオープンデータとして<a href="https://github.com/Cucurbitaceae/room207">GitHubにおきました</a>。ご査収ください。</p>
+
+
+
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+
+    
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="../../post/amazon_wish_list/"
+                class="button big previous">人は贈り物に何を求めているのか: AmazonのWishlistから見えてくるもの</a></li>
+    
+
+    
+        <li><a href="../../post/geohash/"
+                class="button big next">GeohashをRで扱う</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/iot_flex_dashboard\/';
+    var disqus_title = '我が家のあたたかみ、明るさ、そして生活費についてflex dashboardを使って確認できるようになりました';
+    var disqus_url = '\/post\/iot_flex_dashboard\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <a href="../../" class="logo"><img src="../../img/main/logo.jpg" alt="me" /></a>
+                
+            
+            
+                <header>
+                    <h2>Sincere Pumpkin Patch</h2>
+                    <p></p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/uribo" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//foursquare.com/u_ribo" target="_blank" title="Foursquare" class="fa fa-foursquare"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/_suika" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+<li><a href="//instagram.com/u_ribo" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/ur1bo" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+<li><a href="//twitter.com/u_ribo" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+<li><a href="mailto:suika1127@gmail.com" title="Email" class="fa fa-envelope"></a></li>
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-11'>
+                                    September 11, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/tabulizer_fantastic_extract_data_from_pdf/">tabulizerパッケージによるPDF表データからのデータ取得</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-24'>
+                                    August 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/rstan_rcpp_troubles/">Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-19'>
+                                    August 19, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/mesh_code_mapping/">標準地域メッシュによる地図の塗り分け</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-09'>
+                                    August 9, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /post/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="../../categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/r/">R</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>Howdy, I&#39;m Shinya. Engineer, Data Science Enthusiast and Ecologist. This blog is my knowledge work for R that data science language. Most of my work is in the open source R code, which you can find and install on my GitHub https://github.com/uribo .</p>
+
+            <ul class="actions">
+                <li><a href="../../about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+            </ul>
+
+            <p class="copyright">&copy; suryu.me. The contents on this site are licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.<br>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="../../js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+

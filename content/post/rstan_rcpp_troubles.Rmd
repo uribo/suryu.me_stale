@@ -1,0 +1,66 @@
+---
+title:  "Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い"
+author: "Shinya Uryu"
+date: 2016-08-19T10:25:00
+description: rstanを久しぶりに動かしてみたらstanコードのコンパイルに失敗していた。RCpp関係のエラーだったっぽくて、環境設定ファイルを編集したらコンパイルが正常に動くようになったという話。
+# params:
+#  tags: [rstan, trouble-shoot]
+#  image: inst/pic_card_default.png
+---
+
+```{r, child = "../../_blog_post_declare.Rmd"}
+```
+
+久しぶりに**`{rstan}`**を使う機会になって、いざコードを実行しようとしたらコンパイルで失敗してしまった。エラーメッセージをみると次のようなことを言っている。
+
+```
+Error in compileCode(f, code, language = language, verbose = verbose) : 
+  Compilation ERROR, function(s)/method(s)...
+...
+```
+
+適当に検索してみると[{Rcpp}を入れる時はシステム内に既にあるgccに注意 - 六本木で働くデータサイエンティストのブログ](http://tjo.hatenablog.com/entry/2013/10/04/190701)という記事を見つけたが、ここで述べられているのはWindowsでの話。こちらの環境はMacなのだけど、どうやら問題は**`{rstan}`**がコンパイルに依存しているgcc（厳密には **`{Rcpp}`**?）関係であるらしい。それで、もう少し他のものを検索してみたら
+
+[r - Error when with Xcode 5.0 and Rcpp (Command Line Tools ARE installed) - Stack Overflow](http://stackoverflow.com/questions/19503995/error-when-with-xcode-5-0-and-rcpp-command-line-tools-are-installed/19505397)
+
+というのがあってまさにこれで対応できた。`~/.R/Makevars`というファイルを見ると、
+
+```
+CC=clang
+CXX=clang++
+CXXFLAGS = -Wall -mtune=core2  -O3 $(LTO)  #set_by_rstan"
+R_XTRA_CPPFLAGS =  -I$(R_INCLUDE_DIR)   #set_by_rstan"
+```
+
+に加えて
+
+```
+CC=clang
+CXX=clang++ -arch x86_64 -ftemplate-depth-256
+
+CC=clang
+CXX=clang++ -arch x86_64 -ftemplate-depth-256
+
+CC=clang
+CXX=clang++ -arch x86_64 -ftemplate-depth-256
+
+CC=clang-omp -fopenmp
+CXX=clang-omp++ -fopenmp
+CXXFLAGS=-O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function
+```
+
+という記述があった。いつの間に書き加えられたのかわからないが、項目自体重複しているし、**コメントアウトして保存した後に再度stanコードのコンパイルを実行したら正常に動作した**。
+
+```{r, eval = FALSE, echo = TRUE}
+library(rstan)
+stan_demo(1)
+```
+
+定期的に**`{rstan}`**動かさないとこういうトラブルに見舞われる気がするなあ...。
+
+## 実行環境
+
+- R 3.3.1
+- RStudio 0.99.1288
+- **`{rstan}`** 2.11.1
+- **`{Rcpp}`** 0.12.6

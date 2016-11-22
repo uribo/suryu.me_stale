@@ -1,0 +1,495 @@
+---
+title:  "人は贈り物に何を求めているのか: AmazonのWishlistから見えてくるもの"
+author: "Shinya Uryu"
+date: 2016-06-21T09:30:00
+description:
+  私の趣味の一つに「誰かのAmazon ほしい物リスト」を集めるというエモいものがあります。「Amazon ほしい物リスト」とはその名の通り、ほしいと思ったAmazonが扱う商品をまとめておくための機能です。集めているサンプル数が増えてきたので、このデータを元にして気になっていることを確かめてみたいと思います。
+---
+
+```{r, child = "../../_blog_post_declare.Rmd"}
+```
+
+```{r}
+library(remoji)
+library(magrittr)
+```
+
+
+## `r emoji("tea")` 前置き
+
+私の趣味の一つに「**誰かのAmazon ほしい物リスト」を集める**というエモいものがあります。「[Amazon ほしい物リスト](https://www.amazon.co.jp/wishlist/universal)」とはその名の通り、ほしいと思ったAmazonが扱う商品をまとめておくための機能です。後で買う、のような個人での利用が主な用途だと思いますが、リストを公開して、誰かにその商品を代わりに購入してもらう（プレゼントしてもらう）こともしばしば行われるようです。ブログの作者が誕生日を迎えた、去就に関する記事を書いた際によく見かけます。
+
+こうした記事を見かけるたびに私は、皆がどのような商品を欲しがって（あわよくばプレゼントしてもらおうと）いるのか気になっており、リンク先についてメモをとっていました。集めているサンプル数が増えてきたので、このデータを元にして気になっていることを確かめてみたいと思います。
+
+### やりたいこと
+
+例えば、**どんな時にほしいものリストを公開して、プレゼントの機会を伺うのでしょうか。**また、どういった場所（メディア）を利用して告知しているのでしょうか。それは**一時的なものなのか、固定されたものなのか**といったことが気になります。
+
+### 手順
+
+1. ほしい物リストへのリンクと公開理由のデータをまとめる
+2. **`{rvest}`**パッケージによるスクレイピング処理で、リストに登録されている商品に関する情報を取得
+3. ほしい物リストの情報を整理する
+
+### サンプルについて
+
+私がネットをフラフラしていて発見した公開の「Amazon wishlist」へのリンクが含まれる記事が中心です。組織や企業は含めず、個人のほしい物リストに限定しています。保証はありませんが、年齢、職業、生き方などさまざまな人間を含んでいるかと思います。Amazon wishlist自体のドメインは`http://www.amazon.co.jp`に限定しました。
+
+個人名やSNS上のアカウント名は伏せてありますが、商品の傾向からお察しになる場合があるかもしれません。サンプルについて多少の偏りがあるのは、ここでは無視します。
+
+> スクレイピングの際にamazon.co.jpサーバーに負荷をかけすぎたような気がして反省です。APIを使えば良かったのでした...
+
+## `r emoji("registered")` Rコード
+
+### パッケージの読み込み
+
+使用するパッケージを読み込みます。
+
+```{r load_packages, eval = TRUE, echo = TRUE}
+library(pacman)
+p_load(foreach, rvest) # データ取得
+p_load(tibble, purrr, stringr, tidyr) # データ操作
+p_load(ggplot2, cowplot, viridis, bubbles) # 可視化
+p_load(DescTools, knitr, scales) # その他
+library(dplyr)
+```
+
+### データの収集
+
+```{r, eval = TRUE, echo = FALSE}
+df.wishlist <- readRDS("../../data/20160618_amazon_wish_list.rds")
+```
+
+これまでのメモから、Amazonのほしい物リストへのリンク*`url`*とリスト公開の理由*`motive`*を変数に含んだデータフレームを作ります。全部で`r nrow(df.wishlist)`件です。
+
+
+変数*`motive`*はほしいものリストが公開された際の理由をいくつかの項目として分けたものです。`profile`はプロフィールページやブログのサイドバーなどに載っているもの、`course`は去就や進学に関するもの、`move`は引っ越し、`wedding`と`birthday`はそれぞれ結婚と誕生日で、それ以外の理由については`unknown`としました。
+
+このうち、`unknown`を除いた祭の変数*`motive`*は、`profile`が固定のもの、それ以外のものを流動的・イベントによって生じたものと捉えます。
+
+```{r, eval = FALSE, echo = FALSE}
+df.wishlist <- data_frame(
+  url = c("http://www.amazon.co.jp/registry/wishlist/21XMOZFUR1IWG",
+          "http://www.amazon.co.jp/registry/wishlist/2LBURXTDZ3WHX",
+          "http://www.amazon.co.jp/registry/wishlist/CUACF9TYLOUS",
+          "http://www.amazon.co.jp/registry/wishlist/155YU99M1BRGA",
+          "http://www.amazon.co.jp/registry/wishlist/PM7IT344UO2T",
+          "http://www.amazon.co.jp/registry/wishlist/3OFWD7Q729FDR",
+          "http://www.amazon.co.jp/registry/wishlist/1M1A2QYCBSGQ9",
+          "http://www.amazon.co.jp/registry/wishlist/1T4UJ59O9EVSA",
+          "http://www.amazon.co.jp/registry/wishlist/3H3RWFZ0LFN67",
+          "http://www.amazon.co.jp/registry/wishlist/31WJYTS73D19K",
+          "http://www.amazon.co.jp/registry/wishlist/FVUGW4MPMTFJ",
+          "http://www.amazon.co.jp/registry/wishlist/N9M4X3BSKHIH", # gp
+          "http://www.amazon.co.jp/registry/wishlist/3AKZI0141IJN4", # gp
+          "http://www.amazon.co.jp/registry/wishlist/1O9VG3HB2ZJQS",
+          "http://www.amazon.co.jp/registry/wishlist/LAIEKIFVFP5L",
+          "http://www.amazon.co.jp/registry/wishlist/1MC7HKOGGUMI",
+          "http://www.amazon.co.jp/registry/wishlist/263ZWJV4Z9523", # gp
+          "http://www.amazon.co.jp/registry/wishlist/3HH1FL88AQAG8",
+          "http://www.amazon.co.jp/registry/wishlist/1LQBYU2X1Z65D",
+          "http://www.amazon.co.jp/registry/wishlist/9N96PW0YEYGH",
+          "http://www.amazon.co.jp/registry/wishlist/1KWOGE88L8BH4",
+          "http://www.amazon.co.jp/registry/wishlist/3G7TL3SPFM0YR",
+          "http://www.amazon.co.jp/registry/wishlist/1HD6GDOMAB6WC",
+          "http://www.amazon.co.jp/registry/wishlist/S61F9R46MHON",
+          "http://www.amazon.co.jp/registry/wishlist/2GGGHLJIVCTM9",
+          "http://www.amazon.co.jp/registry/wishlist/28P5HBOYZU08J",
+          "http://www.amazon.co.jp/registry/wishlist/26VP7J3S1A5UI",
+          "http://www.amazon.co.jp/registry/wishlist/361V3RV5V4E6N",
+          "http://www.amazon.co.jp/registry/wishlist/2DLVUZU2ROT25"),
+  url.origin = c("http://senyoltw.net/about/",
+                 "http://d.hatena.ne.jp/hoxo_m/20150924/p1",
+                 "http://blog.sushi.money/entry/2015/03/31/134337",
+                 "http://nekogata.hatenablog.com/entry/2015/05/12/081205",
+                 "http://blog.a-know.me",
+                 "http://motemen.hatenablog.com",
+                 "https://www.gitbook.com/book/masarakki/c86-kancolle-api/details",
+                 "http://abrahamcow.hatenablog.com",
+                 "http://shinyorke.hatenablog.com/entry/2016/01/22/213140",
+                 "http://r7kamura.hatenablog.com/entry/2015/12/14/211300",
+                 "http://blog.shibayu36.org",
+                 "http://rcmdnk.github.io",
+                 "http://blog.yuku-t.com/entry/2015/06/02/201755",
+                 "http://vaaaaanquish.jp",
+                 "https://twitter.com/wonder_zone/status/716630454695120896",
+                 "http://tsubotax.com/archives/55505334.html",
+                 "http://amacbee.hatenablog.com/entry/2016/02/28/210544",
+                 "http://sue445.hatenablog.com/entry/2016/04/07/195627",
+                 "http://drillbits.jp/posts/q/",
+                 "http://rep0ooo.net",
+                 "https://twitter.com",
+                 "https://twitter.com",
+                 "http://masudak.hatenablog.jp/entry/2016/04/18/210220",
+                 "http://goldhead.hatenablog.com/entry/2016/04/21/222231",
+                 "https://twitter.com",
+                 "https://ww24.jp/diary/member-of-society/",
+                 "http://blog.maqua.tech",
+                 "http://konyu.hatenablog.com/entry/2016/06/13/121427",
+                 "http://karaage.hatenadiary.jp"),
+  motive = c("profile", 
+             "course", 
+             "move", 
+             "move", 
+             "profile", 
+             "profile", 
+             "unknown", 
+             "profile",
+             "course",
+             "move",
+             "profile",
+             "profile",
+             "wedding",
+             "profile",
+             "course",
+             "course",
+             "course",
+             "birthday",
+             "course",
+             "profile",
+             "unknown",
+             "unknown",
+             "course",
+             "unknown",
+             "unknown",
+             "course",
+             "profile",
+             "course",
+             "profile"))
+```
+
+あとで利用するために、ユーザーを識別するための番号を振っておきます。ここでは`tibble::rownames_to_column`を使って*id*という変数を新たに加えました。
+
+```{r, eval = FALSE, echo = TRUE}
+df.wishlist %<>% dplyr::select(url, motive) %>% 
+  rownames_to_column("id") %>% 
+  dplyr::mutate(id = as.integer(id))
+
+id.div <- df.wishlist$id
+```
+
+次にそれぞれのリストに含まれている商品の登録件数をデータフレームの列に追加します。そして、以降の処理で必要となるスクレイピングのページ送りに関する情報（何ページまでスクレイピングを実行すれば良いか）も加えます。
+
+```{r, eval = FALSE, echo = TRUE}
+# read_html()を利用してhtmlを読み込む
+res <- df.wishlist$url %>% map(read_html)
+
+# リストに登録されている件数
+df.wishlist$item.n <- res %>% map_dbl(~ html_nodes(., xpath = '//*[@id="left-nav"]/div/div/div/div[1]/a/span/span') %>% 
+  html_text() %>% extract_numeric())
+
+# ページ送りの最終番号を取得
+df.wishlist$pagination <- res %>% map_dbl(~ html_nodes(., xpath = '//*[@id="wishlistPagination"]/span/div/ul/li/a') %>% 
+  html_text(.) %>% extract_numeric() %>% max(na.rm = TRUE) %>% 
+    if_else(is.infinite(.), 1, .))
+```
+
+```{r, eval = FALSE, echo = FALSE}
+saveRDS(df.wishlist, file = "../../data/20160618_amazon_wish_list.rds")
+```
+
+Amazonのウェブサイトから必要な情報をスクレイピングによって取得してきます。スクレイピングの処理には主に**`{rvest}`**パッケージを利用します。ほしい情報は`詳細情報を知るための商品個別URL`、`商品価格`の２点です。
+
+一人のリストからこれらの情報を取ってくるのには次のようなコードを実行すれば良いですが、30名近くあると面倒です。加えてページ送りの数はユーザーによって異なっているので、これらの処理は**`{foreach}`**パッケージを利用した関数を作成して実行しました。
+
+```{r, eval = FALSE, echo = TRUE}
+# ほしいものリストのHTML構造を取得する
+x <- df.wishlist$url[2] %>% read_html()
+
+# 1. Amazonの商品個別URL
+x %>% html_nodes(xpath = '//div/div[1]/div[1]/h5/a') %>% 
+  html_attr(name = "href") %>% 
+  paste0("http://www.amazon.co.jp", .)
+# 2. 商品価格
+x %>% html_nodes(xpath = '//div/div[1]/div[1]/span') %>%
+      html_text(.) %>%
+      str_trim() %>%
+      na_if(., "") %>%
+      grep("^￥|この商品は現在取り扱っていません|NA", ., value = TRUE)
+  }
+```
+
+```{r, eval = FALSE, echo = FALSE}
+get_items <- function(url, page) {
+  item <- foreach(i = 1:page,
+  .combine = cbind,
+  .errorhandling = "pass") %do% {
+  read_html(paste0(url, "?ie=UTF8&page=", i)) %>%
+  html_nodes(xpath = '//div/div[1]/div[1]/h5') %>%
+  html_text(.) %>%
+  str_trim()
+  }
+  return(item)
+}
+
+get_prices <- function(id) {
+  price <- foreach(
+    i = 1:df.wishlist$pagination[id],
+    .combine = cbind,
+    .errorhandling = "pass"
+  ) %do% {
+    read_html(paste0(df.wishlist$url[id], "?ie=UTF8&page=", i)) %>%
+      html_nodes(xpath = '//div/div[1]/div[1]/span') %>%
+      html_text(.) %>%
+      str_trim() %>%
+      na_if(., "") %>%
+      grep("^￥|この商品は現在取り扱っていません|NA", ., value = TRUE)
+  } %>% .[1:df.wishlist$item.n[id]]
+  return(price)
+}
+
+get_item_url <- function(url, page) {
+  
+  url <- foreach(i = 1:page,
+                   .combine = cbind,
+  .errorhandling = "pass") %do% {
+  read_html(paste0(url, "?ie=UTF8&page=", i)) %>%
+  html_nodes(xpath = '//div/div[1]/div[1]/h5/a') %>% 
+  html_attr(name = "href") %>% 
+  gsub("/ref=.+", "", .) %>% 
+  paste0("http://www.amazon.co.jp", .)
+  }
+  return(url)
+}
+
+bind_items <- function(id) {
+  data_frame(id    = id,
+             item  = id.items[[paste0("id_", id)]] %>% .[1:df.wishlist$item.n[id]],
+             price  = id.prices[[paste0("id_", id)]] %>% .[1:df.wishlist$item.n[id]],
+             url   = id.url[[paste0("id_", id)]]   %>% .[1:df.wishlist$item.n[id]]
+             )
+}
+
+# df.wishlist %>% 
+#   split(id.div) %>% 
+#   map(~ get_items(.$url, .$pagination)) %>% set_names(paste0("id_", names(.))) -> id.items
+
+df.wishlist.item <- df.wishlist %>% 
+  split(.$id) %>% 
+  map(~ bind_items(id = .$id)) %>% 
+  map_df(~ .[c("id", "item", "price", "url")])
+```
+
+`purrr::split()`でユーザーごとのデータを分割したのち、`purrr::map()`を用いて作成した関数を適用します。
+
+```{r, eval = FALSE, echo = TRUE}
+bind_items <- function(id) {
+  data_frame(id    = id,
+             price  = id.prices[[paste0("id_", id)]] %>% .[1:df.wishlist$item.n[id]],
+             url   = id.url[[paste0("id_", id)]]   %>% .[1:df.wishlist$item.n[id]]
+             )
+}
+
+df.wishlist %>%
+  split(id.div) %>%
+  map(~ get_prices(.$url, .$pagination)) %>% set_names(paste0("id_", names(.))) -> id.prices
+
+df.wishlist %>% 
+  split(id.div) %>% 
+  map(~ get_item_url(.$url, .$pagination)) %>% set_names(paste0("id_", names(.))) -> id.url
+
+df.wishlist.item <- df.wishlist %>% 
+  split(.$id) %>% 
+  map(~ bind_items(id = .$id)) %>% 
+  map_df(~ .[c("id", "price", "url")])
+```
+
+```{r, eval = FALSE, echo = FALSE}
+saveRDS(df.wishlist.item, file = "../../data/20160618_amazon_wish_list_item.rds")
+```
+
+```{r, eval = TRUE, echo = FALSE}
+df.wishlist.item <- readRDS("../../data/20160618_amazon_wish_list_item.rds")
+```
+
+出来上がったデータフレームの行数（商品価格およびURL）と元のほしいものリストに含まれていた件数が一致しているかを確認します。
+
+```{r, eval = TRUE, echo = TRUE}
+sum(df.wishlist$item.n) == nrow(df.wishlist.item)
+```
+
+無事に取れているようです。
+
+## `r emoji("ballot_box_with_check")` 結果
+
+対象にしたWishlistの概要を整理します。
+
+```{r, eval = TRUE, echo = FALSE}
+# rm(list = ls())
+df.wishlist <- readRDS("../../data/20160618_amazon_wish_list.rds")
+df.wishlist %<>% dplyr::mutate(motive = if_else(id == 7, "unknown", motive),
+                              motive = if_else(id == 13, "wedding", motive))
+df.wishlist.item <- readRDS("../../data/20160618_amazon_wish_list_item.rds")
+```
+
+今回の`r nrow(df.wishlist)`人分のAmazonほしいものリストに含まれている商品の数は、全部で`r nrow(df.wishlist.item)`件となりました。
+
+
+### 公開場所と理由
+
+```{r 160621_fig1, eval = TRUE, echo = TRUE, fig.cap = "対象のほしいものリスト公開理由の内訳"}
+df.wishlist %>% group_by(motive) %>% 
+  tally(sort = TRUE) %>% 
+  dplyr::mutate(motive = with(., reorder(motive, n, median))) %>% 
+  ggplot(aes(motive, n, fill = n)) + geom_bar(stat = "identity") + 
+  theme_cowplot() + 
+  scale_fill_viridis() + 
+  guides(fill = "none")
+```
+
+公開場所としてブログやプロフィールのページにほしいものリストへのリンクを載せている人が多いようです。公開の理由に関しては、**去就、進学の祭の記事に含ませていることが多く、誕生日や結婚式といったイベントではあまり載せていない**ようでした。
+
+### ほしいものリストに含める商品の適切な価格設定？
+
+ほしいものリスト内の商品価格の範囲です。
+
+```{r}
+df.summary <- df.wishlist.item %>% group_by(id) %>% 
+  summarise(n = n(),
+            mean = mean(price, na.rm = TRUE)) %>% 
+  dplyr::arrange(mean)
+```
+
+```{r, eval = TRUE, echo = TRUE, results = 'asis'}
+df.summary %>% 
+  dplyr::filter(mean != "NaN") %>% 
+  dplyr::summarise(min = min(mean), max = max(mean)) %>% 
+  kable(format = "markdown")
+```
+
+今回対象にしたほしいものリストに含まれる全商品の**平均価格は`r mean(df.wishlist.item$price, na.rm = TRUE) %>% comma()`円**でした。価格の幅が広く、中には10万円を超える商品がいくつか含まれていました。（商品価格を円の大きさで示す。色はランダム）
+
+```{r 160621_fig2_price_bubble, eval = TRUE, echo = TRUE, fig.cap = "商品価格を円の大きさで示す。色はランダム"}
+df.wishlist.item %>% 
+  bubbles(value = .$price, 
+          label = NA,
+          tooltip  = .$price,
+          color = rainbow(nrow(.), alpha = NULL)[sample(nrow(.))]
+)
+```
+
+商品金額の箱ひげ図を描くと、こうした少数の大きな金額の商品によって箱が潰されてしまいました。これらの値は外れ値として処理して、改めて平均価格を求めてみます。
+
+
+```{r}
+outlier.values <- boxplot.stats(df.wishlist.item$price)$out
+df.omit.outlier <- df.wishlist.item %>% dplyr::filter(price %nin% outlier.values)
+```
+
+```{r}
+mean(df.omit.outlier$price, na.rm = TRUE)
+```
+
+今度は`r mean(df.omit.outlier$price, na.rm = TRUE) %>%  comma()`円と無難な値段になりました。ほしい商品をプレゼントしてもらうにはこのくらいにしておくのが良いのでしょうか。
+
+### ほしいものリスト内の商品数
+
+ほしいものリストの商品数の平均は`r df.wishlist$item.n %>% mean()`でしたが、最小・最大数は次のようになっています。
+
+```{r, eval = TRUE, echo = TRUE, results = 'asis'}
+df.summary %>% dplyr::summarise(min = min(n), max = max(n)) %>% 
+  kable(format = "markdown")
+```
+
+個々のほしいものリストに含まれている商品数をグラフにするとこのようになります。ほしいものを100件詰め込むのはそれはそれで難しい話のようです。候補をたくさん用意するのは良さそうですが加減が必要そうです。
+
+```{r 160621_fig3, fig.cap = "ほしいものリスト内の商品数"}
+df.summary %>% 
+  dplyr::mutate(id = with(., reorder(id, n, median))) %>%
+  ggplot(aes(id, n)) + geom_bar(stat = "identity")
+```
+
+### 今後の方針
+
+簡単な傾向を見ただけですが、今回はここで終わります。今後は次のような項目について調べたいです。
+
+- 商品カテゴリーの区分... 今回はスクレイピングの件数から自重しましたが、こっちの方が気になる気もあります。
+- ほしい物ものリスト経由で、第三者からの提供があったのか調べたい
+    - 公開先、公開理由によって、提供される可能性は大きく異なるのか検証（結婚、進学・卒業は高いけど、引っ越しは低い、とか）
+
+気が向いたら続編として実行したいと思います。
+
+Enjoy :)
+
+## `r emoji("computer")` 実行環境
+
+```{r, eval = TRUE, echo = FALSE}
+devtools::session_info() %$% packages %>% 
+  dplyr::filter(`*`  == "*") %>% 
+  dplyr::select(package, version, source) %>% 
+  knitr::kable(format = "markdown")
+```
+
+```{r, eval = FALSE, echo = FALSE}
+df.wishlist.item <- readRDS("../../data/20160618_amazon_wish_list_item.rds")
+
+df.urls <- df.wishlist.item %>% dplyr::filter(!is.na(url)) %>% 
+  dplyr::select(url) %>% 
+  unique()
+# df.urls$url %>% unique() %>% length()
+
+get_category <- function(i.start = 1, i.end = nrow(df.urls)) {
+  foreach(i = i.start:i.end,
+          .combine = cbind,
+          .errorhandling = "pass") %do% {
+            Sys.sleep(3)
+            
+    df.urls$url[i] %>% read_html() %>% 
+      html_nodes(css = '#wayfinding-breadcrumbs_feature_div > ul > li:nth-child(1) > span > a') %>% 
+      html_text() %>% 
+      str_trim()
+  }
+}
+
+url.1 <- get_category(i.start = 1, i.end = 50)
+url.2 <- get_category(i.start = 51, i.end = 100)
+url.3 <- get_category(i.start = 101, i.end = 150)
+url.4 <- get_category(i.start = 151, i.end = 200)
+url.5 <- get_category(i.start = 201, i.end = 250)
+url.6 <- get_category(i.start = 251, i.end = 300)
+url.7 <- get_category(i.start = 301, i.end = 350)
+url.8 <- get_category(i.start = 351, i.end = 400)
+url.9 <- get_category(i.start = 401, i.end = 450)
+url.10 <- get_category(i.start = 451, i.end = 500)
+url.11 <- get_category(i.start = 501, i.end = 550)
+
+url.12 <- get_category(i.start = 551, i.end = 600)
+
+url.13 <- get_category(i.start = 601, i.end = 650)
+url.14 <- get_category(i.start = 651, i.end = 700)
+url.15 <- get_category(i.start = 701, i.end = 750)
+
+url.16 <- get_category(i.start = 751, i.end = 800)
+
+url.17 <- get_category(i.start = 801, i.end = 850)
+url.18 <- get_category(i.start = 851, i.end = 900)
+url.19 <- get_category(i.start = 901, i.end = 950)
+url.20 <- get_category(i.start = 951, i.end = 1050)
+url.21 <- get_category(i.start = 1051, i.end = 1100)
+url.22 <- get_category(i.start = 1101, i.end = 1150)
+url.23 <- get_category(i.start = 1151, i.end = 1200)
+url.24 <- get_category(i.start = 1201, i.end = 1250)
+url.25 <- get_category(i.start = 1251, i.end = 1300)
+url.26 <- get_category(i.start = 1301, i.end = 1350)
+# url.27 <- get_category(i.start = 1351, i.end = 1400)
+# url.28 <- get_category(i.start = 1401, i.end = 1450)
+# url.29 <- get_category(i.start = 1451, i.end = 1500)
+url.30 <- get_category(i.start = 1501, i.end = 1550)
+url.31 <- get_category(i.start = 1551, i.end = 1600)
+url.32 <- get_category(i.start = 1601, i.end = 1650)
+url.33 <- get_category(i.start = 1651, i.end = 1700)
+url.34 <- get_category(i.start = 1701, i.end = 1754)
+
+
+# save(df.urls,
+#      url.1, url.2, url.3, url.4, url.5,
+#      url.6, url.7, url.8, url.9, url.10,
+#      url.11, url.13, url.15,
+#      url.30, url.31, url.32, url.33, url.34,
+#      get_category,
+#      file = "tmp_item_category.RData")
+# 
+load(file = "tmp_item_category.RData")
+```
+
+

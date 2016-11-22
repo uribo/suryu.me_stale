@@ -1,0 +1,73 @@
+---
+title: "`r remoji::emoji('house')` room 207"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: flatly
+---
+
+```{r setup, include=FALSE}
+library(pacman)
+p_load(readr, lubridate, magrittr)
+p_load(plotly, dygraphs)
+library(flexdashboard)
+library(dplyr)
+```
+
+```{r collect_data, eval= TRUE, echo = FALSE}
+df.env <- read_csv("https://raw.githubusercontent.com/Cucurbitaceae/room207/master/data-raw/Environment.csv") %>% 
+  dplyr::filter(DateTime %within% interval(today() - 7, now()))
+df.utils <- read_csv("https://raw.githubusercontent.com/Cucurbitaceae/room207/master/data-raw/UtilityCosts.csv")
+df.utils %<>% dplyr::mutate(month = month(date)) %>% 
+  dplyr::filter(month == month(today()))
+```
+
+Airquality {data-icon="fa-cloud"}
+==================================
+
+```{r}
+xts::xts(df.env$Airquality, df.env$DateTime) %>% 
+  dygraph() %>% 
+  dyOptions(colors = RColorBrewer::brewer.pal(1, "Accent")) %>% 
+  dySeries(strokeWidth = 2) 
+```
+
+DigitalLight lux  {data-icon="fa-lightbulb-o"}
+==============================================
+
+```{r}
+xts::xts(df.env$DigitalLight.lux, df.env$DateTime) %>% 
+  dygraph() %>% 
+  dyOptions(colors = RColorBrewer::brewer.pal(1, "Accent")[3]) %>% 
+  dySeries(strokeWidth = 2) 
+```
+
+Humidity  {data-icon="fa-tint"}
+===============================
+
+```{r}
+xts::xts(df.env$Humidity, df.env$DateTime) %>% 
+  dygraph() %>% 
+  dyOptions(colors = RColorBrewer::brewer.pal(1, "Set2")) %>% 
+  dySeries(strokeWidth = 2) 
+```
+
+Temperature  {data-icon="fa-dashboard"}
+==================================
+
+```{r}
+xts::xts(df.env$Temperature, df.env$DateTime) %>% 
+  dygraph() %>% 
+  dyOptions(colors = RColorBrewer::brewer.pal(1, "Set1")) %>% 
+  dySeries(strokeWidth = 2)
+```
+
+Utiliy Costs  {data-icon="fa-money"}
+==================================
+
+```{r}
+plot_ly(df.utils, labels = infrastructure, values = price, type = "pie") %>%
+  layout(title = paste("Monthly Utilty Consts in", month(today(), label = TRUE), ",", year(today())))
+```
+

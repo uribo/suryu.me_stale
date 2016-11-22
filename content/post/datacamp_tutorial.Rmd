@@ -1,0 +1,99 @@
+---
+title:  "DataCampの力を借りてR学習ページを作る"
+author: "Shinya Uryu"
+date: 2016-09-11T09:20:00
+description: DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。
+# params:
+#   tags: [package]
+#   image: images/160911_tutorial.png
+---
+
+```{r, child = "../../_blog_post_declare.Rmd"}
+```
+
+R言語を取り扱うオンライン学習系サービスの中でも、[DataCamp](https://www.datacamp.com/)は他のオンライン学習系サービスと比べて少し頭が抜けている感じがある。それは個人的には[datacamp-light](https://github.com/datacamp/datacamp-light)と呼ばれる独自のシステムによるRあるいはPythonコードの実践を、動画を見た直後、オンラインで実行することができるという点が大きいように思う。
+
+そんなDataCampであるが、datacamp-lightをRMarkdown上でも利用可能にする**`{tutorial}`**パッケージを[開発している](https://github.com/datacamp/tutorial)。
+これを利用すると誰もがDataCampのような、利用者にコードを書いてもらってインタラクティブに解答のチェックを行うというシステムを構築できるようになる。今回のように個人ブログに埋め込んだり、Shinyのアプリケーションとして利用したりBookdownの中で利用できたり（検証はしていない）して夢が広がりそうなパッケージなので早速試してみたい。パッケージはすでにCRANに登録されているのでインストールは簡単。
+
+```{r, eval = FALSE, echo = TRUE}
+install.packages("tutorial")
+```
+
+RMarkdown上でdatacamp-lightを利用するにはチャンクコードで次のような宣言をしておく必要がある。
+
+    ```{r include = FALSE}
+    tutorial::go_interactive()
+    ```
+
+```{r, eval = TRUE, echo = FALSE}
+library(tutorial)
+library(testwhat)
+tutorial::go_interactive()
+```
+
+datacamp-lightは、RMarkdown中のチャンクコードの引数を利用してdatacamp-light形式の記述を行うことで機能する。重要なのは引数*ex*と引数*type*の２つだ。
+
+引数*ex*は問題を識別するためのIDのようなもので、問題設定のコードとヒント、解答用コードのチャンク間で統一したものを利用する必要がある。*type*引数には`pre-exercise-code`、`sample-code`、`solution`、`hint`、`sct`を指定できる。これらの値はそれぞれ、問題の内部で利用したいRパッケージやオブジェクト、問題の画面に出力されるコード、正解用のチャンク、ヒント、正解チェックとエラーハンドリングとして利用される。肝になるのが*type*=`sct`を指定した時のコードで、ユーザーが記述した回答に対する挙動を指定する。ここではコードテストとして[**`{testwhat}`**](https://github.com/datacamp/testwhat)の関数を通じて実行される。
+
+まだ使い方を覚えたわけではないが、とりあえず試してみた結果で問題を作ってみた。
+
+### 問題１: ホクソエムに含まれないものを選べ
+
+```{r ex = "create_a", type = "pre-exercise-code"}
+hoxom <- c("hoxo-m", "hoxo-monagi", "hoxo-um", "Haley Wicham", "hoxo-uri")
+```
+
+```{r ex = "create_a", type = "sample-code"}
+# Choose those that are not 'HOXO-M'
+hoxom <- c("hoxo-m", "hoxo-monagi", "hoxo-um", "Haley Wicham", "hoxo-uri")
+```
+
+```{r ex = "create_a", type = "solution"}
+hoxom[4]
+```
+
+```{r ex = "create_a", type = "sct"}
+test_output_contains("hoxom[4]", incorrect_msg = "He is GREAT a member.")
+success_msg("Great!")
+```
+
+### 問題２: dplyrパッケージの関数を利用しirisデータを操作せよ
+
+```{r, ex = "create_b", type = "pre-exercise-code"}
+library(dplyr)
+
+ans <- iris %>% filter(Species == "setosa") %>% 
+  summarise_if(is.numeric, mean)
+```
+
+```{r ex = "create_b", type = "sample-code"}
+# load dplyr library
+library(dplyr)
+
+# Select iris setosa and calculate mean value for all variables
+res <- iris %>% filter() %>% 
+  summarise_if()
+
+# Print result
+```
+
+```{r ex = "create_b", type = "solution"}
+library(dplyr)
+
+res <- iris %>% filter(Species == "setosa") %>% 
+  summarise_if(is.numeric, mean)
+
+print(res)
+```
+
+```{r ex = "create_b", type = "hint"}
+Check iris datasets variable types.
+```
+
+```{r ex = "create_b", type = "sct"}
+test_output_contains("ans", incorrect_msg = "FALSE")
+success_msg("Great!")
+```
+
+マスターできれば楽しい学習サイトを作成できそうだし、学校などでのR講習にも使えそうだ。本気で取り組む場合はDataCampの[R入門で使われているコード](https://github.com/datacamp/courses-intro-to-r)を参考にしてみるのが良さそう（**`{tutorial}`**を利用したRMarkdownファイルがある）。

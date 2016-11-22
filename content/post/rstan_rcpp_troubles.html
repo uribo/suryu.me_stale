@@ -1,0 +1,63 @@
+---
+title:  "Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い"
+author: "Shinya Uryu"
+date: 2016-08-19T10:25:00
+description: rstanを久しぶりに動かしてみたらstanコードのコンパイルに失敗していた。RCpp関係のエラーだったっぽくて、環境設定ファイルを編集したらコンパイルが正常に動くようになったという話。
+# params:
+#  tags: [rstan, trouble-shoot]
+#  image: inst/pic_card_default.png
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>久しぶりに<strong><code>{rstan}</code></strong>を使う機会になって、いざコードを実行しようとしたらコンパイルで失敗してしまった。エラーメッセージをみると次のようなことを言っている。</p>
+<pre><code>Error in compileCode(f, code, language = language, verbose = verbose) : 
+  Compilation ERROR, function(s)/method(s)...
+...</code></pre>
+<p>適当に検索してみると<a href="http://tjo.hatenablog.com/entry/2013/10/04/190701">{Rcpp}を入れる時はシステム内に既にあるgccに注意 - 六本木で働くデータサイエンティストのブログ</a>という記事を見つけたが、ここで述べられているのはWindowsでの話。こちらの環境はMacなのだけど、どうやら問題は<strong><code>{rstan}</code></strong>がコンパイルに依存しているgcc（厳密には <strong><code>{Rcpp}</code></strong>?）関係であるらしい。それで、もう少し他のものを検索してみたら</p>
+<p><a href="http://stackoverflow.com/questions/19503995/error-when-with-xcode-5-0-and-rcpp-command-line-tools-are-installed/19505397">r - Error when with Xcode 5.0 and Rcpp (Command Line Tools ARE installed) - Stack Overflow</a></p>
+<p>というのがあってまさにこれで対応できた。<code>~/.R/Makevars</code>というファイルを見ると、</p>
+<pre><code>CC=clang
+CXX=clang++
+CXXFLAGS = -Wall -mtune=core2  -O3 $(LTO)  #set_by_rstan&quot;
+R_XTRA_CPPFLAGS =  -I$(R_INCLUDE_DIR)   #set_by_rstan&quot;</code></pre>
+<p>に加えて</p>
+<pre><code>CC=clang
+CXX=clang++ -arch x86_64 -ftemplate-depth-256
+
+CC=clang
+CXX=clang++ -arch x86_64 -ftemplate-depth-256
+
+CC=clang
+CXX=clang++ -arch x86_64 -ftemplate-depth-256
+
+CC=clang-omp -fopenmp
+CXX=clang-omp++ -fopenmp
+CXXFLAGS=-O3 -mtune=native -march=native -Wno-unused-variable -Wno-unused-function</code></pre>
+<p>という記述があった。いつの間に書き加えられたのかわからないが、項目自体重複しているし、<strong>コメントアウトして保存した後に再度stanコードのコンパイルを実行したら正常に動作した</strong>。</p>
+<pre class="r"><code>library(rstan)
+stan_demo(1)</code></pre>
+<p>定期的に<strong><code>{rstan}</code></strong>動かさないとこういうトラブルに見舞われる気がするなあ…。</p>
+<div class="section level2">
+<h2>実行環境</h2>
+<ul>
+<li>R 3.3.1</li>
+<li>RStudio 0.99.1288</li>
+<li><strong><code>{rstan}</code></strong> 2.11.1</li>
+<li><strong><code>{Rcpp}</code></strong> 0.12.6</li>
+</ul>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->

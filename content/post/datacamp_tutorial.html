@@ -1,0 +1,50 @@
+---
+title:  "DataCampの力を借りてR学習ページを作る"
+author: "Shinya Uryu"
+date: 2016-09-11T09:20:00
+description: DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。
+# params:
+#   tags: [package]
+#   image: images/160911_tutorial.png
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
+<p>R言語を取り扱うオンライン学習系サービスの中でも、<a href="https://www.datacamp.com/">DataCamp</a>は他のオンライン学習系サービスと比べて少し頭が抜けている感じがある。それは個人的には<a href="https://github.com/datacamp/datacamp-light">datacamp-light</a>と呼ばれる独自のシステムによるRあるいはPythonコードの実践を、動画を見た直後、オンラインで実行することができるという点が大きいように思う。</p>
+<p>そんなDataCampであるが、datacamp-lightをRMarkdown上でも利用可能にする<strong><code>{tutorial}</code></strong>パッケージを<a href="https://github.com/datacamp/tutorial">開発している</a>。 これを利用すると誰もがDataCampのような、利用者にコードを書いてもらってインタラクティブに解答のチェックを行うというシステムを構築できるようになる。今回のように個人ブログに埋め込んだり、Shinyのアプリケーションとして利用したりBookdownの中で利用できたり（検証はしていない）して夢が広がりそうなパッケージなので早速試してみたい。パッケージはすでにCRANに登録されているのでインストールは簡単。</p>
+<pre class="r"><code>install.packages(&quot;tutorial&quot;)</code></pre>
+<p>RMarkdown上でdatacamp-lightを利用するにはチャンクコードで次のような宣言をしておく必要がある。</p>
+<pre><code>```{r include = FALSE}
+tutorial::go_interactive()
+```</code></pre>
+<p>datacamp-lightは、RMarkdown中のチャンクコードの引数を利用してdatacamp-light形式の記述を行うことで機能する。重要なのは引数<em>ex</em>と引数<em>type</em>の２つだ。</p>
+<p>引数<em>ex</em>は問題を識別するためのIDのようなもので、問題設定のコードとヒント、解答用コードのチャンク間で統一したものを利用する必要がある。<em>type</em>引数には<code>pre-exercise-code</code>、<code>sample-code</code>、<code>solution</code>、<code>hint</code>、<code>sct</code>を指定できる。これらの値はそれぞれ、問題の内部で利用したいRパッケージやオブジェクト、問題の画面に出力されるコード、正解用のチャンク、ヒント、正解チェックとエラーハンドリングとして利用される。肝になるのが<em>type</em>=<code>sct</code>を指定した時のコードで、ユーザーが記述した回答に対する挙動を指定する。ここではコードテストとして<a href="https://github.com/datacamp/testwhat"><strong><code>{testwhat}</code></strong></a>の関数を通じて実行される。</p>
+<p>まだ使い方を覚えたわけではないが、とりあえず試してみた結果で問題を作ってみた。</p>
+<div id="-" class="section level3">
+<h3>問題１: ホクソエムに含まれないものを選べ</h3>
+<div data-datacamp-exercise="" data-height="300" data-encoded="true">
+eyJsYW5ndWFnZSI6InIiLCJwcmVfZXhlcmNpc2VfY29kZSI6ImhveG9tIDwtIGMoXCJob3hvLW1cIiwgXCJob3hvLW1vbmFnaVwiLCBcImhveG8tdW1cIiwgXCJIYWxleSBXaWNoYW1cIiwgXCJob3hvLXVyaVwiKSIsInNhbXBsZSI6IiMgQ2hvb3NlIHRob3NlIHRoYXQgYXJlIG5vdCAnSE9YTy1NJ1xuaG94b20gPC0gYyhcImhveG8tbVwiLCBcImhveG8tbW9uYWdpXCIsIFwiaG94by11bVwiLCBcIkhhbGV5IFdpY2hhbVwiLCBcImhveG8tdXJpXCIpIiwic29sdXRpb24iOiJob3hvbVs0XSIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiaG94b21bNF1cIiwgaW5jb3JyZWN0X21zZyA9IFwiSGUgaXMgR1JFQVQgYSBtZW1iZXIuXCIpXG5zdWNjZXNzX21zZyhcIkdyZWF0IVwiKSJ9
+</div>
+</div>
+<div id="-dplyriris" class="section level3">
+<h3>問題２: dplyrパッケージの関数を利用しirisデータを操作せよ</h3>
+<div data-datacamp-exercise="" data-height="300" data-encoded="true">
+eyJsYW5ndWFnZSI6InIiLCJwcmVfZXhlcmNpc2VfY29kZSI6ImxpYnJhcnkoZHBseXIpXG5cbmFucyA8LSBpcmlzICU+JSBmaWx0ZXIoU3BlY2llcyA9PSBcInNldG9zYVwiKSAlPiUgXG4gIHN1bW1hcmlzZV9pZihpcy5udW1lcmljLCBtZWFuKSIsInNhbXBsZSI6IiMgbG9hZCBkcGx5ciBsaWJyYXJ5XG5saWJyYXJ5KGRwbHlyKVxuXG4jIFNlbGVjdCBpcmlzIHNldG9zYSBhbmQgY2FsY3VsYXRlIG1lYW4gdmFsdWUgZm9yIGFsbCB2YXJpYWJsZXNcbnJlcyA8LSBpcmlzICU+JSBmaWx0ZXIoKSAlPiUgXG4gIHN1bW1hcmlzZV9pZigpXG5cbiMgUHJpbnQgcmVzdWx0Iiwic29sdXRpb24iOiJsaWJyYXJ5KGRwbHlyKVxuXG5yZXMgPC0gaXJpcyAlPiUgZmlsdGVyKFNwZWNpZXMgPT0gXCJzZXRvc2FcIikgJT4lIFxuICBzdW1tYXJpc2VfaWYoaXMubnVtZXJpYywgbWVhbilcblxucHJpbnQocmVzKSIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiYW5zXCIsIGluY29ycmVjdF9tc2cgPSBcIkZBTFNFXCIpXG5zdWNjZXNzX21zZyhcIkdyZWF0IVwiKSIsImhpbnQiOiJDaGVjayBpcmlzIGRhdGFzZXRzIHZhcmlhYmxlIHR5cGVzLiJ9
+</div>
+<p>マスターできれば楽しい学習サイトを作成できそうだし、学校などでのR講習にも使えそうだ。本気で取り組む場合はDataCampの<a href="https://github.com/datacamp/courses-intro-to-r">R入門で使われているコード</a>を参考にしてみるのが良さそう（<strong><code>{tutorial}</code></strong>を利用したRMarkdownファイルがある）。</p>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->

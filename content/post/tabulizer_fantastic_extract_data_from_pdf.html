@@ -1,0 +1,124 @@
+---
+title:  "tabulizerパッケージによるPDF表データからのデータ取得"
+author: "Shinya Uryu"
+date: 2016-08-24T08:10:00
+description: ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。使ってみた感じ、PDFからのデータ取得の決定版となりそうな大変便利なパッケージであることがわかったので、その機能を試しておく。
+# params:
+#   tags: [package]
+#   image: inst/pic_card_default.png
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。<a href="https://github.com/ropenscilabs/tabulizer"><strong><code>{tabulizer}</code></strong></a>というものだ。このパッケージは<a href="http://tabula.technology">Tabula</a>というオープンソースツールの機能を利用して、PDF中に含まれる表から、値を取り出すというもの。</p>
+<p>政府や企業の報告書はPDFであることが多く（二次利用を想定していないのだろうが）、表としてデータが収められていることがしばしばある。PDFからのデータ取得方法として、Rでは <strong><code>{tm}</code></strong>を<a href="http://uribo.hatenablog.com/entry/2015/11/29/140000">使う方法</a>や<strong><code>{pdftools}</code></strong>を<a href="http://uribo.hatenablog.com/entry/2016/02/27/195500">利用する方法</a>がそれぞれあるが、<strong><code>{pdftools}</code></strong>ではテキストベースでの抽出となるため、表データの抽出からRの特徴とも言えるデータフレーム形式への変換が困難であった。そこでこの<strong><code>{tabulizer}</code></strong>を使うことで、PDFに含まれる表データの抽出が可能となり、Rで扱えるデータの幅が広がることが考えられる。</p>
+<p>使ってみた感じ、<strong>PDFからのデータ取得の決定版となりそうな大変便利なパッケージ</strong>であることがわかったので、その機能を試しておく。</p>
+<p>パッケージは現在CRANには登録されていないのでGitHubのリポジトリからダウンロードしてくる。利用の際に<strong><code>{tabulizerjars}</code></strong>というパッケージも必要になるのでこちらもインストール（<strong><code>{rJava}</code></strong>に依存しているのでWindows環境では面倒かも）。なおGitHubリポジトリ上のインストールの際は<strong><code>{githubinstall}</code></strong>を利用するのが楽。</p>
+<pre class="r"><code>library(githubinstall)
+githubinstall(c(&quot;tabulizerjars&quot;, &quot;tabulizer&quot;))</code></pre>
+<div class="section level2">
+<h2>使い方</h2>
+<p>GitHubの<a href="https://github.com/ropenscilabs/tabulizer/blob/master/vignettes/tabulizer.Rmd">vignettesに解説記事</a>があるが一通り紹介しておく。</p>
+<pre class="r"><code>library(tabulizer)</code></pre>
+<div id="pdf-extract_tables" class="section level3">
+<h3>PDFからの表データ取得: extract_tables</h3>
+<p>メインとなる関数が<code>extract_tables()</code>。この関数では引数に与えたPDFファイル（ローカル上でもウェブ上でも良い）に含まれる表からデータを抽出する。引数がいくつか用意されていて、PDFへのパス以外何も指定しない場合にはすべてのPDFのページを対象に表データの抽出を実行する。返り値は行列のリストが初期値となっている。</p>
+<p>例として、<strong><code>{tabulizer}</code></strong>パッケージインストール時に付属するPDFファイルを対象に操作してみる。なおこのファイルは <a href="https://github.com/leeper/tabulizer/raw/master/inst/examples/data.pdf" class="uri">https://github.com/leeper/tabulizer/raw/master/inst/examples/data.pdf</a> にあるものと同じなので、実行結果を比較してみたい方はリンク先のPDFを見てもらうと良いだろう。</p>
+<pre class="r"><code>path2pdf &lt;- system.file(&quot;examples&quot;, &quot;data.pdf&quot;, package = &quot;tabulizer&quot;)
+out &lt;- extract_tables(path2pdf)
+class(out) # リストクラス
+
+# 表データの取り出し
+out[[1]] %&gt;% head()</code></pre>
+<p>Rで利用する場合はデータフレームであると何かと都合が良いので、データフレームとして取り出すオプションとして、引数<em>method</em>が用意されている。<code>*method*=&quot;data.frame&quot;</code>でリストの中身がデータフレームとして与えられるようになる。</p>
+<pre class="r"><code>out &lt;- extract_tables(path2pdf, 
+               pages = 2,
+               method = &quot;data.frame&quot;)
+
+out</code></pre>
+<p>今回は<em>pages</em>引数で対象ページを指定した。ページ内に複数の表が存在する場合にはデータフレームも２つになる。</p>
+<p>引数<em>method</em>は既定値でmatrixだが、data.frameやcharacterも選べるようになっている。またさらなるオプションとして、取得結果をRのオブジェクトではなくcsvやtsv、json形式で保存するようにも設定できる。保存の際は作業ディレクトリではなくPDFが位置するディレクトリに作成される（ウェブ上のPDFを対象にすることはできない）。</p>
+<pre class="r"><code>extract_tables(path2pdf, 
+               pages = 3,
+               method = &quot;csv&quot;)
+# [1] &quot;/Library/Frameworks/R.framework/Versions/3.3/Resources/library/tabulizer/examples&quot;</code></pre>
+<p>表の部分的な抽出も<em>area</em>引数の指定により可能となっている。これは１つのページから複数のテーブルデータを得る場合などに役立つ。<em>area</em>は<code>list()</code>でPDFの座標位置（上左下右の順番）を与える必要があるので闇雲に対象のデータがある座標を探すことになってしまうが、その際は次の<code>locate_areas()</code>を利用すると良いだろう。</p>
+<pre class="r"><code>extract_tables(path2pdf, 
+               pages = 2,
+               area = list(c(126, 149, 212, 462)),
+               method = &quot;data.frame&quot;)</code></pre>
+<div class="section level4">
+<h4>インタラクティブな操作で取得範囲を指定</h4>
+<p>Shiny Widgetsの機能を利用した<code>locate_areas()</code>または<code>extract_areas()</code>の実行により、インタクティブに取得範囲を指定できるようになる。これは対象のPDFをブラウザ上に描画させ、データ取得を実行する範囲をユーザーで指定する（ドラックで範囲指定）というもの。</p>
+<p><img src="../../img/160824_tabulizer.gif" style="display: block; margin: auto;"></p>
+<pre class="r"><code>locate_areas(path2pdf, pages = 2, widget = &quot;shiny&quot;)
+# [[1]]
+#      top     left   bottom    right 
+# 123.6069 159.5029 208.3006 287.6879 </code></pre>
+<p>返り値の座標を<code>extract_tables()</code>の<em>area</em>引数の値として与えてみると</p>
+<pre class="r"><code>extract_tables(path2pdf,
+               pages = 2,
+               method = &quot;data.frame&quot;,
+               area = list(c(120, 150, 210, 280)))</code></pre>
+<p>見事に該当箇所のデータが取得できた！</p>
+<p>もう一つの<code>extract_areas()</code>関数の方は、指定箇所のデータを直接取得するというもの。</p>
+<pre class="r"><code>extract_areas(path2pdf, pages = 2)
+# [[1]]
+#      [,1]          
+# [1,] &quot;Petal.Length&quot;
+# [2,] &quot;1.4&quot;         
+# [3,] &quot;1.4&quot;         
+# [4,] &quot;1.3&quot;         
+# [5,] &quot;1.5&quot;         
+# [6,] &quot;1.4&quot;         
+# [7,] &quot;1.7&quot; </code></pre>
+</div>
+</div>
+<div id="-extract_metadata" class="section level3">
+<h3>メタ情報の取得: extract_metadata</h3>
+<p>関数<code>extract_metadata()</code>は対象PDFのメタ情報（タイトルやページ数、作成日など）を取得する関数となっている。PDFの概要を知りたい場合に便利だろう（<code>pdftools::pdf_info()</code>と同様の機能）。</p>
+<pre class="r"><code># extract_metadata関数によって取得されるメタデータ
+extract_metadata(path2pdf) %&gt;% names()</code></pre>
+</div>
+<div class="section level3">
+<h3>表サイズの確認</h3>
+<p>これは<code>extract_tables()</code>での引数<em>area</em>の指定に役立つと思われる。</p>
+<pre class="r"><code>get_page_dims(path2pdf)
+get_n_pages(path2pdf) # ページ数</code></pre>
+</div>
+<div id="pdf-split_pdf-merge_pdfs" class="section level3">
+<h3>PDFの分割と結合: split_pdf / merge_pdfs</h3>
+<p>PDFを分割したり、複数のPDFを結合する関数が用意されている。</p>
+<pre class="r"><code># 一時フォルダに各ページのPDFが保存される
+(sf &lt;- split_pdf(path2pdf))
+# [1] &quot;/var/folders/8f/s_lbgwks6q7g3lz52q93ngph0000gn/T//Rtmpx4BCAz/data1.pdf&quot; &quot;/var/folders/8f/s_lbgwks6q7g3lz52q93ngph0000gn/T//Rtmpx4BCAz/data2.pdf&quot;
+# [3] &quot;/var/folders/8f/s_lbgwks6q7g3lz52q93ngph0000gn/T//Rtmpx4BCAz/data3.pdf&quot;
+
+# PDFを結合
+merge_pdfs(sf, &quot;merge.pdf&quot;)</code></pre>
+</div>
+<div id="pdf" class="section level3">
+<h3>PDFのサムネイル生成</h3>
+<p><code>pdftools::pdf_render_page()</code>と同じように、PDFの各ページについてサムネイル画像を生成する関数が用意されている。<code>make_thumbnails()</code>にPDFのパスを与えると、PDFがあるフォルダにpng形式の画像ファイルが生成される（出力先や画像ファイルの拡張子は引数の指定により変更可能。）</p>
+<pre class="r"><code>make_thumbnails(path2pdf,
+                pages = 1,
+                format = &quot;png&quot;,
+                resolution = 72L,
+                outdir = &quot;inst/&quot;)</code></pre>
+<p><img src="../../img/tabulizer_data1.png" style="display: block; margin: auto;"></p>
+</div>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->

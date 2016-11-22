@@ -1,0 +1,753 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>tabulizerパッケージによるPDF表データからのデータ取得</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17" />
+        
+
+
+        
+            <meta name="author" content="Shinya Uryu">
+        
+        
+            <meta name="description" content="ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。使ってみた感じ、PDFからのデータ取得の決定版となりそうな大変便利なパッケージであることがわかったので、その機能を試しておく。">
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="tabulizerパッケージによるPDF表データからのデータ取得"/>
+<meta name="twitter:description" content="ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。使ってみた感じ、PDFからのデータ取得の決定版となりそうな大変便利なパッケージであることがわかったので、その機能を試しておく。"/>
+<meta name="twitter:site" content="@u_ribo"/>
+
+
+        <meta property="og:title" content="tabulizerパッケージによるPDF表データからのデータ取得" />
+<meta property="og:description" content="ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。使ってみた感じ、PDFからのデータ取得の決定版となりそうな大変便利なパッケージであることがわかったので、その機能を試しておく。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/tabulizer_fantastic_extract_data_from_pdf/" />
+
+
+<meta property="og:updated_time" content="2016-08-24T08:10:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="tabulizerパッケージによるPDF表データからのデータ取得">
+<meta itemprop="description" content="ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。使ってみた感じ、PDFからのデータ取得の決定版となりそうな大変便利なパッケージであることがわかったので、その機能を試しておく。">
+
+
+<meta itemprop="dateModified" content="2016-08-24T08:10:00&#43;00:00" />
+<meta itemprop="wordCount" content="2286">
+
+
+
+<meta itemprop="keywords" content="R," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="../../css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+
+
+
+
+
+
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="../../">Wonderful R World</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="../../post">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../categories">
+                        
+                            <i class="fa fa-list-alt">&nbsp;</i>Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../project">
+                        
+                            <i class="fa fa-diamond">&nbsp;</i>Project
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../about">
+                        
+                            <i class="fa fa-user">&nbsp;</i>About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="../../post">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../categories">
+                            <h3>
+                                
+                                    <i class="fa fa-list-alt">&nbsp;</i>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../project">
+                            <h3>
+                                
+                                    <i class="fa fa-diamond">&nbsp;</i>
+                                
+                                Project
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../about">
+                            <h3>
+                                
+                                    <i class="fa fa-user">&nbsp;</i>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/tabulizer_fantastic_extract_data_from_pdf/"><p>tabulizerパッケージによるPDF表データからのデータ取得</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/rstan_rcpp_troubles/"><p>Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/mesh_code_mapping/"><p>標準地域メッシュによる地図の塗り分け</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=%2fpost%2ftabulizer_fantastic_extract_data_from_pdf%2f&text=tabulizer%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%ab%e3%82%88%e3%82%8bPDF%e8%a1%a8%e3%83%87%e3%83%bc%e3%82%bf%e3%81%8b%e3%82%89%e3%81%ae%e3%83%87%e3%83%bc%e3%82%bf%e5%8f%96%e5%be%97&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=%2fpost%2ftabulizer_fantastic_extract_data_from_pdf%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2ftabulizer_fantastic_extract_data_from_pdf%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=%2fpost%2ftabulizer_fantastic_extract_data_from_pdf%2f&title=tabulizer%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%ab%e3%82%88%e3%82%8bPDF%e8%a1%a8%e3%83%87%e3%83%bc%e3%82%bf%e3%81%8b%e3%82%89%e3%81%ae%e3%83%87%e3%83%bc%e3%82%bf%e5%8f%96%e5%be%97" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2ftabulizer_fantastic_extract_data_from_pdf%2f&title=tabulizer%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%ab%e3%82%88%e3%82%8bPDF%e8%a1%a8%e3%83%87%e3%83%bc%e3%82%bf%e3%81%8b%e3%82%89%e3%81%ae%e3%83%87%e3%83%bc%e3%82%bf%e5%8f%96%e5%be%97" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2ftabulizer_fantastic_extract_data_from_pdf%2f&title=tabulizer%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%ab%e3%82%88%e3%82%8bPDF%e8%a1%a8%e3%83%87%e3%83%bc%e3%82%bf%e3%81%8b%e3%82%89%e3%81%ae%e3%83%87%e3%83%bc%e3%82%bf%e5%8f%96%e5%be%97" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2ftabulizer_fantastic_extract_data_from_pdf%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="../../post/tabulizer_fantastic_extract_data_from_pdf/">tabulizerパッケージによるPDF表データからのデータ取得</a></h1>
+            
+        
+        
+            <p>ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。使ってみた感じ、PDFからのデータ取得の決定版となりそうな大変便利なパッケージであることがわかったので、その機能を試しておく。</p>
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-08-24'>
+            August 24, 2016</time>
+        <span class="author">Shinya Uryu</span>
+        
+            <p>5 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+
+    
+
+    <div id="content">
+
+
+<p>ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。<a href="https://github.com/ropenscilabs/tabulizer"><strong><code>{tabulizer}</code></strong></a>というものだ。このパッケージは<a href="http://tabula.technology">Tabula</a>というオープンソースツールの機能を利用して、PDF中に含まれる表から、値を取り出すというもの。</p>
+<p>政府や企業の報告書はPDFであることが多く（二次利用を想定していないのだろうが）、表としてデータが収められていることがしばしばある。PDFからのデータ取得方法として、Rでは <strong><code>{tm}</code></strong>を<a href="http://uribo.hatenablog.com/entry/2015/11/29/140000">使う方法</a>や<strong><code>{pdftools}</code></strong>を<a href="http://uribo.hatenablog.com/entry/2016/02/27/195500">利用する方法</a>がそれぞれあるが、<strong><code>{pdftools}</code></strong>ではテキストベースでの抽出となるため、表データの抽出からRの特徴とも言えるデータフレーム形式への変換が困難であった。そこでこの<strong><code>{tabulizer}</code></strong>を使うことで、PDFに含まれる表データの抽出が可能となり、Rで扱えるデータの幅が広がることが考えられる。</p>
+<p>使ってみた感じ、<strong>PDFからのデータ取得の決定版となりそうな大変便利なパッケージ</strong>であることがわかったので、その機能を試しておく。</p>
+<p>パッケージは現在CRANには登録されていないのでGitHubのリポジトリからダウンロードしてくる。利用の際に<strong><code>{tabulizerjars}</code></strong>というパッケージも必要になるのでこちらもインストール（<strong><code>{rJava}</code></strong>に依存しているのでWindows環境では面倒かも）。なおGitHubリポジトリ上のインストールの際は<strong><code>{githubinstall}</code></strong>を利用するのが楽。</p>
+<pre class="r"><code>library(githubinstall)
+githubinstall(c(&quot;tabulizerjars&quot;, &quot;tabulizer&quot;))</code></pre>
+<div class="section level2">
+<h2>使い方</h2>
+<p>GitHubの<a href="https://github.com/ropenscilabs/tabulizer/blob/master/vignettes/tabulizer.Rmd">vignettesに解説記事</a>があるが一通り紹介しておく。</p>
+<pre class="r"><code>library(tabulizer)</code></pre>
+<div id="pdf-extract_tables" class="section level3">
+<h3>PDFからの表データ取得: extract_tables</h3>
+<p>メインとなる関数が<code>extract_tables()</code>。この関数では引数に与えたPDFファイル（ローカル上でもウェブ上でも良い）に含まれる表からデータを抽出する。引数がいくつか用意されていて、PDFへのパス以外何も指定しない場合にはすべてのPDFのページを対象に表データの抽出を実行する。返り値は行列のリストが初期値となっている。</p>
+<p>例として、<strong><code>{tabulizer}</code></strong>パッケージインストール時に付属するPDFファイルを対象に操作してみる。なおこのファイルは <a href="https://github.com/leeper/tabulizer/raw/master/inst/examples/data.pdf" class="uri">https://github.com/leeper/tabulizer/raw/master/inst/examples/data.pdf</a> にあるものと同じなので、実行結果を比較してみたい方はリンク先のPDFを見てもらうと良いだろう。</p>
+<pre class="r"><code>path2pdf &lt;- system.file(&quot;examples&quot;, &quot;data.pdf&quot;, package = &quot;tabulizer&quot;)
+out &lt;- extract_tables(path2pdf)
+class(out) # リストクラス
+
+# 表データの取り出し
+out[[1]] %&gt;% head()</code></pre>
+<p>Rで利用する場合はデータフレームであると何かと都合が良いので、データフレームとして取り出すオプションとして、引数<em>method</em>が用意されている。<code>*method*=&quot;data.frame&quot;</code>でリストの中身がデータフレームとして与えられるようになる。</p>
+<pre class="r"><code>out &lt;- extract_tables(path2pdf, 
+               pages = 2,
+               method = &quot;data.frame&quot;)
+
+out</code></pre>
+<p>今回は<em>pages</em>引数で対象ページを指定した。ページ内に複数の表が存在する場合にはデータフレームも２つになる。</p>
+<p>引数<em>method</em>は既定値でmatrixだが、data.frameやcharacterも選べるようになっている。またさらなるオプションとして、取得結果をRのオブジェクトではなくcsvやtsv、json形式で保存するようにも設定できる。保存の際は作業ディレクトリではなくPDFが位置するディレクトリに作成される（ウェブ上のPDFを対象にすることはできない）。</p>
+<pre class="r"><code>extract_tables(path2pdf, 
+               pages = 3,
+               method = &quot;csv&quot;)
+# [1] &quot;/Library/Frameworks/R.framework/Versions/3.3/Resources/library/tabulizer/examples&quot;</code></pre>
+<p>表の部分的な抽出も<em>area</em>引数の指定により可能となっている。これは１つのページから複数のテーブルデータを得る場合などに役立つ。<em>area</em>は<code>list()</code>でPDFの座標位置（上左下右の順番）を与える必要があるので闇雲に対象のデータがある座標を探すことになってしまうが、その際は次の<code>locate_areas()</code>を利用すると良いだろう。</p>
+<pre class="r"><code>extract_tables(path2pdf, 
+               pages = 2,
+               area = list(c(126, 149, 212, 462)),
+               method = &quot;data.frame&quot;)</code></pre>
+<div class="section level4">
+<h4>インタラクティブな操作で取得範囲を指定</h4>
+<p>Shiny Widgetsの機能を利用した<code>locate_areas()</code>または<code>extract_areas()</code>の実行により、インタクティブに取得範囲を指定できるようになる。これは対象のPDFをブラウザ上に描画させ、データ取得を実行する範囲をユーザーで指定する（ドラックで範囲指定）というもの。</p>
+<p><img src="../../img/160824_tabulizer.gif" style="display: block; margin: auto;"></p>
+<pre class="r"><code>locate_areas(path2pdf, pages = 2, widget = &quot;shiny&quot;)
+# [[1]]
+#      top     left   bottom    right 
+# 123.6069 159.5029 208.3006 287.6879 </code></pre>
+<p>返り値の座標を<code>extract_tables()</code>の<em>area</em>引数の値として与えてみると</p>
+<pre class="r"><code>extract_tables(path2pdf,
+               pages = 2,
+               method = &quot;data.frame&quot;,
+               area = list(c(120, 150, 210, 280)))</code></pre>
+<p>見事に該当箇所のデータが取得できた！</p>
+<p>もう一つの<code>extract_areas()</code>関数の方は、指定箇所のデータを直接取得するというもの。</p>
+<pre class="r"><code>extract_areas(path2pdf, pages = 2)
+# [[1]]
+#      [,1]          
+# [1,] &quot;Petal.Length&quot;
+# [2,] &quot;1.4&quot;         
+# [3,] &quot;1.4&quot;         
+# [4,] &quot;1.3&quot;         
+# [5,] &quot;1.5&quot;         
+# [6,] &quot;1.4&quot;         
+# [7,] &quot;1.7&quot; </code></pre>
+</div>
+</div>
+<div id="-extract_metadata" class="section level3">
+<h3>メタ情報の取得: extract_metadata</h3>
+<p>関数<code>extract_metadata()</code>は対象PDFのメタ情報（タイトルやページ数、作成日など）を取得する関数となっている。PDFの概要を知りたい場合に便利だろう（<code>pdftools::pdf_info()</code>と同様の機能）。</p>
+<pre class="r"><code># extract_metadata関数によって取得されるメタデータ
+extract_metadata(path2pdf) %&gt;% names()</code></pre>
+</div>
+<div class="section level3">
+<h3>表サイズの確認</h3>
+<p>これは<code>extract_tables()</code>での引数<em>area</em>の指定に役立つと思われる。</p>
+<pre class="r"><code>get_page_dims(path2pdf)
+get_n_pages(path2pdf) # ページ数</code></pre>
+</div>
+<div id="pdf-split_pdf-merge_pdfs" class="section level3">
+<h3>PDFの分割と結合: split_pdf / merge_pdfs</h3>
+<p>PDFを分割したり、複数のPDFを結合する関数が用意されている。</p>
+<pre class="r"><code># 一時フォルダに各ページのPDFが保存される
+(sf &lt;- split_pdf(path2pdf))
+# [1] &quot;/var/folders/8f/s_lbgwks6q7g3lz52q93ngph0000gn/T//Rtmpx4BCAz/data1.pdf&quot; &quot;/var/folders/8f/s_lbgwks6q7g3lz52q93ngph0000gn/T//Rtmpx4BCAz/data2.pdf&quot;
+# [3] &quot;/var/folders/8f/s_lbgwks6q7g3lz52q93ngph0000gn/T//Rtmpx4BCAz/data3.pdf&quot;
+
+# PDFを結合
+merge_pdfs(sf, &quot;merge.pdf&quot;)</code></pre>
+</div>
+<div id="pdf" class="section level3">
+<h3>PDFのサムネイル生成</h3>
+<p><code>pdftools::pdf_render_page()</code>と同じように、PDFの各ページについてサムネイル画像を生成する関数が用意されている。<code>make_thumbnails()</code>にPDFのパスを与えると、PDFがあるフォルダにpng形式の画像ファイルが生成される（出力先や画像ファイルの拡張子は引数の指定により変更可能。）</p>
+<pre class="r"><code>make_thumbnails(path2pdf,
+                pages = 1,
+                format = &quot;png&quot;,
+                resolution = 72L,
+                outdir = &quot;inst/&quot;)</code></pre>
+<p><img src="../../img/tabulizer_data1.png" style="display: block; margin: auto;"></p>
+</div>
+</div>
+
+
+
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+
+    
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="../../post/rstan_rcpp_troubles/"
+                class="button big previous">Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</a></li>
+    
+
+    
+        <li><a href="../../post/datacamp_tutorial/"
+                class="button big next">DataCampの力を借りてR学習ページを作る</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/tabulizer_fantastic_extract_data_from_pdf\/';
+    var disqus_title = 'tabulizerパッケージによるPDF表データからのデータ取得';
+    var disqus_url = '\/post\/tabulizer_fantastic_extract_data_from_pdf\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <a href="../../" class="logo"><img src="../../img/main/logo.jpg" alt="me" /></a>
+                
+            
+            
+                <header>
+                    <h2>Sincere Pumpkin Patch</h2>
+                    <p></p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/uribo" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//foursquare.com/u_ribo" target="_blank" title="Foursquare" class="fa fa-foursquare"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/_suika" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+<li><a href="//instagram.com/u_ribo" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/ur1bo" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+<li><a href="//twitter.com/u_ribo" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+<li><a href="mailto:suika1127@gmail.com" title="Email" class="fa fa-envelope"></a></li>
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-11'>
+                                    September 11, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/tabulizer_fantastic_extract_data_from_pdf/">tabulizerパッケージによるPDF表データからのデータ取得</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-24'>
+                                    August 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/rstan_rcpp_troubles/">Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-19'>
+                                    August 19, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/mesh_code_mapping/">標準地域メッシュによる地図の塗り分け</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-09'>
+                                    August 9, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /post/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="../../categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/r/">R</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>Howdy, I&#39;m Shinya. Engineer, Data Science Enthusiast and Ecologist. This blog is my knowledge work for R that data science language. Most of my work is in the open source R code, which you can find and install on my GitHub https://github.com/uribo .</p>
+
+            <ul class="actions">
+                <li><a href="../../about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+            </ul>
+
+            <p class="copyright">&copy; suryu.me. The contents on this site are licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.<br>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="../../js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+
