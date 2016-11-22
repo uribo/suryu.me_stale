@@ -1,0 +1,16 @@
+```{r [SETTING], include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  echo = TRUE, 
+  eval = TRUE, 
+  message = FALSE, 
+  error = FALSE, 
+  warning = FALSE,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 5,
+  tidy = FALSE,
+  tidy.opts = list(blank = FALSE, width.cutoff = 40))
+```
+
+
