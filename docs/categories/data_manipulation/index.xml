@@ -45,7 +45,7 @@
 &lt;/table&gt;
 &lt;div id=&#34;if_else&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;if_else関数&lt;/h2&gt;
-&lt;p&gt;ドキュメントによると、この変数は、R標準関数の制御関数の一つである&lt;code&gt;ifelse()&lt;/code&gt;と比べてより厳密 strict なものであるらしい。真偽値の判定を実行するコード（xはyよりも大きい、xのクラスはzである、とか）と、真偽それぞれの状況の応答を引数に与えて実行する。またこの関数は、それだけでなくxの値が欠損値である場合についても特定の処理を実行するという特徴をもつ。欠損値に対する挙動は引数&lt;em&gt;missing&lt;/em&gt;によって与える。&lt;/p&gt;
+&lt;p&gt;ドキュメントによるとこの関数は、R標準の制御関数の一つである&lt;code&gt;ifelse()&lt;/code&gt;と比べてより厳密 strict なものであるらしい。真偽値の判定を実行するコード（xはyよりも大きい、xのクラスはzである、とか）と、真偽それぞれの状況の応答を引数に与えて実行する。またこの関数は、それだけでなくxの値が欠損値である場合についても特定の処理を実行するという特徴をもつ。欠損値に対する挙動は引数&lt;em&gt;missing&lt;/em&gt;によって与える。&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- c(-3:3, NA)
 if_else(x &amp;lt; 0, &amp;quot;negative&amp;quot;, &amp;quot;positive&amp;quot;, missing = &amp;quot;missing&amp;quot;)
 ## [1] &amp;quot;negative&amp;quot; &amp;quot;negative&amp;quot; &amp;quot;negative&amp;quot; &amp;quot;positive&amp;quot; &amp;quot;positive&amp;quot; &amp;quot;positive&amp;quot;
@@ -64,14 +64,14 @@ if_else(x &amp;lt; 0, &amp;quot;negative&amp;quot;, &amp;quot;positive&amp;quot;
 &lt;/div&gt;
 &lt;div id=&#34;case_when&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;case_when関数&lt;/h2&gt;
-&lt;p&gt;変換候補が複数あるとき、&lt;code&gt;if_else()&lt;/code&gt;よりも&lt;code&gt;case_when()&lt;/code&gt;を使うのが効率的だ。&lt;code&gt;case_when()&lt;/code&gt;では関数名の通り、条件分岐によるベクトル内の要素の変更を行う。書き方が特殊なので慣れが必要。引数内で条件式とそれに該当する値の変更値をチルダ記号で繋いで指定する。&lt;/p&gt;
+&lt;p&gt;変換候補が複数あるとき、&lt;code&gt;if_else()&lt;/code&gt;よりも&lt;code&gt;case_when()&lt;/code&gt;を使うのが効率的だ。&lt;code&gt;case_when()&lt;/code&gt;では関数名の通り、条件分岐によるベクトル内の要素の変更を行う。書き方が特殊なので慣れが必要。引数内で条件式とそれに該当する値の変更値をチルダ記号（&lt;code&gt;~&lt;/code&gt;）で繋いで指定する。&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- c(-3:3, NA)
 case_when(
   x &amp;lt; 0 ~ &amp;quot;negative&amp;quot;,
   x &amp;gt; 0 ~ &amp;quot;positive&amp;quot;)
 ## [1] &amp;quot;negative&amp;quot; &amp;quot;negative&amp;quot; &amp;quot;negative&amp;quot; NA         &amp;quot;positive&amp;quot; &amp;quot;positive&amp;quot;
 ## [7] &amp;quot;positive&amp;quot; NA&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;上記のように引数に与えた複数の条件に対して値が変更されるが、気をつけないといけないのが、要素の各値に対する挙動を指定しないと、条件に当てはまらない、つまり真となる条件のない要素については欠損値に置換されてしまう。先の例では、元の欠損値に加え、0もNAになっている。&lt;/p&gt;
+&lt;p&gt;上記のように引数に与えた複数の条件に対して値が変更されるが、気をつけないといけないのが要素の各値に対する挙動である。個々の挙動を指定しないと、条件に当てはまらない、つまり真となる条件のない要素については欠損値に置換されてしまう。先の例では元の欠損値に加え、0もNAになっている。&lt;/p&gt;
 &lt;p&gt;で、これを&lt;code&gt;mutate()&lt;/code&gt;の中で使うときの注意点。&lt;code&gt;mutate()&lt;/code&gt;の中で関数を利用する場合、変数の参照は「&lt;code&gt;.$&lt;/code&gt;」で行うということを思い出して次のようにする。&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df.animals &amp;lt;- tibble::frame_data(
   ~team, ~rank,
@@ -108,13 +108,13 @@ recode(x, `3` = 6L, `-3` = -8L)
 # 1, 2, 3... が対象となる
 recode(x, 6L, -8L, 10L)
 ## [1] -3 -2 -1  0  6 -8 10 NA&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;ベクトル内の要素は同じ型でなければいけないので、次のように整数と実数や、数値ベクトルに文字列を混ぜようとすると怒られる。怒られるだけでなく、その他の値は欠損値となってしまう。&lt;/p&gt;
+&lt;p&gt;ベクトル内の要素は同じ型でなければいけないので、次のように整数と実数や数値ベクトルに文字列を混ぜようとすると怒られる。怒られるだけでなく、その他の値は欠損値となってしまう。&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# integerとnumericも区別されるので注意
 recode(x, `3` = 6)
 ## [1] NA NA NA NA NA NA  6 NA
 recode(x, `3` = &amp;quot;three&amp;quot;)
 ## [1] NA      NA      NA      NA      NA      NA      &amp;quot;three&amp;quot; NA&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;すべての要素の挙動を指定する必要はないが、指定したもの以外の値について、&lt;code&gt;.default&lt;/code&gt;引数を用いて一括で指定できる。&lt;/p&gt;
+&lt;p&gt;すべての要素の挙動を指定する必要はないが、指定したもの以外の値について&lt;code&gt;.default&lt;/code&gt;引数を用いて一括で指定できる。&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;recode(x, `3` = &amp;quot;three&amp;quot;, .default = &amp;quot;numeric&amp;quot;)
 ## [1] &amp;quot;numeric&amp;quot; &amp;quot;numeric&amp;quot; &amp;quot;numeric&amp;quot; &amp;quot;numeric&amp;quot; &amp;quot;numeric&amp;quot; &amp;quot;numeric&amp;quot; &amp;quot;three&amp;quot;  
 ## [8] NA&lt;/code&gt;&lt;/pre&gt;
