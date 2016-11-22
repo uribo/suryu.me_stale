@@ -1,0 +1,805 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>dplyrのベクトル要素変換用関数3種</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17" />
+        
+
+
+        
+            <meta name="author" content="Shinya Uryu">
+        
+        
+            
+                <meta name="description" content="Tips for R and Python">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="dplyrのベクトル要素変換用関数3種"/>
+<meta name="twitter:description" content="library(dplyr) {dplyr}パッケージの現行バージョン (0.5.0) ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分"/>
+<meta name="twitter:site" content="@u_ribo"/>
+
+
+        <meta property="og:title" content="dplyrのベクトル要素変換用関数3種" />
+<meta property="og:description" content="library(dplyr) {dplyr}パッケージの現行バージョン (0.5.0) ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/dplyr_recode/" />
+
+
+<meta property="og:updated_time" content="2016-11-23T06:30:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="dplyrのベクトル要素変換用関数3種">
+<meta itemprop="description" content="library(dplyr) {dplyr}パッケージの現行バージョン (0.5.0) ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分">
+
+
+<meta itemprop="dateModified" content="2016-11-23T06:30:00&#43;00:00" />
+<meta itemprop="wordCount" content="1730">
+
+
+
+<meta itemprop="keywords" content="R,data_manipulation," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="../../css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+
+
+
+
+
+
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="../../">Wonderful R World</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="../../post">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../categories">
+                        
+                            <i class="fa fa-list-alt">&nbsp;</i>Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../project">
+                        
+                            <i class="fa fa-diamond">&nbsp;</i>Project
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../about">
+                        
+                            <i class="fa fa-user">&nbsp;</i>About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="../../post">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../categories">
+                            <h3>
+                                
+                                    <i class="fa fa-list-alt">&nbsp;</i>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../project">
+                            <h3>
+                                
+                                    <i class="fa fa-diamond">&nbsp;</i>
+                                
+                                Project
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../about">
+                            <h3>
+                                
+                                    <i class="fa fa-user">&nbsp;</i>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="../../post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/tabulizer_fantastic_extract_data_from_pdf/"><p>tabulizerパッケージによるPDF表データからのデータ取得</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/rstan_rcpp_troubles/"><p>Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=%2fpost%2fdplyr_recode%2f&text=dplyr%e3%81%ae%e3%83%99%e3%82%af%e3%83%88%e3%83%ab%e8%a6%81%e7%b4%a0%e5%a4%89%e6%8f%9b%e7%94%a8%e9%96%a2%e6%95%b03%e7%a8%ae&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=%2fpost%2fdplyr_recode%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fdplyr_recode%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=%2fpost%2fdplyr_recode%2f&title=dplyr%e3%81%ae%e3%83%99%e3%82%af%e3%83%88%e3%83%ab%e8%a6%81%e7%b4%a0%e5%a4%89%e6%8f%9b%e7%94%a8%e9%96%a2%e6%95%b03%e7%a8%ae" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fdplyr_recode%2f&title=dplyr%e3%81%ae%e3%83%99%e3%82%af%e3%83%88%e3%83%ab%e8%a6%81%e7%b4%a0%e5%a4%89%e6%8f%9b%e7%94%a8%e9%96%a2%e6%95%b03%e7%a8%ae" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fdplyr_recode%2f&title=dplyr%e3%81%ae%e3%83%99%e3%82%af%e3%83%88%e3%83%ab%e8%a6%81%e7%b4%a0%e5%a4%89%e6%8f%9b%e7%94%a8%e9%96%a2%e6%95%b03%e7%a8%ae" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fdplyr_recode%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="../../post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-11-23'>
+            November 23, 2016</time>
+        <span class="author">Shinya Uryu</span>
+        
+            <p>4 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+
+    
+
+    <div id="content">
+
+
+<pre class="r"><code>library(dplyr)</code></pre>
+<p><strong><code>{dplyr}</code></strong>パッケージの現行バージョン (0.5.0) ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分けについてメモしておく。</p>
+<p>簡単に整理するとこんな感じになる</p>
+<table>
+<thead>
+<tr class="header">
+<th>関数</th>
+<th>特徴</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>if_else()</code></td>
+<td><code>ifelse()</code>の拡張。欠損値に対する挙動も指定できる</td>
+</tr>
+<tr class="even">
+<td><code>case_when()</code></td>
+<td>ベクトルの各要素に対する挙動を指定。指定しない場合には欠損値として扱われるので注意</td>
+</tr>
+<tr class="odd">
+<td><code>recode()</code></td>
+<td>ベクトル内の特定の値だけを変更したいときに効果的。変換後の型に注意</td>
+</tr>
+</tbody>
+</table>
+<div id="if_else" class="section level2">
+<h2>if_else関数</h2>
+<p>ドキュメントによると、この変数は、R標準関数の制御関数の一つである<code>ifelse()</code>と比べてより厳密 strict なものであるらしい。真偽値の判定を実行するコード（xはyよりも大きい、xのクラスはzである、とか）と、真偽それぞれの状況の応答を引数に与えて実行する。またこの関数は、それだけでなくxの値が欠損値である場合についても特定の処理を実行するという特徴をもつ。欠損値に対する挙動は引数<em>missing</em>によって与える。</p>
+<pre class="r"><code>x &lt;- c(-3:3, NA)
+if_else(x &lt; 0, &quot;negative&quot;, &quot;positive&quot;, missing = &quot;missing&quot;)
+## [1] &quot;negative&quot; &quot;negative&quot; &quot;negative&quot; &quot;positive&quot; &quot;positive&quot; &quot;positive&quot;
+## [7] &quot;positive&quot; &quot;missing&quot;</code></pre>
+<p>この関数はもちろん <strong><code>{dplyr}</code></strong> の<code>mutate()</code>内で利用できる。</p>
+<pre class="r"><code>iris %&gt;% head() %&gt;% 
+  mutate(Sepal.Size = if_else(Sepal.Length &gt; 6.0, TRUE, FALSE))
+##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species Sepal.Size
+## 1          5.1         3.5          1.4         0.2  setosa      FALSE
+## 2          4.9         3.0          1.4         0.2  setosa      FALSE
+## 3          4.7         3.2          1.3         0.2  setosa      FALSE
+## 4          4.6         3.1          1.5         0.2  setosa      FALSE
+## 5          5.0         3.6          1.4         0.2  setosa      FALSE
+## 6          5.4         3.9          1.7         0.4  setosa      FALSE</code></pre>
+<p><code>if_else()</code>では真偽値の判定を入れ子にして複数の分岐を作成することもできるが、データの値を修正する場合には、次の<code>case_when()</code>を用いるのが良い。</p>
+</div>
+<div id="case_when" class="section level2">
+<h2>case_when関数</h2>
+<p>変換候補が複数あるとき、<code>if_else()</code>よりも<code>case_when()</code>を使うのが効率的だ。<code>case_when()</code>では関数名の通り、条件分岐によるベクトル内の要素の変更を行う。書き方が特殊なので慣れが必要。引数内で条件式とそれに該当する値の変更値をチルダ記号で繋いで指定する。</p>
+<pre class="r"><code>x &lt;- c(-3:3, NA)
+case_when(
+  x &lt; 0 ~ &quot;negative&quot;,
+  x &gt; 0 ~ &quot;positive&quot;)
+## [1] &quot;negative&quot; &quot;negative&quot; &quot;negative&quot; NA         &quot;positive&quot; &quot;positive&quot;
+## [7] &quot;positive&quot; NA</code></pre>
+<p>上記のように引数に与えた複数の条件に対して値が変更されるが、気をつけないといけないのが、要素の各値に対する挙動を指定しないと、条件に当てはまらない、つまり真となる条件のない要素については欠損値に置換されてしまう。先の例では、元の欠損値に加え、0もNAになっている。</p>
+<p>で、これを<code>mutate()</code>の中で使うときの注意点。<code>mutate()</code>の中で関数を利用する場合、変数の参照は「<code>.$</code>」で行うということを思い出して次のようにする。</p>
+<pre class="r"><code>df.animals &lt;- tibble::frame_data(
+  ~team, ~rank,
+  &quot;mouse&quot;, 1,
+  &quot;cow&quot;, 2,
+  &quot;tiger&quot;, 3,
+  &quot;rabbit&quot;, 4
+)
+
+df.animals %&gt;% 
+  mutate(
+    rank = case_when(
+      .$team == &quot;mouse&quot; ~ 3,
+      .$team == &quot;cow&quot; ~ 2,
+      .$team == &quot;tiger&quot; ~ 1,
+      .$team == &quot;rabbit&quot; ~3
+    )
+  )
+## # A tibble: 4 × 2
+##     team  rank
+##    &lt;chr&gt; &lt;dbl&gt;
+## 1  mouse     3
+## 2    cow     2
+## 3  tiger     1
+## 4 rabbit     3</code></pre>
+</div>
+<div id="recode" class="section level2">
+<h2>recode</h2>
+<p>もう一つの関数、<code>recode()</code>。これはより細かいというか、個々の値に対して変換をしたいときに便利。これも引数で「対象の値 = 変換後の値」を記述する形式となる。変換するものがなければ省略して良いし、変換後の値だけを引数に与えても良い。その場合には要素の順に変換の対象としていく（この挙動がいまいち掴めない…）。</p>
+<pre class="r"><code>x &lt;- c(-3:3, NA)
+recode(x, `3` = 6L, `-3` = -8L)
+## [1] -8 -2 -1  0  1  2  6 NA
+
+# 1, 2, 3... が対象となる
+recode(x, 6L, -8L, 10L)
+## [1] -3 -2 -1  0  6 -8 10 NA</code></pre>
+<p>ベクトル内の要素は同じ型でなければいけないので、次のように整数と実数や、数値ベクトルに文字列を混ぜようとすると怒られる。怒られるだけでなく、その他の値は欠損値となってしまう。</p>
+<pre class="r"><code># integerとnumericも区別されるので注意
+recode(x, `3` = 6)
+## [1] NA NA NA NA NA NA  6 NA
+recode(x, `3` = &quot;three&quot;)
+## [1] NA      NA      NA      NA      NA      NA      &quot;three&quot; NA</code></pre>
+<p>すべての要素の挙動を指定する必要はないが、指定したもの以外の値について、<code>.default</code>引数を用いて一括で指定できる。</p>
+<pre class="r"><code>recode(x, `3` = &quot;three&quot;, .default = &quot;numeric&quot;)
+## [1] &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;three&quot;  
+## [8] NA</code></pre>
+<p>同様に欠損値に対しても<code>.missing</code>引数での置換を行える。</p>
+<pre class="r"><code>recode(x, `3` = &quot;three&quot;, .default = &quot;numeric&quot;, .missing = &quot;missing&quot;)
+## [1] &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;three&quot;  
+## [8] &quot;missing&quot;</code></pre>
+<p>私は<code>mutate()</code>と組み合わせてこういう使い方をしばしば行う。ここでは「<code>.$</code>」を使わない</p>
+<pre class="r"><code>df.animals %&gt;% 
+  mutate(所属 = recode(team,
+                     mouse  = &quot;子&quot;,
+                     cow    = &quot;丑&quot;,
+                     tiger  = &quot;寅&quot;,
+                     rabbit = &quot;卯&quot;))
+## # A tibble: 4 × 3
+##     team  rank  所属
+##    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
+## 1  mouse     1    子
+## 2    cow     2    丑
+## 3  tiger     3    寅
+## 4 rabbit     4    卯</code></pre>
+<p>ベクトルをカテゴリデータにする<code>recode_factor()</code>関数もあるがここでは割愛。</p>
+</div>
+
+
+
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+                        <i class="fa fa-list-alt">&nbsp;</i>
+                    
+
+                    
+                        Category
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='../../categoriesdata_manipulation'>data_manipulation</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="../../post/datacamp_tutorial/"
+                class="button big previous">DataCampの力を借りてR学習ページを作る</a></li>
+    
+
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/dplyr_recode\/';
+    var disqus_title = 'dplyrのベクトル要素変換用関数3種';
+    var disqus_url = '\/post\/dplyr_recode\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <a href="../../" class="logo"><img src="../../img/main/logo.jpg" alt="me" /></a>
+                
+            
+            
+                <header>
+                    <h2>Sincere Pumpkin Patch</h2>
+                    <p></p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/uribo" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//foursquare.com/u_ribo" target="_blank" title="Foursquare" class="fa fa-foursquare"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/_suika" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+<li><a href="//instagram.com/u_ribo" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/ur1bo" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+<li><a href="//twitter.com/u_ribo" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+<li><a href="mailto:suika1127@gmail.com" title="Email" class="fa fa-envelope"></a></li>
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-11-23'>
+                                    November 23, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-11'>
+                                    September 11, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/tabulizer_fantastic_extract_data_from_pdf/">tabulizerパッケージによるPDF表データからのデータ取得</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-24'>
+                                    August 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/rstan_rcpp_troubles/">Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-19'>
+                                    August 19, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /post/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="../../categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/r/">R</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/data_manipulation/">data_manipulation</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>Howdy, I&#39;m Shinya. Engineer, Data Science Enthusiast and Ecologist. This blog is my knowledge work for R that data science language. Most of my work is in the open source R code, which you can find and install on my GitHub https://github.com/uribo .</p>
+
+            <ul class="actions">
+                <li><a href="../../about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+            </ul>
+
+            <p class="copyright">&copy; suryu.me. The contents on this site are licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.<br>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="../../js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+
