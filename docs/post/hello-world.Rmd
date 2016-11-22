@@ -1,0 +1,85 @@
+---
+title: "Hello World"
+author: "Shinya Uryu"
+date: 2016-06-10T06:30:00
+categories: ["R"]
+featured: "pic02.jpg"
+featuredalt: ""
+featuredpath: "date"
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+```{r}
+library(remoji)
+```
+
+
+これまで「はてなブログ」でちまちまと駄文を[書き連ねていた](http://uribo.hatenablog.com)わけだけど、ふと思い立ってこちらに引っ越すことにした。このサイトはR Markdownの[ウェブサイト構築機能](http://rmarkdown.rstudio.com/rmarkdown_websites.html)を使って作られている。その特徴としてページを作成する際のもとになっているのはR Markdownファイルとなっている。
+
+何ヶ月か前からブログを移行する気持ちがあって着々と準備を進めていたのだけど公開までに時間がかかった。というのも、他の進捗がイマイチだったこともあってなんだか遊びっぽいことに注力してしまうのはアレな感じがあったからだ。といいつつ結局進捗よりもこちらが先になってしまった。それは反省。
+
+## `r emoji("pencil2")` はてなブログからR Markdown Websitesへ
+
+引越しの理由について書いておきたい。はてなブログの良さはあるのだけど、次にあげるような理由があったので引っ越し先を検討していた。要約すると<span class="hlt_bf">「Rは最高！」というのを伝えるのに最適な環境を用意したかった</span>のだ。
+
+1. Rmdからmarkdownを生成してコピー＆ペーストでページを作成するのが面倒。（はてなAPIを使ってラッパーパッケージでも作れば良かったのかもしれないが）
+2. htmlwidgetsを埋め込めない（はてなブログでは画像で対応していた）
+3. 公開する資料やコードが増えてきた
+4. 海外Rブロガーを見ていると独自ドメインでやっている人をちょいちょい見かけるのでそういう人たちへの憧れ
+
+
+私自身が、Rを好きになってRに慣れていけた理由として、Rでもこんなことができる！という驚きによるものだったので、このウェブサイトによってRの魅力を伝えやすくなっているのではないかと期待する。
+
+きっちりとしたブログサービスのはてなブログから移行した代わりに失ったものもいろいろあると思うが、まあ自由にやっていけるのは気楽な気がしているので今は良い。
+
+### `r emoji("+1")` R Markdown Websitesの良いところ
+
+R Markdown Websitesを使えば、Rmdを元にウェブサイトの構築が簡単に行える。それはそれで別に記事を書きたいので簡単に述べておくと、サイトの構造を`_site.yml`および`_navbar.yml`に書いておき、Rmd形式でページを書いた後に次のコードを実行するだけでhtmlファイルが生成される。R Markdownを使ったウェブサイト構築の特徴ともいえるのだが、このサイトでもページとしてのURLに階層性はほとんどなく、ほぼすべてのページがトップディレクトリ直下に置かれている。
+
+```{r, eval = FALSE, echo = TRUE}
+# ディレクトリ全体のRmdファイルを対象にレンダー
+rmarkdown::render_site()
+```
+
+もちろん、個々のRmdをレンダーしても良くって、その際はいつものRStudioのKnitボタンを押せば良い。
+
+個人的には下記のようにhtmlwidgetsをそのまま表示できるのがとても嬉しい `r emoji("smile")`。 **`{leaflet}`**や **`{highcharter}`**だって表示させることができる。
+
+```{r}
+library(leaflet)
+leaflet(width = 600, height = 400) %>% addTiles() %>% 
+  setView(lng = 135.0, lat = 38.0, zoom = 3)
+```
+
+```{r, eval = FALSE, echo = TRUE}
+library(highcharter)
+data("favorite_bars")
+data("favorite_pies")
+
+hc <- highchart() %>% 
+  hc_chart(type = "column", inverted = TRUE) %>% 
+  hc_title(text = "A highcharter chart") %>% 
+  hc_xAxis(categories = 2012:2016) %>% 
+  hc_yAxis(opposite = TRUE, showFirstLabel = FALSE,
+           showLastLabel = FALSE) %>% 
+  hc_add_series(data = c(3900,  4200,  5700,  8500, 11900),
+                name = "Downloads",
+                inverted = FALSE) %>% 
+  hc_legend(layout = "vertical")
+
+hc
+```
+
+
+## `r emoji("house_with_garden")` 一人暮らしの方
+
+そして、ついでというか無関係な話題になるけど、現実世界の自分も住まいを変えた。今はトーキョーで大学生時代以来の一人暮らしをしている。というかその前段階として働くようになった。
+
+５月の頭に引越しをしたので、一人暮らしを始めて一ヶ月が経った。最初は冷蔵庫も洗濯機も物干し竿もなくてアレだったけど、今は随分と生活に必要なものが揃ってきた。
+部屋にはパソコンと椅子、本くらいしか持ってくるものがなくて、ベッドやらは新調した。少しずつものを増やして~~いきたい~~毎週のようにAmazonから何かが届いていたが、だいぶ落ち着いてきた気がする。
+
+６月に入り、2016年も折り返し地点に来ようとしている。進捗は...なわけだけど、ここで気持ちを整理した（気がする）。最近は特にアウトプットの機会が減ってきているような気がしているので、進捗を含めて努力していきたい。
+
+Enjoy :)

@@ -1,0 +1,188 @@
+---
+title:  "GeohashをRで扱う"
+author: "Shinya Uryu"
+date: 2016-08-05T10:00:05
+description: geohashを求めるライブラリは各種言語で用意されているみたいで、それのR版を見つけた。geohashを求めるのは良いが、geohashがどの領域を示しているのかを確認したい。というわけでleafletパッケージを使ってお手軽に領域の可視化を行ってみる。
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+```{r}
+library(magrittr)
+```
+
+```{r, eval = TRUE, echo = FALSE}
+library(geohash)
+```
+
+## Geohashとは
+
+Geohash（ジオハッシュ）とは
+
+緯度経度の組み合わせをごく身近な数値と文字からなるハッシュ値で示す方法の一つで、一対の緯度経度をポイントではなくグリッドとして表現する。例えば、東京タワーの位置を緯度経度で示すとおおよそ北緯35.658、東経139.745となるが、これをGeohashで表現すると「`r gh_encode(35.658, 139.745, precision = 6)`」となる。
+
+詳細や仕様については[geohashのページ](http://geohash.org/site/tips.html)や末尾にあげる参考ページの解説をご覧いただきたいが、要点として、**ハッシュ値の長さが緯度経度の精度を定める（最高で８）**ということがある。この特徴があるため、先の東京タワー周辺を示すgeohash対象の領域を広げようとした場合、geohashの精度を低くする（ハッシュの長さを短くする）ことで対応できる（`r gh_encode(35.658, 139.745, precision = 6)`から`r gh_encode(35.658, 139.745, precision = 3)`のようにする）。これは元のgeohashを内包したgeohashを生成している。また、近隣にあるgeohashは近いハッシュ値をそれぞれもつため、検索しやすい。
+
+## geohashパッケージ
+
+geohashを求めるライブラリは各種言語で用意されているみたいで、それのR版を見つけた。**`{geohash}`**パッケージはCRANに[登録されている](https://cran.r-project.org/package=geohash)ので、必要があればインストール。なお[GitHubリポジトリ](https://github.com/Ironholds/geohash/)に開発版がある。バージョン`0.1.1`が今年の４月にCRANリリースされたようなのでまだ若い。
+
+使い方をメモしておく。緯度経度からのgeohash生成と、対象のgeohashに隣接するgeohashを求める関数が提供されている。まずはパッケージの読み込みから。
+
+```{r, echo = TRUE, eval = FALSE}
+# install.packages("geohash") # CRAN版のインストール
+# devtools::install_github("ironholds/geohash") # GitHub開発版のインストール
+
+library(geohash)
+```
+
+### geohashのエンコード・デコード
+
+geohashを求めるには`gh_encode()`関数を使う。geohashを求めたい地点の緯度経度、そしてgeohashの精度を指定して実行する。
+
+```{r}
+gh_encode(35.658, 139.745, precision = 6)
+```
+
+geohashを再び緯度経度に戻すには`gh_encode()`関数を使う。
+
+```{r}
+gh_encode(35.658, 139.745, precision = 6) %>% 
+  gh_decode()
+```
+
+### 隣接するgeohashを求める
+
+`gh_neighbours()`および、求めたい方位の関数を実行する。
+
+```{r}
+gh_encode(35.658, 139.745, precision = 6) %>% gh_neighbours()
+gh_encode(35.658, 139.745, precision = 6) %>% south()
+```
+
+## leafletを使ったgeohash領域の可視化
+
+geohashを求めるのは良いが、geohashがどの領域を示しているのかを確認したい。 http://malt.dip.jp/~malt/map/ というサービスもあるが、Rでやりたい。できれば複数のgeohashを表示したい。というわけで**`{leaflet}`**パッケージを使ってお手軽にやってみる。
+
+参考) [Geohashの確認ツールを作った - Qiita](http://qiita.com/malt/items/4ebda3b0dbadd546ca1e)
+
+今回は、geohashを求めるための緯度経度データとして[オープンデータ - 神奈川県ホームページ](http://www.pref.kanagawa.jp/cnt/f533905/) にある「ＡＥＤ・避難場所等に関するオープンデータ」の中から、「避難所（施設）一覧」のファイルを利用させていただく。
+
+```{r}
+# 利用するパッケージを読み込む
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(leaflet)
+library(htmltools)
+```
+
+```{r}
+# rioパッケージを使うと、ダウンロードする手間が省ける
+library(rio)
+df.refuge <- import("http://www.pref.kanagawa.jp/uploaded/attachment/845067.xlsx")
+
+# 変数とデータの概要を確認
+df.refuge %>% glimpse()
+
+# 必要な変数だけを選択。適当に変数名を変更
+df.refuge %<>% select(
+  name = 施設名称, 
+  latitude  = 緯度, 
+  longitude  = 経度)
+```
+
+緯度経度が含まれているので、施設ごとにgeohashを与えていく。geohashの精度は６とした。
+
+```{r}
+df.refuge %<>% mutate(
+  geohash = gh_encode(latitude, longitude, precision = 6)
+)
+```
+
+```{r, results = "asis"}
+df.refuge %>% head() %>% knitr::kable(format = "markdown")
+```
+
+geohashを得たが、このままでは領域を表示できない。geohashの領域を表示するためには`gh_decode()`関数を利用してgeohashに与えられる誤差範囲から、領域を定義する４点の座標を求める必要がある。
+
+```{r}
+df.sample <- gh_decode(df.refuge$geohash[1]) %>% mutate(
+  lng1 = lng - lng_error,
+  lat1 = lat - lat_error,
+  lng2 = lng + lng_error,
+  lat2 = lat + lat_error)
+```
+
+領域の可視化には`leaflet::addRectangles()`関数を使う。この関数は、任意の４点から長方形のポリゴンを生成する。
+
+```{r, eval = FALSE, echo = TRUE}
+leaflet() %>% 
+  addTiles() %>% 
+  setView(lng = df.sample$lng, lat = df.sample$lat, zoom = 13) %>% 
+  addRectangles(lng1 = df.sample$lng1,
+                lat1 = df.sample$lat1,
+                lng2 = df.sample$lng2,
+                lat2 = df.sample$lat2)
+```
+
+この処理をすべてのデータに対して行う。`gh_decode()`の返り値がデータフレームオブジェクトであるので、**`{purrr}`**パッケージの`map()`関数により階層構造のあるデータフレームを作成し、`tidyr::unnest()`関数で変数の値として保存する処理を実行する。
+
+```{r}
+df.refuge %<>% mutate(
+  hash_decode = map(geohash, gh_decode)
+) %>% 
+  unnest() %>% 
+  mutate(lng1 = lng - lng_error,
+         lat1 = lat - lat_error,
+         lng2 = lng + lng_error,
+         lat2 = lat + lat_error)
+```
+
+このようになる。
+
+```{r, result = "asis"}
+df.refuge %>% head() %>% knitr::kable(format = "markdown")
+```
+
+最後に再び**`{leaflet}`**で可視化。
+
+```{r}
+leaflet(df.refuge) %>%
+  addTiles() %>%
+  addCircleMarkers(
+  data = dplyr::select(.data = df.refuge, name, longitude, latitude),
+  stroke         = FALSE,
+  fillOpacity    = 0.5,
+  clusterOptions = markerClusterOptions(),
+  popup = ~ sprintf(
+  "<b>Place: <a href = 'http://geohash.org/?q=%s,%s&format=gmaps', target='_blank'>%s</a><br>Lat: %s<br>Long: %s</b>",
+  htmlEscape(latitude),
+  htmlEscape(longitude),
+  htmlEscape(name),
+  htmlEscape(latitude),
+  htmlEscape(longitude)
+  )
+  ) %>%
+  addRectangles(
+  lng1 = df.refuge$lng1,
+  lat1 = df.refuge$lat1,
+  lng2 = df.refuge$lng2,
+  lat2 = df.refuge$lat2,
+  color = "#ff9800",
+  fillColor = "#ffd740",
+  fillOpacity = 0.6
+  )
+```
+
+拡大してもらうと各避難所の位置とgeohashの領域がわかる。同一のgeohash内で避難所の数が多いところは色が濃く表示される。山が多いとはいえ、神奈川県西部では避難所が少ない感じがある。
+
+Enjoy!
+
+## 参考
+
+[緯度経度を文字列で表すGeoHash – @masuidrive blog](http://blog.masuidrive.jp/2010/01/13/geohash/)
+[Geohashのアルゴリズム – @masuidrive blog](http://blog.masuidrive.jp/2010/01/15/geohash-algorithm/)
+[Geohashのdecodeのアルゴリズムの解説します & ScalaのGeohashライブラリを作ってみました(仮) - ( ꒪⌓꒪) ゆるよろ日記](http://yuroyoro.hatenablog.com/entry/20100115/1263526125)
+[Geohashing in R](https://cran.rstudio.com/web/packages/geohash/vignettes/geohash.html)

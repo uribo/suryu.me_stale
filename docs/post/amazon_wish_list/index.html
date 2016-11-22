@@ -1,0 +1,979 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>人は贈り物に何を求めているのか: AmazonのWishlistから見えてくるもの</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17" />
+        
+
+
+        
+            <meta name="author" content="Shinya Uryu">
+        
+        
+            <meta name="description" content="私の趣味の一つに「誰かのAmazon ほしい物リスト」を集めるというエモいものがあります。「Amazon ほしい物リスト」とはその名の通り、ほしいと思ったAmazonが扱う商品をまとめておくための機能です。集めているサンプル数が増えてきたので、このデータを元にして気になっていることを確かめてみたいと思います。">
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="人は贈り物に何を求めているのか: AmazonのWishlistから見えてくるもの"/>
+<meta name="twitter:description" content="私の趣味の一つに「誰かのAmazon ほしい物リスト」を集めるというエモいものがあります。「Amazon ほしい物リスト」とはその名の通り、ほしいと思ったAmazonが扱う商品をまとめておくための機能です。集めているサンプル数が増えてきたので、このデータを元にして気になっていることを確かめてみたいと思います。"/>
+<meta name="twitter:site" content="@u_ribo"/>
+
+
+        <meta property="og:title" content="人は贈り物に何を求めているのか: AmazonのWishlistから見えてくるもの" />
+<meta property="og:description" content="私の趣味の一つに「誰かのAmazon ほしい物リスト」を集めるというエモいものがあります。「Amazon ほしい物リスト」とはその名の通り、ほしいと思ったAmazonが扱う商品をまとめておくための機能です。集めているサンプル数が増えてきたので、このデータを元にして気になっていることを確かめてみたいと思います。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/amazon_wish_list/" />
+
+
+<meta property="og:updated_time" content="2016-06-21T09:30:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="人は贈り物に何を求めているのか: AmazonのWishlistから見えてくるもの">
+<meta itemprop="description" content="私の趣味の一つに「誰かのAmazon ほしい物リスト」を集めるというエモいものがあります。「Amazon ほしい物リスト」とはその名の通り、ほしいと思ったAmazonが扱う商品をまとめておくための機能です。集めているサンプル数が増えてきたので、このデータを元にして気になっていることを確かめてみたいと思います。">
+
+
+<meta itemprop="dateModified" content="2016-06-21T09:30:00&#43;00:00" />
+<meta itemprop="wordCount" content="3197">
+
+
+
+<meta itemprop="keywords" content="R," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="../../css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+
+<script src="../../rmarkdown-libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="../../rmarkdown-libs/d3-3.5.3/d3.js"></script>
+<script src="../../rmarkdown-libs/bubbles-binding-0.2/bubbles.js"></script>
+
+
+
+
+
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="../../">Wonderful R World</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="../../post">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../categories">
+                        
+                            <i class="fa fa-list-alt">&nbsp;</i>Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../project">
+                        
+                            <i class="fa fa-diamond">&nbsp;</i>Project
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../about">
+                        
+                            <i class="fa fa-user">&nbsp;</i>About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="../../post">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../categories">
+                            <h3>
+                                
+                                    <i class="fa fa-list-alt">&nbsp;</i>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../project">
+                            <h3>
+                                
+                                    <i class="fa fa-diamond">&nbsp;</i>
+                                
+                                Project
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../about">
+                            <h3>
+                                
+                                    <i class="fa fa-user">&nbsp;</i>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/tabulizer_fantastic_extract_data_from_pdf/"><p>tabulizerパッケージによるPDF表データからのデータ取得</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/rstan_rcpp_troubles/"><p>Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/mesh_code_mapping/"><p>標準地域メッシュによる地図の塗り分け</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=%2fpost%2famazon_wish_list%2f&text=%e4%ba%ba%e3%81%af%e8%b4%88%e3%82%8a%e7%89%a9%e3%81%ab%e4%bd%95%e3%82%92%e6%b1%82%e3%82%81%e3%81%a6%e3%81%84%e3%82%8b%e3%81%ae%e3%81%8b%3a%20Amazon%e3%81%aeWishlist%e3%81%8b%e3%82%89%e8%a6%8b%e3%81%88%e3%81%a6%e3%81%8f%e3%82%8b%e3%82%82%e3%81%ae&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=%2fpost%2famazon_wish_list%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2famazon_wish_list%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=%2fpost%2famazon_wish_list%2f&title=%e4%ba%ba%e3%81%af%e8%b4%88%e3%82%8a%e7%89%a9%e3%81%ab%e4%bd%95%e3%82%92%e6%b1%82%e3%82%81%e3%81%a6%e3%81%84%e3%82%8b%e3%81%ae%e3%81%8b%3a%20Amazon%e3%81%aeWishlist%e3%81%8b%e3%82%89%e8%a6%8b%e3%81%88%e3%81%a6%e3%81%8f%e3%82%8b%e3%82%82%e3%81%ae" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2famazon_wish_list%2f&title=%e4%ba%ba%e3%81%af%e8%b4%88%e3%82%8a%e7%89%a9%e3%81%ab%e4%bd%95%e3%82%92%e6%b1%82%e3%82%81%e3%81%a6%e3%81%84%e3%82%8b%e3%81%ae%e3%81%8b%3a%20Amazon%e3%81%aeWishlist%e3%81%8b%e3%82%89%e8%a6%8b%e3%81%88%e3%81%a6%e3%81%8f%e3%82%8b%e3%82%82%e3%81%ae" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2famazon_wish_list%2f&title=%e4%ba%ba%e3%81%af%e8%b4%88%e3%82%8a%e7%89%a9%e3%81%ab%e4%bd%95%e3%82%92%e6%b1%82%e3%82%81%e3%81%a6%e3%81%84%e3%82%8b%e3%81%ae%e3%81%8b%3a%20Amazon%e3%81%aeWishlist%e3%81%8b%e3%82%89%e8%a6%8b%e3%81%88%e3%81%a6%e3%81%8f%e3%82%8b%e3%82%82%e3%81%ae" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2famazon_wish_list%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="../../post/amazon_wish_list/">人は贈り物に何を求めているのか: AmazonのWishlistから見えてくるもの</a></h1>
+            
+        
+        
+            <p>私の趣味の一つに「誰かのAmazon ほしい物リスト」を集めるというエモいものがあります。「Amazon ほしい物リスト」とはその名の通り、ほしいと思ったAmazonが扱う商品をまとめておくための機能です。集めているサンプル数が増えてきたので、このデータを元にして気になっていることを確かめてみたいと思います。</p>
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-06-21'>
+            June 21, 2016</time>
+        <span class="author">Shinya Uryu</span>
+        
+            <p>7 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+
+    
+
+    <div id="content">
+
+
+<pre class="r"><code>library(remoji)
+library(magrittr)</code></pre>
+<pre class="r"><code>library(remoji)
+library(magrittr)</code></pre>
+<div class="section level2">
+<h2>🍵 前置き</h2>
+<p>私の趣味の一つに「<strong>誰かのAmazon ほしい物リスト」を集める</strong>というエモいものがあります。「<a href="https://www.amazon.co.jp/wishlist/universal">Amazon ほしい物リスト</a>」とはその名の通り、ほしいと思ったAmazonが扱う商品をまとめておくための機能です。後で買う、のような個人での利用が主な用途だと思いますが、リストを公開して、誰かにその商品を代わりに購入してもらう（プレゼントしてもらう）こともしばしば行われるようです。ブログの作者が誕生日を迎えた、去就に関する記事を書いた際によく見かけます。</p>
+<p>こうした記事を見かけるたびに私は、皆がどのような商品を欲しがって（あわよくばプレゼントしてもらおうと）いるのか気になっており、リンク先についてメモをとっていました。集めているサンプル数が増えてきたので、このデータを元にして気になっていることを確かめてみたいと思います。</p>
+<div class="section level3">
+<h3>やりたいこと</h3>
+<p>例えば、<strong>どんな時にほしいものリストを公開して、プレゼントの機会を伺うのでしょうか。</strong>また、どういった場所（メディア）を利用して告知しているのでしょうか。それは<strong>一時的なものなのか、固定されたものなのか</strong>といったことが気になります。</p>
+</div>
+<div class="section level3">
+<h3>手順</h3>
+<ol style="list-style-type: decimal">
+<li>ほしい物リストへのリンクと公開理由のデータをまとめる</li>
+<li><strong><code>{rvest}</code></strong>パッケージによるスクレイピング処理で、リストに登録されている商品に関する情報を取得</li>
+<li>ほしい物リストの情報を整理する</li>
+</ol>
+</div>
+<div class="section level3">
+<h3>サンプルについて</h3>
+<p>私がネットをフラフラしていて発見した公開の「Amazon wishlist」へのリンクが含まれる記事が中心です。組織や企業は含めず、個人のほしい物リストに限定しています。保証はありませんが、年齢、職業、生き方などさまざまな人間を含んでいるかと思います。Amazon wishlist自体のドメインは<code>http://www.amazon.co.jp</code>に限定しました。</p>
+<p>個人名やSNS上のアカウント名は伏せてありますが、商品の傾向からお察しになる場合があるかもしれません。サンプルについて多少の偏りがあるのは、ここでは無視します。</p>
+<blockquote>
+<p>スクレイピングの際にamazon.co.jpサーバーに負荷をかけすぎたような気がして反省です。APIを使えば良かったのでした…</p>
+</blockquote>
+</div>
+</div>
+<div id="r" class="section level2">
+<h2>®️ Rコード</h2>
+<div class="section level3">
+<h3>パッケージの読み込み</h3>
+<p>使用するパッケージを読み込みます。</p>
+<pre class="r"><code>library(pacman)
+p_load(foreach, rvest) # データ取得
+p_load(tibble, purrr, stringr, tidyr) # データ操作
+p_load(ggplot2, cowplot, viridis, bubbles) # 可視化
+p_load(DescTools, knitr, scales) # その他
+library(dplyr)</code></pre>
+</div>
+<div class="section level3">
+<h3>データの収集</h3>
+<p>これまでのメモから、Amazonのほしい物リストへのリンク<em><code>url</code></em>とリスト公開の理由<em><code>motive</code></em>を変数に含んだデータフレームを作ります。全部で29件です。</p>
+<p>変数<em><code>motive</code></em>はほしいものリストが公開された際の理由をいくつかの項目として分けたものです。<code>profile</code>はプロフィールページやブログのサイドバーなどに載っているもの、<code>course</code>は去就や進学に関するもの、<code>move</code>は引っ越し、<code>wedding</code>と<code>birthday</code>はそれぞれ結婚と誕生日で、それ以外の理由については<code>unknown</code>としました。</p>
+<p>このうち、<code>unknown</code>を除いた祭の変数<em><code>motive</code></em>は、<code>profile</code>が固定のもの、それ以外のものを流動的・イベントによって生じたものと捉えます。</p>
+<p>あとで利用するために、ユーザーを識別するための番号を振っておきます。ここでは<code>tibble::rownames_to_column</code>を使って<em>id</em>という変数を新たに加えました。</p>
+<pre class="r"><code>df.wishlist %&lt;&gt;% dplyr::select(url, motive) %&gt;% 
+  rownames_to_column(&quot;id&quot;) %&gt;% 
+  dplyr::mutate(id = as.integer(id))
+
+id.div &lt;- df.wishlist$id</code></pre>
+<p>次にそれぞれのリストに含まれている商品の登録件数をデータフレームの列に追加します。そして、以降の処理で必要となるスクレイピングのページ送りに関する情報（何ページまでスクレイピングを実行すれば良いか）も加えます。</p>
+<pre class="r"><code># read_html()を利用してhtmlを読み込む
+res &lt;- df.wishlist$url %&gt;% map(read_html)
+
+# リストに登録されている件数
+df.wishlist$item.n &lt;- res %&gt;% map_dbl(~ html_nodes(., xpath = &#39;//*[@id=&quot;left-nav&quot;]/div/div/div/div[1]/a/span/span&#39;) %&gt;% 
+  html_text() %&gt;% extract_numeric())
+
+# ページ送りの最終番号を取得
+df.wishlist$pagination &lt;- res %&gt;% map_dbl(~ html_nodes(., xpath = &#39;//*[@id=&quot;wishlistPagination&quot;]/span/div/ul/li/a&#39;) %&gt;% 
+  html_text(.) %&gt;% extract_numeric() %&gt;% max(na.rm = TRUE) %&gt;% 
+    if_else(is.infinite(.), 1, .))</code></pre>
+<p>Amazonのウェブサイトから必要な情報をスクレイピングによって取得してきます。スクレイピングの処理には主に<strong><code>{rvest}</code></strong>パッケージを利用します。ほしい情報は<code>詳細情報を知るための商品個別URL</code>、<code>商品価格</code>の２点です。</p>
+<p>一人のリストからこれらの情報を取ってくるのには次のようなコードを実行すれば良いですが、30名近くあると面倒です。加えてページ送りの数はユーザーによって異なっているので、これらの処理は<strong><code>{foreach}</code></strong>パッケージを利用した関数を作成して実行しました。</p>
+<pre class="r"><code># ほしいものリストのHTML構造を取得する
+x &lt;- df.wishlist$url[2] %&gt;% read_html()
+
+# 1. Amazonの商品個別URL
+x %&gt;% html_nodes(xpath = &#39;//div/div[1]/div[1]/h5/a&#39;) %&gt;% 
+  html_attr(name = &quot;href&quot;) %&gt;% 
+  paste0(&quot;http://www.amazon.co.jp&quot;, .)
+# 2. 商品価格
+x %&gt;% html_nodes(xpath = &#39;//div/div[1]/div[1]/span&#39;) %&gt;%
+      html_text(.) %&gt;%
+      str_trim() %&gt;%
+      na_if(., &quot;&quot;) %&gt;%
+      grep(&quot;^￥|この商品は現在取り扱っていません|NA&quot;, ., value = TRUE)
+  }</code></pre>
+<p><code>purrr::split()</code>でユーザーごとのデータを分割したのち、<code>purrr::map()</code>を用いて作成した関数を適用します。</p>
+<pre class="r"><code>bind_items &lt;- function(id) {
+  data_frame(id    = id,
+             price  = id.prices[[paste0(&quot;id_&quot;, id)]] %&gt;% .[1:df.wishlist$item.n[id]],
+             url   = id.url[[paste0(&quot;id_&quot;, id)]]   %&gt;% .[1:df.wishlist$item.n[id]]
+             )
+}
+
+df.wishlist %&gt;%
+  split(id.div) %&gt;%
+  map(~ get_prices(.$url, .$pagination)) %&gt;% set_names(paste0(&quot;id_&quot;, names(.))) -&gt; id.prices
+
+df.wishlist %&gt;% 
+  split(id.div) %&gt;% 
+  map(~ get_item_url(.$url, .$pagination)) %&gt;% set_names(paste0(&quot;id_&quot;, names(.))) -&gt; id.url
+
+df.wishlist.item &lt;- df.wishlist %&gt;% 
+  split(.$id) %&gt;% 
+  map(~ bind_items(id = .$id)) %&gt;% 
+  map_df(~ .[c(&quot;id&quot;, &quot;price&quot;, &quot;url&quot;)])</code></pre>
+<p>出来上がったデータフレームの行数（商品価格およびURL）と元のほしいものリストに含まれていた件数が一致しているかを確認します。</p>
+<pre class="r"><code>sum(df.wishlist$item.n) == nrow(df.wishlist.item)
+## [1] TRUE</code></pre>
+<p>無事に取れているようです。</p>
+</div>
+</div>
+<div class="section level2">
+<h2>☑️ 結果</h2>
+<p>対象にしたWishlistの概要を整理します。</p>
+<p>今回の29人分のAmazonほしいものリストに含まれている商品の数は、全部で1832件となりました。</p>
+<div class="section level3">
+<h3>公開場所と理由</h3>
+<pre class="r"><code>df.wishlist %&gt;% group_by(motive) %&gt;% 
+  tally(sort = TRUE) %&gt;% 
+  dplyr::mutate(motive = with(., reorder(motive, n, median))) %&gt;% 
+  ggplot(aes(motive, n, fill = n)) + geom_bar(stat = &quot;identity&quot;) + 
+  theme_cowplot() + 
+  scale_fill_viridis() + 
+  guides(fill = &quot;none&quot;)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figures/160621_fig1-1.png" alt="対象のほしいものリスト公開理由の内訳" width="672" />
+<p class="caption">
+(#fig:160621_fig1)対象のほしいものリスト公開理由の内訳
+</p>
+</div>
+<p>公開場所としてブログやプロフィールのページにほしいものリストへのリンクを載せている人が多いようです。公開の理由に関しては、<strong>去就、進学の祭の記事に含ませていることが多く、誕生日や結婚式といったイベントではあまり載せていない</strong>ようでした。</p>
+</div>
+<div class="section level3">
+<h3>ほしいものリストに含める商品の適切な価格設定？</h3>
+<p>ほしいものリスト内の商品価格の範囲です。</p>
+<pre class="r"><code>df.summary &lt;- df.wishlist.item %&gt;% group_by(id) %&gt;% 
+  summarise(n = n(),
+            mean = mean(price, na.rm = TRUE)) %&gt;% 
+  dplyr::arrange(mean)</code></pre>
+<pre class="r"><code>df.summary %&gt;% 
+  dplyr::filter(mean != &quot;NaN&quot;) %&gt;% 
+  dplyr::summarise(min = min(mean), max = max(mean)) %&gt;% 
+  kable(format = &quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">min</th>
+<th align="right">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">910.6667</td>
+<td align="right">99355.08</td>
+</tr>
+</tbody>
+</table>
+<p>今回対象にしたほしいものリストに含まれる全商品の<strong>平均価格は8,336.182円</strong>でした。価格の幅が広く、中には10万円を超える商品がいくつか含まれていました。（商品価格を円の大きさで示す。色はランダム）</p>
+<pre class="r"><code>df.wishlist.item %&gt;% 
+  bubbles(value = .$price, 
+          label = NA,
+          tooltip  = .$price,
+          color = rainbow(nrow(.), alpha = NULL)[sample(nrow(.))]
+)</code></pre>
+<div class="figure" style="text-align: center">
+<div id="htmlwidget-1fbcb32830b60f4aaef6" style="width:672px;height:480px;" class="bubbles html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1fbcb32830b60f4aaef6">{"x":{"value":[1545,3809,2992,3240,3596,2138,2160,3845,3000,972,14300,27867,13770,1296,1901,1080,453,3024,22600,268,9504,3200,647,648,3091,2851,3800,12465,45613,1931,1164,9090,17559,1620,2772,2936,3200,2036,72800,19799,5800,1188,45360,7636,6405,23800,1404,2036,1527,2851,3308,3564,9291,1480,8717,2100,2776,1780,9633,3463,1404,11550,1250,1620,1620,1512,972,1944,22343,1615,1404,1980,1296,3308,3564,713,1944,2752,3672,5170,11880,2592,994,9180,2972,2354,980,1080,26740,6300,2484,1391,3888,659,799,713,1944,2752,3672,5170,1058,637,153900,140900,110808,1616,15500,23760,23630,2462,4246,713,7344,2260,842,1620,7020,664,null,842,4277,1296,18106,1058,637,1728,842,2916,909,21515,580,637,529,1068,1134,691,1598,1944,2700,1290,3110,972,680,596,918,1512,1728,842,2916,909,2376,617,1296,3580,864,1404,1836,2376,1000,3630,645,1468,1836,6199,3826,1620,13128,1839,2878,6118,8735,1580,3000,2376,617,3091,1669,524,1600,1296,912,2280,1620,1354,2160,1512,1080,2100,4051,1188,1020,3242,1450,4690,670,918,2700,3091,1669,524,3564,3456,1512,1080,1060,713,1068,940,917,2376,21600,994,2310,1128,10280,4104,540,1512,3024,2138,3564,3456,1512,1080,1060,929,907,12744,1404,1404,886,3888,3888,700,679,5076,2376,844,1296,3024,3024,2052,1404,1102,3780,713,929,1944,788,1026,1037,35640,2052,1512,1512,734,2160,972,6521,14999,1512,3024,1728,2808,1296,5184,6696,3240,2030,1677,1296,529,680,1037,35640,3175,2592,4104,7776,20883,29833,5863,2138,2138,2138,2678,1728,1400,2138,994,724,842,1944,907,3175,2592,4104,7776,20883,29833,1944,28252,1620,3024,9800,1598,1231,1404,1296,1620,799,3218,2376,1620,810,2052,12908,1440,2592,2376,1620,823,1944,28252,1620,1156,864,1836,1166,972,8208,594,2592,929,4104,1102,1944,1296,1512,2592,594,2391,3175,2668,1156,864,1836,1166,972,8208,2700,408,8100,4644,4104,3672,4104,3672,1480,2376,864,1944,3024,1512,60400,32725,3150,1728,2160,864,2700,408,8100,4644,4104,1080,1037,864,1037,907,1728,907,778,594,1080,1037,864,1037,907,1728,907,778,594,1080,1037,864,1037,907,1728,907,1836,1836,950,2376,15120,2592,2592,3888,756,799,4104,2592,8424,7020,35950,1620,3456,2037,3888,3127,4477,5184,637,6800,1728,2592,11850,1944,842,810,3240,972,4104,35950,1620,3456,1735,3564,1836,2700,1166,1728,2700,1944,3240,4320,4320,1728,6048,918,648,842,2304,48990,2484,2592,928,11800,2808,760,1404,3950,1944,1620,1543,3024,950,2160,34747,6156,10584,1382,3672,864,5940,3130,972,1404,2808,760,1404,1080,2376,648,1188,4104,3456,1242,18074,4860,4721,52198,2700,2700,500,3611,713,1404,1080,2376,648,1188,2700,3240,3240,3024,1200,2916,1512,17280,1728,1620,8208,3672,2148,5400,1728,713,1071,2592,1440,2700,3240,3240,4860,2700,842,4968,3240,1100,4522,5184,2376,3564,8999,1015,886,6372,5184,2097,1620,5940,5940,4860,2700,842,1166,3456,648,929,4104,4104,4104,2160,1080,1080,3888,4933,3024,3240,1620,2376,1944,1943,1166,3456,648,929,1944,3024,3685,2144,4104,3541,907,3024,1944,3456,1728,1361,1620,9661,3240,3456,4104,3110,893,1944,3024,3685,1620,2376,4320,3240,3024,4066,3456,821,17280,1255,778,2052,9288,2592,9000,3488,5000,3996,1620,4104,1620,2376,7344,10260,1680,2376,812,4860,3024,10260,2592,5940,1058,3888,10800,907,3024,3024,2757,2808,7344,10260,1680,2376,2376,2592,3024,2376,3672,4320,4320,3672,24840,30240,39800,2484,2160,8517,3456,2160,2700,6156,2160,2700,2484,2376,29800,5100,2600,21500,6531,3888,1080,1080,3456,1512,43200,29800,5100,2600,21500,6531,3888,1080,1080,3456,1512,43200,2808,5728,6525,8056,7355,929,5616,8100,6532,2808,5728,6525,8056,7355,929,5616,8100,6532,2808,5728,6525,8056,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1944,3888,3456,4135,600,820,830,4428,10800,2754,3002,2470,2540,1404,4161,1146,3970,1530,5311,2520,2766,2786,4536,3456,3456,3456,2786,3456,1811,2000,6426,2786,2786,3456,3456,7370,1380,4661,3120,3599,3200,2894,3456,4104,2280,5999,5836,3130,3672,2786,2916,3758,1944,1512,3888,3240,6400,2618,3024,null,2052,700,6264,2376,9001,2160,1616,2376,3456,2376,1123,4104,864,2160,1620,3024,3564,1090,1944,734,3672,356,1296,2484,5728,1404,842,2376,3780,1620,3132,3456,2052,2592,2160,1728,734,2592,1296,2484,5728,1404,842,2376,1943,974,1620,4104,1728,713,3024,669,3240,1361,1836,759,10000,7176,3024,4536,6912,799,2376,1943,974,1620,3240,5700,1080,1728,972,1102,1836,2592,1166,2052,7128,8800,4080,3996,3999,3240,5700,1080,1728,972,1102,1836,null,null,null,null,null,null,null,null,12400,11030,5000,5618,5518,5645,5845,7549,6999,821,1728,670,4104,3024,4320,8424,1080,1800,2808,2700,6549,3456,2376,3218,3024,3132,1620,7549,6999,810,886,3024,2808,2104,2141,2376,1685,2484,3456,2808,886,1836,5832,2000,3996,6313,3132,2808,9245,1682,2808,3240,3024,3024,1296,3888,5076,5184,605,1728,1944,2376,4104,3024,3456,3672,10715,5031,4536,764,1700,3240,3024,1404,1728,7804,3888,3218,2916,3780,3024,1173,1512,11744,1404,1728,7804,3888,3218,2916,3780,3024,1173,1512,11744,2808,3240,4536,30329,3240,645,1728,1026,2376,4536,1299,2563,3456,2181,1730,2916,5138,3672,9726,8023,2808,3240,2800,5076,13312,22812,4968,23190,3240,2424,2800,5076,13312,22812,4968,23190,3240,2424,2800,5076,13312,22812,4968,23190,null,null,null,null,null,null,null,null,null,null,648,1030,1054,4860,3200,1299,6048,3630,3240,540,977,4336,2270,7085,4980,1227,1728,670,1728,3024,596,1512,1625,885,5400,617,994,819,3292,823,8187,10700,4678,6516,6500,4177,842,886,929,1836,680,3024,2808,1728,1080,842,700,860,2700,8640,819,864,1944,799,3240,2052,3450,5616,1404,1512,3024,1458,2052,2980,49800,2786,6264,810,756,710,4860,4104,1296,1680,864,1728,3402,1404,1404,4104,5430,5680,1296,3672,2916,1728,3402,1404,1404,500,2052,1620,2721,2721,3240,691,3791,1512,1300,680,2376,2160,3024,907,2333,1234,1620,1132,1836,3456,3024,2400,4644,2600,896,2160,2160,679,864,617,1296,864,896,1944,1728,700,1728,648,2592,3132,2268,null,null,null,null,null,1382,null,657,6550,53784,15984,null,1699,8934,8778,22600,17580,2600,26312,8912,3796,2980,2110,1790,4065,2500,2592,1610,2480,7930,8999,2080,52694,29700,29700,24840,7425,4065,2500,2592,1610,2480,7930,null,null,null,null,null,null,null,null,3024,4427,28347,760,1539,493,458,1573,1824,2700,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1218,1680,3180,2786,3308,18900,1902,1902,1934,3888,5624,1354,3024,3780,2808,1528,4618,1014,145000,3672,562,1080,660,622000,2370000,1512000,3109,1206,1143,1095,1143,1402,1906,4209,2772,2036,7146,4104,3374,3000,4800,2448,1080,959,879,567,500,744,null,null,15120,16200,1000,2580,1200,21498,1620,10800,5400,1990,1937,970,1472,2479,2850,9500,2700,7280,1449,24499,2980,1296,487,334,478,652,912,409,484,912,1075,869,4536,4104,3996,3024,3024,4104,3780,334,478,652,912,12650,39800,1599,940,1113,31800,16650,1290,17989,9617,39300,null,3240,12000,2183,9999,2905,2646,2000,1944,648,1200,1598,1995,1458,4104,3780,1746,2900,1080,2244,1449,1879,1820,2570,9999,3840,null,null,1944,2592,29961,2052,2638,317,2462,2138,2376,2138,472,16480,110999,583,3235,3280,493,538,10100,1500,2376,2678,1404,1922,1573,1360,933,1006,557,1747,734,756,1617,4104,3888,4968,1944,5076,2376,1944,8208,562,810,1944,1028,5616,3780,1573,3456,2376,3888,1836,3456,3888,3456,3672,15120,4860,3780,2700,2138,4968,32184,3888,3888,1296,3456,1728,3002,3456,2376,3888,null,2899,5184,1500,24800,129991,1417,3173,5076,6361,6575,6696,null,null,596,1900,627,null,null,null,null,null,null,13150,1050,4635,834,1620,1785,1080,2180,2890,2975,2600,990,4980,2700,1944,1512,918,1944,1296,2160,2160,799,514,5076,13150,4104,2200,4104,2376,2699,28500,2268,3110,3002,3780,1728,1836,1944,1944,1620,1620,1814,1836,1728,2052,1944,1944,4104,2200,4104,5616,1598,1836,1836,1814,1728,2160,1944,1728,388,2106,1512,1512,1404,1728,1728,1620,2052,1296,1944,1728,1598,2052,1728,1944,3240,3672,1131,4266,4266,1836,1944,2821,3672,2592,3564,1512,2592,2376,1620,1512,2570,3002,4320,2376,3456,1026,2668,1337,3240,4968,3672,2808,12950,1404,3024,2950,5300,6900,5694,1250,5000,5000,3456,4536,5050,393,744,2872,1099,1000,19008,4950,2450,2217,1404,11011,1898,1491,2950,1922,1800,6594,998,1544,2160,1280,999,3331,3886,3365,2188,5311,2188,389,493,493,2376,540,499,2592,2376,1728,1998,1598,1512,16200,1296,2786,3024,1512,1543,null,null,11580,6980,2500,5800,4104,2500,2900,4280,2475,2650,2992,7730,885,2376,2980,2376,6027,null,885,885,null,null,null,5990,879,3132,43000,690,5580,3900,9800,9150,6760,7000,107348,2580,22586,15500,2100,6480,8641,8414,11581,2600,3024,5510,9581,1554,4545,4599,3240,880,4200,3599,2830,3378,3500,3700,674,450,1509,680,12861,12980,2211,30000,8233,8980,3240,null,null,null,2376,2196,2183,680,3218,1944,1944,1490,2360,1728,2592,3024,1728,1728,1944,3672,1900,1227,3002,1680,15800,1620,3024,1536,2592,1944,114000,2376,821,1404,1109,12000,1109,1458,2161,2854,2419,752,1130,818,2776,1300,1512,2484,1404,3672,3002,3564,3240,1944,907,1400,1944,734,1382,1620,3672,842,3456,3240,6000,2130,4622,971,889,623,1482,2492,1980,3780,8187,3024,4104,1040,907,1290,2796,1620,1944,1944,1944,1728,1728,2680,2800,2592,3780,2376,1944,2160,2592,4104,2700,1080,2592,1404,3024,3240,1512,3456,2497,1512,864,3000,3672,2000,1000,54800,1620,896,767,134235,35250,1620,1728,52694,38520,3700,2999,127115,87526,31866,76050,80510,44514,84180,91081,821578,null,null],"label":[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],"tooltip":[1545,3809,2992,3240,3596,2138,2160,3845,3000,972,14300,27867,13770,1296,1901,1080,453,3024,22600,268,9504,3200,647,648,3091,2851,3800,12465,45613,1931,1164,9090,17559,1620,2772,2936,3200,2036,72800,19799,5800,1188,45360,7636,6405,23800,1404,2036,1527,2851,3308,3564,9291,1480,8717,2100,2776,1780,9633,3463,1404,11550,1250,1620,1620,1512,972,1944,22343,1615,1404,1980,1296,3308,3564,713,1944,2752,3672,5170,11880,2592,994,9180,2972,2354,980,1080,26740,6300,2484,1391,3888,659,799,713,1944,2752,3672,5170,1058,637,153900,140900,110808,1616,15500,23760,23630,2462,4246,713,7344,2260,842,1620,7020,664,null,842,4277,1296,18106,1058,637,1728,842,2916,909,21515,580,637,529,1068,1134,691,1598,1944,2700,1290,3110,972,680,596,918,1512,1728,842,2916,909,2376,617,1296,3580,864,1404,1836,2376,1000,3630,645,1468,1836,6199,3826,1620,13128,1839,2878,6118,8735,1580,3000,2376,617,3091,1669,524,1600,1296,912,2280,1620,1354,2160,1512,1080,2100,4051,1188,1020,3242,1450,4690,670,918,2700,3091,1669,524,3564,3456,1512,1080,1060,713,1068,940,917,2376,21600,994,2310,1128,10280,4104,540,1512,3024,2138,3564,3456,1512,1080,1060,929,907,12744,1404,1404,886,3888,3888,700,679,5076,2376,844,1296,3024,3024,2052,1404,1102,3780,713,929,1944,788,1026,1037,35640,2052,1512,1512,734,2160,972,6521,14999,1512,3024,1728,2808,1296,5184,6696,3240,2030,1677,1296,529,680,1037,35640,3175,2592,4104,7776,20883,29833,5863,2138,2138,2138,2678,1728,1400,2138,994,724,842,1944,907,3175,2592,4104,7776,20883,29833,1944,28252,1620,3024,9800,1598,1231,1404,1296,1620,799,3218,2376,1620,810,2052,12908,1440,2592,2376,1620,823,1944,28252,1620,1156,864,1836,1166,972,8208,594,2592,929,4104,1102,1944,1296,1512,2592,594,2391,3175,2668,1156,864,1836,1166,972,8208,2700,408,8100,4644,4104,3672,4104,3672,1480,2376,864,1944,3024,1512,60400,32725,3150,1728,2160,864,2700,408,8100,4644,4104,1080,1037,864,1037,907,1728,907,778,594,1080,1037,864,1037,907,1728,907,778,594,1080,1037,864,1037,907,1728,907,1836,1836,950,2376,15120,2592,2592,3888,756,799,4104,2592,8424,7020,35950,1620,3456,2037,3888,3127,4477,5184,637,6800,1728,2592,11850,1944,842,810,3240,972,4104,35950,1620,3456,1735,3564,1836,2700,1166,1728,2700,1944,3240,4320,4320,1728,6048,918,648,842,2304,48990,2484,2592,928,11800,2808,760,1404,3950,1944,1620,1543,3024,950,2160,34747,6156,10584,1382,3672,864,5940,3130,972,1404,2808,760,1404,1080,2376,648,1188,4104,3456,1242,18074,4860,4721,52198,2700,2700,500,3611,713,1404,1080,2376,648,1188,2700,3240,3240,3024,1200,2916,1512,17280,1728,1620,8208,3672,2148,5400,1728,713,1071,2592,1440,2700,3240,3240,4860,2700,842,4968,3240,1100,4522,5184,2376,3564,8999,1015,886,6372,5184,2097,1620,5940,5940,4860,2700,842,1166,3456,648,929,4104,4104,4104,2160,1080,1080,3888,4933,3024,3240,1620,2376,1944,1943,1166,3456,648,929,1944,3024,3685,2144,4104,3541,907,3024,1944,3456,1728,1361,1620,9661,3240,3456,4104,3110,893,1944,3024,3685,1620,2376,4320,3240,3024,4066,3456,821,17280,1255,778,2052,9288,2592,9000,3488,5000,3996,1620,4104,1620,2376,7344,10260,1680,2376,812,4860,3024,10260,2592,5940,1058,3888,10800,907,3024,3024,2757,2808,7344,10260,1680,2376,2376,2592,3024,2376,3672,4320,4320,3672,24840,30240,39800,2484,2160,8517,3456,2160,2700,6156,2160,2700,2484,2376,29800,5100,2600,21500,6531,3888,1080,1080,3456,1512,43200,29800,5100,2600,21500,6531,3888,1080,1080,3456,1512,43200,2808,5728,6525,8056,7355,929,5616,8100,6532,2808,5728,6525,8056,7355,929,5616,8100,6532,2808,5728,6525,8056,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1944,3888,3456,4135,600,820,830,4428,10800,2754,3002,2470,2540,1404,4161,1146,3970,1530,5311,2520,2766,2786,4536,3456,3456,3456,2786,3456,1811,2000,6426,2786,2786,3456,3456,7370,1380,4661,3120,3599,3200,2894,3456,4104,2280,5999,5836,3130,3672,2786,2916,3758,1944,1512,3888,3240,6400,2618,3024,null,2052,700,6264,2376,9001,2160,1616,2376,3456,2376,1123,4104,864,2160,1620,3024,3564,1090,1944,734,3672,356,1296,2484,5728,1404,842,2376,3780,1620,3132,3456,2052,2592,2160,1728,734,2592,1296,2484,5728,1404,842,2376,1943,974,1620,4104,1728,713,3024,669,3240,1361,1836,759,10000,7176,3024,4536,6912,799,2376,1943,974,1620,3240,5700,1080,1728,972,1102,1836,2592,1166,2052,7128,8800,4080,3996,3999,3240,5700,1080,1728,972,1102,1836,null,null,null,null,null,null,null,null,12400,11030,5000,5618,5518,5645,5845,7549,6999,821,1728,670,4104,3024,4320,8424,1080,1800,2808,2700,6549,3456,2376,3218,3024,3132,1620,7549,6999,810,886,3024,2808,2104,2141,2376,1685,2484,3456,2808,886,1836,5832,2000,3996,6313,3132,2808,9245,1682,2808,3240,3024,3024,1296,3888,5076,5184,605,1728,1944,2376,4104,3024,3456,3672,10715,5031,4536,764,1700,3240,3024,1404,1728,7804,3888,3218,2916,3780,3024,1173,1512,11744,1404,1728,7804,3888,3218,2916,3780,3024,1173,1512,11744,2808,3240,4536,30329,3240,645,1728,1026,2376,4536,1299,2563,3456,2181,1730,2916,5138,3672,9726,8023,2808,3240,2800,5076,13312,22812,4968,23190,3240,2424,2800,5076,13312,22812,4968,23190,3240,2424,2800,5076,13312,22812,4968,23190,null,null,null,null,null,null,null,null,null,null,648,1030,1054,4860,3200,1299,6048,3630,3240,540,977,4336,2270,7085,4980,1227,1728,670,1728,3024,596,1512,1625,885,5400,617,994,819,3292,823,8187,10700,4678,6516,6500,4177,842,886,929,1836,680,3024,2808,1728,1080,842,700,860,2700,8640,819,864,1944,799,3240,2052,3450,5616,1404,1512,3024,1458,2052,2980,49800,2786,6264,810,756,710,4860,4104,1296,1680,864,1728,3402,1404,1404,4104,5430,5680,1296,3672,2916,1728,3402,1404,1404,500,2052,1620,2721,2721,3240,691,3791,1512,1300,680,2376,2160,3024,907,2333,1234,1620,1132,1836,3456,3024,2400,4644,2600,896,2160,2160,679,864,617,1296,864,896,1944,1728,700,1728,648,2592,3132,2268,null,null,null,null,null,1382,null,657,6550,53784,15984,null,1699,8934,8778,22600,17580,2600,26312,8912,3796,2980,2110,1790,4065,2500,2592,1610,2480,7930,8999,2080,52694,29700,29700,24840,7425,4065,2500,2592,1610,2480,7930,null,null,null,null,null,null,null,null,3024,4427,28347,760,1539,493,458,1573,1824,2700,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1218,1680,3180,2786,3308,18900,1902,1902,1934,3888,5624,1354,3024,3780,2808,1528,4618,1014,145000,3672,562,1080,660,622000,2370000,1512000,3109,1206,1143,1095,1143,1402,1906,4209,2772,2036,7146,4104,3374,3000,4800,2448,1080,959,879,567,500,744,null,null,15120,16200,1000,2580,1200,21498,1620,10800,5400,1990,1937,970,1472,2479,2850,9500,2700,7280,1449,24499,2980,1296,487,334,478,652,912,409,484,912,1075,869,4536,4104,3996,3024,3024,4104,3780,334,478,652,912,12650,39800,1599,940,1113,31800,16650,1290,17989,9617,39300,null,3240,12000,2183,9999,2905,2646,2000,1944,648,1200,1598,1995,1458,4104,3780,1746,2900,1080,2244,1449,1879,1820,2570,9999,3840,null,null,1944,2592,29961,2052,2638,317,2462,2138,2376,2138,472,16480,110999,583,3235,3280,493,538,10100,1500,2376,2678,1404,1922,1573,1360,933,1006,557,1747,734,756,1617,4104,3888,4968,1944,5076,2376,1944,8208,562,810,1944,1028,5616,3780,1573,3456,2376,3888,1836,3456,3888,3456,3672,15120,4860,3780,2700,2138,4968,32184,3888,3888,1296,3456,1728,3002,3456,2376,3888,null,2899,5184,1500,24800,129991,1417,3173,5076,6361,6575,6696,null,null,596,1900,627,null,null,null,null,null,null,13150,1050,4635,834,1620,1785,1080,2180,2890,2975,2600,990,4980,2700,1944,1512,918,1944,1296,2160,2160,799,514,5076,13150,4104,2200,4104,2376,2699,28500,2268,3110,3002,3780,1728,1836,1944,1944,1620,1620,1814,1836,1728,2052,1944,1944,4104,2200,4104,5616,1598,1836,1836,1814,1728,2160,1944,1728,388,2106,1512,1512,1404,1728,1728,1620,2052,1296,1944,1728,1598,2052,1728,1944,3240,3672,1131,4266,4266,1836,1944,2821,3672,2592,3564,1512,2592,2376,1620,1512,2570,3002,4320,2376,3456,1026,2668,1337,3240,4968,3672,2808,12950,1404,3024,2950,5300,6900,5694,1250,5000,5000,3456,4536,5050,393,744,2872,1099,1000,19008,4950,2450,2217,1404,11011,1898,1491,2950,1922,1800,6594,998,1544,2160,1280,999,3331,3886,3365,2188,5311,2188,389,493,493,2376,540,499,2592,2376,1728,1998,1598,1512,16200,1296,2786,3024,1512,1543,null,null,11580,6980,2500,5800,4104,2500,2900,4280,2475,2650,2992,7730,885,2376,2980,2376,6027,null,885,885,null,null,null,5990,879,3132,43000,690,5580,3900,9800,9150,6760,7000,107348,2580,22586,15500,2100,6480,8641,8414,11581,2600,3024,5510,9581,1554,4545,4599,3240,880,4200,3599,2830,3378,3500,3700,674,450,1509,680,12861,12980,2211,30000,8233,8980,3240,null,null,null,2376,2196,2183,680,3218,1944,1944,1490,2360,1728,2592,3024,1728,1728,1944,3672,1900,1227,3002,1680,15800,1620,3024,1536,2592,1944,114000,2376,821,1404,1109,12000,1109,1458,2161,2854,2419,752,1130,818,2776,1300,1512,2484,1404,3672,3002,3564,3240,1944,907,1400,1944,734,1382,1620,3672,842,3456,3240,6000,2130,4622,971,889,623,1482,2492,1980,3780,8187,3024,4104,1040,907,1290,2796,1620,1944,1944,1944,1728,1728,2680,2800,2592,3780,2376,1944,2160,2592,4104,2700,1080,2592,1404,3024,3240,1512,3456,2497,1512,864,3000,3672,2000,1000,54800,1620,896,767,134235,35250,1620,1728,52694,38520,3700,2999,127115,87526,31866,76050,80510,44514,84180,91081,821578,null,null],"color":["#0080FF","#FF0028","#6A00FF","#4FFF00","#0600FF","#FF00E5","#FFC600","#FF0076","#FF00C9","#4800FF","#00FF6F","#1200FF","#EFFF00","#DFFF00","#FF00ED","#FFC900","#1A00FF","#9E00FF","#D6FF00","#9CFF00","#0D00FF","#40FF00","#FFFB00","#00FF6A","#FF0086","#00EDFF","#1AFF00","#8DFF00","#FF00C3","#0081FF","#00FF3B","#FF3F00","#FF4300","#0096FF","#D7FF00","#FF00E9","#1900FF","#BE00FF","#4DFF00","#A800FF","#AFFF00","#1600FF","#FF00B4","#00D8FF","#FFD000","#FF0033","#0097FF","#FF00B1","#FF0052","#FF9900","#00FF82","#00FFFB","#FFBA00","#00FFCD","#D400FF","#4800FF","#FF00A6","#FFD800","#00FFCF","#5000FF","#005CFF","#75FF00","#F3FF00","#FF4600","#006CFF","#00D1FF","#002CFF","#A800FF","#1D00FF","#FB00FF","#FF004E","#B4FF00","#2000FF","#FF00BA","#00FFC1","#E000FF","#66FF00","#FFC100","#0067FF","#00FFA7","#C300FF","#8100FF","#BFFF00","#FF8600","#DCFF00","#00FF36","#F4FF00","#FF7900","#6EFF00","#FF4C00","#8BFF00","#FF00E7","#D1FF00","#00FFD9","#00D4FF","#4900FF","#FF0044","#00FFFC","#0023FF","#FF0024","#00CBFF","#FFE200","#FF00FA","#FF0000","#90FF00","#F600FF","#FF6F00","#00FFB3","#00FFD3","#FFB300","#004CFF","#70FF00","#0015FF","#00FFBA","#E0FF00","#00FF08","#2900FF","#7A00FF","#0500FF","#7EFF00","#00FF96","#3F00FF","#7100FF","#FF00AD","#FF00D6","#00FFA8","#09FF00","#FF7200","#BF00FF","#C8FF00","#00FFFF","#0099FF","#2300FF","#D8FF00","#FF6000","#F300FF","#FFEA00","#A200FF","#2400FF","#FF008A","#00CAFF","#9E00FF","#00FFD5","#0044FF","#00FF26","#FF9500","#000FFF","#00FF5A","#0032FF","#FF5D00","#FF00F2","#FFA000","#CC00FF","#00FF0F","#FF0041","#0074FF","#FF00E3","#D2FF00","#FF006E","#FFDC00","#00FFED","#00FFBD","#FF0300","#0078FF","#00F1FF","#00FF8C","#00E3FF","#57FF00","#00FF12","#F4FF00","#64FF00","#00FFF2","#FF00C8","#0028FF","#FF00B3","#E1FF00","#0039FF","#002DFF","#21FF00","#A3FF00","#FF00B7","#9F00FF","#FF0029","#97FF00","#00CAFF","#1400FF","#FF0072","#00FFED","#F400FF","#00B6FF","#00BFFF","#FF00C3","#00FF9C","#FF4F00","#00FFD8","#00FFF7","#00FF27","#F400FF","#00BCFF","#FFB600","#003AFF","#FF2000","#3CFF00","#9FFF00","#0085FF","#00FFFD","#FF000C","#00D7FF","#FF00C4","#3500FF","#FFB700","#76FF00","#70FF00","#B700FF","#FFAC00","#22FF00","#FFE100","#008BFF","#0058FF","#FFDB00","#00FF7A","#DA00FF","#E0FF00","#00FF1E","#A600FF","#B7FF00","#5300FF","#FF00B4","#FF002B","#4200FF","#F000FF","#FF0030","#FF003B","#FF4400","#FF006B","#B500FF","#00FFCA","#00FF72","#0B00FF","#FF00EA","#B5FF00","#00D4FF","#00FF93","#0033FF","#6BFF00","#05FF00","#00FFC0","#00FF7C","#8CFF00","#CD00FF","#14FF00","#7C00FF","#FF1700","#FF0038","#00D9FF","#00F9FF","#008EFF","#99FF00","#85FF00","#5C00FF","#29FF00","#A6FF00","#FF7000","#00C5FF","#74FF00","#001DFF","#00FF15","#FF00FB","#C200FF","#00A8FF","#FF0700","#25FF00","#FF1D00","#9AFF00","#FF1F00","#66FF00","#00FF03","#0092FF","#2D00FF","#00C5FF","#00DBFF","#00FFC8","#BEFF00","#00FFBB","#00A9FF","#0022FF","#006FFF","#F500FF","#EF00FF","#FF004A","#006DFF","#00CEFF","#FFA000","#00FFAA","#FF2800","#61FF00","#9800FF","#FF002B","#0077FF","#00FF3E","#FF0061","#2FFF00","#FF00AA","#00F5FF","#DDFF00","#00FFBF","#FF3600","#0056FF","#FFDA00","#1000FF","#FFFD00","#FAFF00","#00FFC0","#FF0043","#FFC400","#3AFF00","#2200FF","#00FF4D","#42FF00","#1A00FF","#3900FF","#5E00FF","#00FF52","#C900FF","#0090FF","#FF008D","#00FFE4","#FF00DE","#4700FF","#E6FF00","#EB00FF","#FF00F7","#6CFF00","#B200FF","#16FF00","#8500FF","#73FF00","#A1FF00","#FEFF00","#FF5600","#FFC300","#00FF95","#FF0069","#FF00B0","#FF7F00","#FF4900","#FF00C0","#0040FF","#FFE700","#4B00FF","#FF8E00","#4400FF","#FF009D","#B3FF00","#FF9000","#1B00FF","#3B00FF","#2500FF","#FF0030","#00E1FF","#FF00EB","#FF00AB","#000BFF","#008DFF","#FFAF00","#9400FF","#FF0200","#55FF00","#2B00FF","#FFA200","#9300FF","#00FF5F","#FFBD00","#CBFF00","#0300FF","#E300FF","#A300FF","#C7FF00","#FF2500","#00FF6A","#FF00A3","#FF005C","#FF0016","#00BBFF","#FF009A","#FF3000","#FF4B00","#00FFF5","#75FF00","#FFA500","#006FFF","#2EFF00","#FF0074","#8C00FF","#FF5900","#FF008E","#FF6800","#FFE400","#D6FF00","#FF00E4","#28FF00","#FF004F","#7500FF","#00FF43","#AB00FF","#00FF49","#00FF41","#2EFF00","#00FF4B","#FF0073","#00FFA5","#FF7800","#FE00FF","#FFD900","#FF1A00","#4DFF00","#00FFAD","#FFF000","#FF00CF","#72FF00","#FF0021","#FFFF00","#00E3FF","#003FFF","#00FF86","#FF0068","#A9FF00","#FF7B00","#FFF400","#FFE300","#00FF4E","#00F4FF","#FFB400","#00FFB2","#0070FF","#11FF00","#00FF97","#FFB500","#FF2C00","#FF004D","#FF0010","#0093FF","#15FF00","#FFAF00","#FF2900","#FF00E2","#00A1FF","#1700FF","#FF001C","#FF003D","#FF7A00","#001EFF","#00F7FF","#C5FF00","#FF2300","#00FF29","#FF001B","#B0FF00","#A700FF","#0079FF","#FF3900","#6500FF","#0CFF00","#65FF00","#FF0098","#FFEB00","#19FF00","#00FFD7","#FF9D00","#FF3E00","#F8FF00","#0043FF","#A900FF","#0073FF","#00FF60","#BC00FF","#FF007C","#00FF1C","#00C1FF","#FEFF00","#00FFAC","#00A5FF","#00FF2B","#FF00AC","#00FF74","#FF00C7","#00B0FF","#FF0026","#FFCF00","#00FF87","#FF00C5","#1CFF00","#0A00FF","#BD00FF","#FF5E00","#FF0095","#0021FF","#00FFBB","#FF0017","#00DCFF","#FF00E1","#ADFF00","#FF0090","#FF0800","#C6FF00","#57FF00","#F5FF00","#FF007D","#00C2FF","#0098FF","#0064FF","#FF3400","#06FF00","#3BFF00","#71FF00","#6100FF","#00DDFF","#00FF83","#FFBB00","#EA00FF","#E5FF00","#FF4800","#00FDFF","#0041FF","#00DEFF","#0013FF","#00FF50","#001AFF","#4AFF00","#FF009C","#FF5400","#C1FF00","#FF004C","#D300FF","#8AFF00","#5100FF","#FF1500","#69FF00","#0F00FF","#48FF00","#FFC300","#E500FF","#3300FF","#FF00D2","#00FFDD","#007DFF","#C2FF00","#C800FF","#D600FF","#AA00FF","#FF00B5","#FF6D00","#4D00FF","#FF5200","#00D2FF","#FF00F3","#A0FF00","#00FF68","#00FF9C","#FF0047","#2600FF","#FF1300","#80FF00","#FF00A9","#007FFF","#0016FF","#B800FF","#00FF61","#07FF00","#FFC200","#E500FF","#61FF00","#FF0048","#8EFF00","#00FFDA","#5EFF00","#FF00FB","#FF1400","#0036FF","#9400FF","#FF9400","#7AFF00","#0076FF","#00FF1B","#FF0003","#B8FF00","#00D5FF","#FFE000","#FF0006","#34FF00","#24FF00","#00E5FF","#32FF00","#00FFC9","#FF0084","#FF000B","#FF0003","#00FF9A","#00FF56","#6000FF","#00FF2E","#00FAFF","#00A6FF","#9B00FF","#3400FF","#FDFF00","#00FF44","#00FF1A","#D1FF00","#00FFAB","#8900FF","#FF0060","#00FF4A","#00DFFF","#A500FF","#E000FF","#0053FF","#FF00A0","#0100FF","#FFA900","#0074FF","#FF00CA","#0083FF","#4500FF","#FF0070","#6C00FF","#FF6100","#3600FF","#FF7500","#00FFAE","#FF006A","#00FF71","#E900FF","#A4FF00","#00B0FF","#00FFDF","#00FF3C","#00FF09","#7FFF00","#79FF00","#4D00FF","#00FF85","#FFFC00","#B900FF","#D600FF","#FF00B6","#FF00CD","#FF0081","#6D00FF","#00FFC3","#00FF0E","#00FFDC","#00FFB9","#FF00D4","#00C7FF","#00FFA0","#0004FF","#5A00FF","#00E6FF","#FF000A","#FFD600","#0086FF","#0003FF","#0029FF","#FFD200","#FF9E00","#00FFD0","#2BFF00","#FFE700","#007BFF","#1FFF00","#00FF9B","#00FFCE","#00E8FF","#FF00CB","#0006FF","#C500FF","#FF0001","#FF00D1","#00B7FF","#2AFF00","#0055FF","#FF001A","#FF0900","#FF7D00","#FF004F","#FF00EF","#CBFF00","#FF4F00","#FF00A4","#00FF2F","#FF0039","#FF0009","#FF0037","#FF0089","#1000FF","#FF0096","#0046FF","#004DFF","#7B00FF","#00FF75","#00FF5E","#FF005B","#00FEFF","#8800FF","#FF0021","#7200FF","#FF0080","#FF004B","#00FF5C","#00FF9E","#2700FF","#B6FF00","#D100FF","#FF4900","#00FF53","#00F3FF","#00FF06","#FF0086","#FF0500","#00FFEF","#00FF55","#7900FF","#00AFFF","#33FF00","#00FFB4","#FF6800","#B1FF00","#18FF00","#5400FF","#FF00E7","#001FFF","#00FF7F","#00BDFF","#D9FF00","#000EFF","#0082FF","#FF0018","#FF00BF","#00FF8F","#00FFD6","#00A4FF","#89FF00","#AF00FF","#2900FF","#00D3FF","#F7FF00","#FFE900","#00FFE8","#FFB200","#005AFF","#1800FF","#00FF51","#00FF6B","#007EFF","#00FFA6","#0034FF","#00D0FF","#81FF00","#0C00FF","#00BEFF","#00FF64","#FF0081","#FF0057","#FE00FF","#C400FF","#FF002D","#00FFCB","#FF9300","#FF5000","#0011FF","#00FF79","#C1FF00","#A400FF","#00FFB5","#60FF00","#00FF11","#FF008C","#0900FF","#00FF6F","#00FF64","#58FF00","#FF000F","#00FF50","#A7FF00","#91FF00","#00FF13","#FFBC00","#FFC700","#003EFF","#FF0400","#0031FF","#FF00D9","#FF00AF","#FF0059","#FF0082","#FF0099","#00FFC7","#A3FF00","#B300FF","#00FF02","#00C3FF","#FF00F1","#0700FF","#FF003F","#0055FF","#FF9600","#FF7700","#78FF00","#00FF46","#FF0063","#30FF00","#FF0042","#00FF7E","#00FF0B","#00FF81","#FF0050","#00FF84","#00FFA1","#62FF00","#5F00FF","#FFBE00","#FF00E6","#A8FF00","#FF8B00","#FF7600","#00FF8B","#009CFF","#0009FF","#6400FF","#0071FF","#B700FF","#6B00FF","#C600FF","#F0FF00","#8A00FF","#0001FF","#8300FF","#FF8A00","#FF0031","#3D00FF","#00FFEB","#000AFF","#00FFC6","#00FFDB","#00FF80","#00FFF2","#00FF34","#001BFF","#EAFF00","#0FFF00","#FFCD00","#FF1C00","#00FF41","#00FF62","#FF6200","#FF2E00","#FF0075","#00FF0E","#1500FF","#80FF00","#00FF2A","#002BFF","#00FF3F","#AD00FF","#00E8FF","#00C8FF","#00FF04","#FF9000","#00FF97","#FFF600","#FF8D00","#FF1200","#FF00CC","#DF00FF","#FF0063","#00C6FF","#0087FF","#00FFB1","#FF3800","#48FF00","#00FF0C","#0018FF","#00E7FF","#00B3FF","#FF6700","#FF003F","#FF00E1","#0038FF","#00FFE3","#FF0094","#7A00FF","#0037FF","#00ADFF","#FF6A00","#B600FF","#6DFF00","#FF000D","#3000FF","#E5FF00","#94FF00","#3DFF00","#00ABFF","#00FFE0","#FF00C8","#BDFF00","#FF00B9","#00FF8D","#FF4D00","#00FF2C","#FF0077","#009EFF","#13FF00","#0095FF","#FF8200","#FF5100","#009FFF","#FF0F00","#00FF54","#5700FF","#FF00FE","#FF8F00","#FF003E","#FF8B00","#00BBFF","#FF2F00","#8000FF","#FF0085","#0002FF","#FF00BB","#002DFF","#7BFF00","#0DFF00","#FF9200","#0045FF","#FF5B00","#00FFBE","#FF0025","#00FF55","#00FF4F","#1BFF00","#FF6900","#51FF00","#FF0097","#FF8800","#7800FF","#00FF46","#FF4400","#0089FF","#FFAB00","#FF00F6","#00FFDE","#FF2D00","#8400FF","#FF8400","#6600FF","#B200FF","#E4FF00","#00CFFF","#2E00FF","#0094FF","#0046FF","#0064FF","#00FFA6","#FF006D","#00FFF4","#FF00EC","#00FF10","#FF8100","#FF4A00","#FF0062","#00F7FF","#FF8C00","#FF9800","#0097FF","#00FFE8","#FF0014","#FF9100","#FF8600","#00FF28","#3100FF","#52FF00","#FF00FD","#0075FF","#7600FF","#FF00AE","#FF5400","#FF00D7","#8E00FF","#00FF19","#FF00BD","#FFCC00","#77FF00","#FF00A8","#FF5C00","#00EEFF","#54FF00","#D4FF00","#00FF04","#FF0058","#00FF37","#00FFE3","#FFFE00","#00FF66","#00FFF6","#A5FF00","#0060FF","#FF00A2","#FFAE00","#00EBFF","#FFE600","#FF00D7","#DAFF00","#0091FF","#FF5E00","#FF006D","#0084FF","#C4FF00","#FF0022","#FF00DA","#2F00FF","#003CFF","#001CFF","#00FF33","#00FF77","#00FF5D","#006EFF","#FF2600","#0008FF","#FF0095","#FF0D00","#00FFD4","#FF0036","#D100FF","#8FFF00","#00FF32","#FFFA00","#E400FF","#00FF0A","#FF001D","#00FFEA","#ABFF00","#00FF92","#FF003A","#0025FF","#9500FF","#FF00C2","#FF1100","#D900FF","#FF00C6","#0027FF","#0066FF","#FF007A","#00F2FF","#00FF88","#36FF00","#00FF4C","#17FF00","#FFBE00","#00FF48","#0035FF","#00FFD9","#B100FF","#00AAFF","#00FF39","#5500FF","#FF00D3","#03FF00","#FF0051","#0800FF","#00D9FF","#0079FF","#C000FF","#FF2600","#FF00DC","#0092FF","#FF009F","#9A00FF","#FF9700","#00B8FF","#00FF79","#FFD100","#43FF00","#005DFF","#00FFF0","#FFAA00","#00FF00","#DBFF00","#FF0600","#00ECFF","#00FF16","#FF0008","#FF1200","#FF1B00","#00FFE5","#A000FF","#FF5A00","#EEFF00","#7D00FF","#8B00FF","#FF008B","#00FF5B","#EA00FF","#001EFF","#0017FF","#FF6B00","#00FF18","#10FF00","#AE00FF","#5600FF","#FF00D2","#00F0FF","#00B9FF","#AD00FF","#0041FF","#002EFF","#FF6300","#AAFF00","#00FFFC","#B2FF00","#00FFEC","#3200FF","#006AFF","#00B4FF","#FF3300","#00E4FF","#A100FF","#00FF31","#FF8700","#FFF500","#FF2100","#12FF00","#005EFF","#86FF00","#5200FF","#FFEC00","#00DEFF","#00CDFF","#9EFF00","#F700FF","#2C00FF","#00A3FF","#4A00FF","#FF6500","#FF007C","#4CFF00","#3C00FF","#FF5F00","#00FCFF","#00FFA9","#FF3C00","#00FF35","#FFC800","#0004FF","#EFFF00","#5B00FF","#FF7C00","#FF00F9","#00FF37","#8A00FF","#6AFF00","#85FF00","#FFE800","#FF6E00","#FF0035","#C0FF00","#FF00E8","#FFB900","#FF00D5","#FF002C","#00FF98","#FF0087","#FCFF00","#FF0027","#93FF00","#00FF2D","#FF00BE","#FF0034","#FF005E","#FFBF00","#00FF14","#00FFEE","#C100FF","#00E2FF","#FF00AA","#FF0071","#0065FF","#8D00FF","#8000FF","#FF8300","#D3FF00","#F9FF00","#FF0015","#0023FF","#1E00FF","#2DFF00","#2400FF","#00FF7B","#00FF25","#00FFF3","#0061FF","#009CFF","#FFCA00","#FF0023","#FF4700","#FF0002","#00FF40","#00FFB0","#FF3200","#C3FF00","#FF5700","#CB00FF","#B7FF00","#FF006C","#EE00FF","#CDFF00","#46FF00","#7400FF","#00FF74","#00FF32","#FF008F","#FF0054","#00FF92","#FFA400","#00FFCC","#0400FF","#00FF6C","#FFCE00","#00FF91","#00FF90","#83FF00","#EDFF00","#FF00DD","#43FF00","#0600FF","#ECFF00","#00C0FF","#6600FF","#005BFF","#A300FF","#01FF00","#00AEFF","#00FF09","#31FF00","#E7FF00","#FFCB00","#FF007B","#FFD700","#FF4000","#6FFF00","#E200FF","#6700FF","#00FF1D","#FF4100","#49FF00","#4100FF","#005FFF","#00FF9D","#FF00DF","#AEFF00","#9200FF","#00FF3C","#00FF45","#FF0017","#FF1900","#4000FF","#00FF8D","#DC00FF","#008DFF","#00FFB7","#FF7200","#0057FF","#CEFF00","#FF0045","#FF0B00","#00FFC4","#2CFF00","#39FF00","#FF00A7","#B400FF","#FC00FF","#5DFF00","#CAFF00","#00FF1E","#00FF70","#FF009E","#0088FF","#CFFF00","#BAFF00","#44FF00","#FF00A5","#FF1E00","#0052FF","#FF00B2","#00FBFF","#D0FF00","#00FFB6","#1AFF00","#37FF00","#39FF00","#FF3700","#00FF69","#00FF73","#FF0077","#00F2FF","#FF005A","#FF5800","#8F00FF","#0062FF","#0019FF","#FF0079","#3A00FF","#00FF89","#06FF00","#FF0092","#E700FF","#F900FF","#92FF00","#FF1700","#FF1000","#FF002E","#88FF00","#00FF7D","#0083FF","#FF0078","#B9FF00","#0020FF","#27FF00","#FF0100","#FF1600","#FF0004","#FF9F00","#FF001C","#FF7400","#4EFF00","#00FF47","#FFF800","#FF00DC","#FFA300","#1F00FF","#4300FF","#00FFC5","#FFAA00","#00FF5F","#00FF18","#9DFF00","#FF00F5","#2100FF","#FFDD00","#FD00FF","#3FFF00","#00FF4B","#FFF100","#FF2100","#FF0056","#0012FF","#FF0065","#94FF00","#F800FF","#29FF00","#00A0FF","#0050FF","#FFB400","#00A1FF","#FF3100","#00FF59","#8FFF00","#00F8FF","#5BFF00","#7300FF","#00FF01","#FFF100","#8200FF","#DB00FF","#FFDE00","#52FF00","#00FFCF","#FF3000","#FF4200","#00BAFF","#00E9FF","#FF1C00","#FF00F0","#DD00FF","#00FF24","#95FF00","#F200FF","#0B00FF","#FFD500","#FF0091","#82FF00","#CF00FF","#E100FF","#0018FF","#FFD300","#005AFF","#FF0019","#004BFF","#FF0059","#D700FF","#00FF5A","#0032FF","#F100FF","#FF0300","#FF8100","#0050FF","#00FF76","#FFC500","#FF0C00","#00FFA4","#00FF83","#FF0064","#FF6600","#AC00FF","#3EFF00","#00FFA3","#DB00FF","#FF0055","#45FF00","#FFEC00","#FF005E","#FF00CD","#00FF58","#0068FF","#FF4E00","#87FF00","#DEFF00","#00FFB0","#96FF00","#FF00EC","#6800FF","#FF00DB","#98FF00","#38FF00","#FFD400","#6900FF","#00FF3D","#FF00D0","#FF8900","#FF0008","#FF2A00","#FFF900","#FFE500","#FF0035","#FFD200","#1F00FF","#00FCFF","#8F00FF","#6E00FF","#FFA700","#00DAFF","#00FFDE","#0100FF","#FFB100","#FF00F6","#009DFF","#FF0011","#FFEF00","#FFB900","#003BFF","#7F00FF","#5200FF","#00FF65","#8700FF","#7000FF","#FF9A00","#1DFF00","#00FF9F","#BC00FF","#00FF2D","#00FF88","#0072FF","#FF0090","#004EFF","#006AFF","#EAFF00","#FF0093","#FF008B","#BB00FF","#0010FF","#ED00FF","#6200FF","#00FF8E","#FF9500","#00FFC2","#00FF67","#00F6FF","#FF4500","#00EDFF","#ACFF00","#00CFFF","#0047FF","#CCFF00","#C600FF","#FF00CE","#002AFF","#FF5500","#59FF00","#00FF7E","#2800FF","#1300FF","#50FF00","#FF00B9","#FFA100","#FF001F","#5C00FF","#FF006F","#FFA500","#7CFF00","#E9FF00","#E8FF00","#00FF28","#FF7E00","#FF0068","#00FFFE","#FF00F1","#FFA600","#3800FF","#FF7700","#FF0026","#9BFF00","#4600FF","#FF8000","#BBFF00","#003DFF","#009BFF","#00FFD4","#00FF20","#FF00E0","#FF2B00","#1EFF00","#5800FF","#00EAFF","#24FF00","#F2FF00","#00FFE9","#00FFBC","#34FF00","#FF0D00","#D800FF","#00FFE6","#5CFF00","#000DFF","#00FF22","#CE00FF","#FF00A1","#FF9B00","#00FFE1","#0014FF","#FF7C00","#C100FF","#FF2400","#007AFF","#9EFF00","#FF3A00","#FFB000","#0088FF","#FF005D","#00B6FF","#008CFF","#4300FF","#00A7FF","#FFAD00","#6300FF","#FF00B8","#FF00F8","#FF007E","#FF8500","#0028FF","#0063FF","#FFEE00","#D200FF","#0059FF","#FF2B00","#0026FF","#9C00FF","#35FF00","#BA00FF","#00FF23","#00FF8A","#A8FF00","#FF7100","#C9FF00","#FF0005","#00FF6E","#D000FF","#00A6FF","#FF5900","#FFC800","#FF00D8","#7DFF00","#FF9B00","#5FFF00","#9700FF","#CB00FF","#08FF00","#0054FF","#E3FF00","#EBFF00","#0005FF","#00FF3A","#00FFF8","#FFF300","#00FF42","#FF2700","#00FFB8","#FF0088","#E800FF","#F9FF00","#0200FF","#F900FF","#9100FF","#FBFF00","#0048FF","#7000FF","#FFA800","#56FF00","#FF009B","#FFDF00","#FFB800","#FF000E","#6BFF00","#7500FF","#FFED00","#23FF00","#FFF200","#00B2FF","#00C0FF","#FF0020","#FF0007","#CA00FF","#41FF00","#00FF23","#FF5300","#10FF00","#00FFA1","#006BFF","#FF6D00","#9600FF","#00FFF1","#FF0800","#00FFD2","#FF3A00","#F1FF00","#3700FF","#008FFF","#00FFCA","#00FF63","#FF002A","#FFDC00","#002FFF","#3E00FF","#BCFF00","#FF000D","#0AFF00","#00FFAF","#B2FF00","#0051FF","#2E00FF","#00EFFF","#5D00FF","#D5FF00","#00B1FF","#8500FF","#6100FF","#FF00F4","#00FF0D","#FF3D00","#5CFF00","#C700FF","#04FF00","#FF00A5","#FF001E","#00FFC5","#EF00FF","#004BFF","#004AFF","#00FF1F","#FF0E00","#000EFF","#6B00FF","#FF0054","#00FFA2","#00FF99","#00FF17","#0013FF","#00FFE7","#00FF05","#9900FF","#004FFF","#01FF00","#00ACFF","#008AFF","#00FF13","#FFF600","#20FF00","#02FF00","#00FF30","#C6FF00","#00FFAB","#FF0083","#0049FF","#1500FF","#1100FF","#5900FF","#15FF00","#00FFE2","#00FF6D","#4BFF00","#FF00BE","#1C00FF","#FF0066","#FF0044","#9D00FF","#84FF00","#47FF00","#7700FF","#00FF21","#FF6400","#A2FF00","#4C00FF","#0009FF","#0BFF00","#FF0053","#67FF00","#FF3B00","#3400FF","#00FFD1","#5AFF00","#0037FF","#FF0A00","#9900FF","#3900FF","#00C9FF","#4E00FF","#FF0049","#F6FF00","#FF00FF","#0BFF00","#FF0049","#E600FF","#BCFF00","#FFCD00","#0E00FF","#7AFF00","#0024FF","#0030FF","#FA00FF","#00FF07","#FF005F","#007CFF","#3E00FF","#FF00BC","#26FF00","#DBFF00","#00ABFF","#00FF78","#00D6FF","#EC00FF","#0EFF00","#E2FF00","#FF009B","#FF3500","#FF0040","#3EFF00","#FF0067","#FF00C1","#FF00A0","#FF0013","#00FFFA","#FF00FC","#FF9C00","#FF2200","#FF0012","#4F00FF","#00FFF9","#FF0032","#8600FF","#FFC000","#FF3500","#63FF00","#00E0FF","#99FF00","#00FF94","#0069FF","#0042FF","#2A00FF","#FF3F00","#FF0072","#FF00AF","#0007FF","#D500FF","#FF0012","#68FF00","#FF003A","#009AFF","#6F00FF","#000CFF","#FFD700","#0000FF","#00FF38","#DE00FF","#00C4FF","#00FF57","#B000FF","#7E00FF","#00CCFF","#FFE100","#1FFF00","#00FFF7","#FF6300","#FF7300","#FF007F","#5700FF","#005FFF","#FF00EE","#ADFF00","#53FF00","#FFFB00","#FF1800","#8AFF00","#00FFB6","#FF6C00","#00B5FF","#9000FF","#FF0046","#FF002F","#003CFF","#00A2FF","#FF003C","#007EFF","#FFF700"],"textColor":["#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333","#333333"],"key.id":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,7,7,7,7,7,7,7,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,16,16,16,16,16,16,16,16,16,16,16,16,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,18,18,18,18,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21,21,22,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,23,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,24,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,27,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,28,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29],"key.price":[1545,3809,2992,3240,3596,2138,2160,3845,3000,972,14300,27867,13770,1296,1901,1080,453,3024,22600,268,9504,3200,647,648,3091,2851,3800,12465,45613,1931,1164,9090,17559,1620,2772,2936,3200,2036,72800,19799,5800,1188,45360,7636,6405,23800,1404,2036,1527,2851,3308,3564,9291,1480,8717,2100,2776,1780,9633,3463,1404,11550,1250,1620,1620,1512,972,1944,22343,1615,1404,1980,1296,3308,3564,713,1944,2752,3672,5170,11880,2592,994,9180,2972,2354,980,1080,26740,6300,2484,1391,3888,659,799,713,1944,2752,3672,5170,1058,637,153900,140900,110808,1616,15500,23760,23630,2462,4246,713,7344,2260,842,1620,7020,664,null,842,4277,1296,18106,1058,637,1728,842,2916,909,21515,580,637,529,1068,1134,691,1598,1944,2700,1290,3110,972,680,596,918,1512,1728,842,2916,909,2376,617,1296,3580,864,1404,1836,2376,1000,3630,645,1468,1836,6199,3826,1620,13128,1839,2878,6118,8735,1580,3000,2376,617,3091,1669,524,1600,1296,912,2280,1620,1354,2160,1512,1080,2100,4051,1188,1020,3242,1450,4690,670,918,2700,3091,1669,524,3564,3456,1512,1080,1060,713,1068,940,917,2376,21600,994,2310,1128,10280,4104,540,1512,3024,2138,3564,3456,1512,1080,1060,929,907,12744,1404,1404,886,3888,3888,700,679,5076,2376,844,1296,3024,3024,2052,1404,1102,3780,713,929,1944,788,1026,1037,35640,2052,1512,1512,734,2160,972,6521,14999,1512,3024,1728,2808,1296,5184,6696,3240,2030,1677,1296,529,680,1037,35640,3175,2592,4104,7776,20883,29833,5863,2138,2138,2138,2678,1728,1400,2138,994,724,842,1944,907,3175,2592,4104,7776,20883,29833,1944,28252,1620,3024,9800,1598,1231,1404,1296,1620,799,3218,2376,1620,810,2052,12908,1440,2592,2376,1620,823,1944,28252,1620,1156,864,1836,1166,972,8208,594,2592,929,4104,1102,1944,1296,1512,2592,594,2391,3175,2668,1156,864,1836,1166,972,8208,2700,408,8100,4644,4104,3672,4104,3672,1480,2376,864,1944,3024,1512,60400,32725,3150,1728,2160,864,2700,408,8100,4644,4104,1080,1037,864,1037,907,1728,907,778,594,1080,1037,864,1037,907,1728,907,778,594,1080,1037,864,1037,907,1728,907,1836,1836,950,2376,15120,2592,2592,3888,756,799,4104,2592,8424,7020,35950,1620,3456,2037,3888,3127,4477,5184,637,6800,1728,2592,11850,1944,842,810,3240,972,4104,35950,1620,3456,1735,3564,1836,2700,1166,1728,2700,1944,3240,4320,4320,1728,6048,918,648,842,2304,48990,2484,2592,928,11800,2808,760,1404,3950,1944,1620,1543,3024,950,2160,34747,6156,10584,1382,3672,864,5940,3130,972,1404,2808,760,1404,1080,2376,648,1188,4104,3456,1242,18074,4860,4721,52198,2700,2700,500,3611,713,1404,1080,2376,648,1188,2700,3240,3240,3024,1200,2916,1512,17280,1728,1620,8208,3672,2148,5400,1728,713,1071,2592,1440,2700,3240,3240,4860,2700,842,4968,3240,1100,4522,5184,2376,3564,8999,1015,886,6372,5184,2097,1620,5940,5940,4860,2700,842,1166,3456,648,929,4104,4104,4104,2160,1080,1080,3888,4933,3024,3240,1620,2376,1944,1943,1166,3456,648,929,1944,3024,3685,2144,4104,3541,907,3024,1944,3456,1728,1361,1620,9661,3240,3456,4104,3110,893,1944,3024,3685,1620,2376,4320,3240,3024,4066,3456,821,17280,1255,778,2052,9288,2592,9000,3488,5000,3996,1620,4104,1620,2376,7344,10260,1680,2376,812,4860,3024,10260,2592,5940,1058,3888,10800,907,3024,3024,2757,2808,7344,10260,1680,2376,2376,2592,3024,2376,3672,4320,4320,3672,24840,30240,39800,2484,2160,8517,3456,2160,2700,6156,2160,2700,2484,2376,29800,5100,2600,21500,6531,3888,1080,1080,3456,1512,43200,29800,5100,2600,21500,6531,3888,1080,1080,3456,1512,43200,2808,5728,6525,8056,7355,929,5616,8100,6532,2808,5728,6525,8056,7355,929,5616,8100,6532,2808,5728,6525,8056,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1944,3888,3456,4135,600,820,830,4428,10800,2754,3002,2470,2540,1404,4161,1146,3970,1530,5311,2520,2766,2786,4536,3456,3456,3456,2786,3456,1811,2000,6426,2786,2786,3456,3456,7370,1380,4661,3120,3599,3200,2894,3456,4104,2280,5999,5836,3130,3672,2786,2916,3758,1944,1512,3888,3240,6400,2618,3024,null,2052,700,6264,2376,9001,2160,1616,2376,3456,2376,1123,4104,864,2160,1620,3024,3564,1090,1944,734,3672,356,1296,2484,5728,1404,842,2376,3780,1620,3132,3456,2052,2592,2160,1728,734,2592,1296,2484,5728,1404,842,2376,1943,974,1620,4104,1728,713,3024,669,3240,1361,1836,759,10000,7176,3024,4536,6912,799,2376,1943,974,1620,3240,5700,1080,1728,972,1102,1836,2592,1166,2052,7128,8800,4080,3996,3999,3240,5700,1080,1728,972,1102,1836,null,null,null,null,null,null,null,null,12400,11030,5000,5618,5518,5645,5845,7549,6999,821,1728,670,4104,3024,4320,8424,1080,1800,2808,2700,6549,3456,2376,3218,3024,3132,1620,7549,6999,810,886,3024,2808,2104,2141,2376,1685,2484,3456,2808,886,1836,5832,2000,3996,6313,3132,2808,9245,1682,2808,3240,3024,3024,1296,3888,5076,5184,605,1728,1944,2376,4104,3024,3456,3672,10715,5031,4536,764,1700,3240,3024,1404,1728,7804,3888,3218,2916,3780,3024,1173,1512,11744,1404,1728,7804,3888,3218,2916,3780,3024,1173,1512,11744,2808,3240,4536,30329,3240,645,1728,1026,2376,4536,1299,2563,3456,2181,1730,2916,5138,3672,9726,8023,2808,3240,2800,5076,13312,22812,4968,23190,3240,2424,2800,5076,13312,22812,4968,23190,3240,2424,2800,5076,13312,22812,4968,23190,null,null,null,null,null,null,null,null,null,null,648,1030,1054,4860,3200,1299,6048,3630,3240,540,977,4336,2270,7085,4980,1227,1728,670,1728,3024,596,1512,1625,885,5400,617,994,819,3292,823,8187,10700,4678,6516,6500,4177,842,886,929,1836,680,3024,2808,1728,1080,842,700,860,2700,8640,819,864,1944,799,3240,2052,3450,5616,1404,1512,3024,1458,2052,2980,49800,2786,6264,810,756,710,4860,4104,1296,1680,864,1728,3402,1404,1404,4104,5430,5680,1296,3672,2916,1728,3402,1404,1404,500,2052,1620,2721,2721,3240,691,3791,1512,1300,680,2376,2160,3024,907,2333,1234,1620,1132,1836,3456,3024,2400,4644,2600,896,2160,2160,679,864,617,1296,864,896,1944,1728,700,1728,648,2592,3132,2268,null,null,null,null,null,1382,null,657,6550,53784,15984,null,1699,8934,8778,22600,17580,2600,26312,8912,3796,2980,2110,1790,4065,2500,2592,1610,2480,7930,8999,2080,52694,29700,29700,24840,7425,4065,2500,2592,1610,2480,7930,null,null,null,null,null,null,null,null,3024,4427,28347,760,1539,493,458,1573,1824,2700,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1218,1680,3180,2786,3308,18900,1902,1902,1934,3888,5624,1354,3024,3780,2808,1528,4618,1014,145000,3672,562,1080,660,622000,2370000,1512000,3109,1206,1143,1095,1143,1402,1906,4209,2772,2036,7146,4104,3374,3000,4800,2448,1080,959,879,567,500,744,null,null,15120,16200,1000,2580,1200,21498,1620,10800,5400,1990,1937,970,1472,2479,2850,9500,2700,7280,1449,24499,2980,1296,487,334,478,652,912,409,484,912,1075,869,4536,4104,3996,3024,3024,4104,3780,334,478,652,912,12650,39800,1599,940,1113,31800,16650,1290,17989,9617,39300,null,3240,12000,2183,9999,2905,2646,2000,1944,648,1200,1598,1995,1458,4104,3780,1746,2900,1080,2244,1449,1879,1820,2570,9999,3840,null,null,1944,2592,29961,2052,2638,317,2462,2138,2376,2138,472,16480,110999,583,3235,3280,493,538,10100,1500,2376,2678,1404,1922,1573,1360,933,1006,557,1747,734,756,1617,4104,3888,4968,1944,5076,2376,1944,8208,562,810,1944,1028,5616,3780,1573,3456,2376,3888,1836,3456,3888,3456,3672,15120,4860,3780,2700,2138,4968,32184,3888,3888,1296,3456,1728,3002,3456,2376,3888,null,2899,5184,1500,24800,129991,1417,3173,5076,6361,6575,6696,null,null,596,1900,627,null,null,null,null,null,null,13150,1050,4635,834,1620,1785,1080,2180,2890,2975,2600,990,4980,2700,1944,1512,918,1944,1296,2160,2160,799,514,5076,13150,4104,2200,4104,2376,2699,28500,2268,3110,3002,3780,1728,1836,1944,1944,1620,1620,1814,1836,1728,2052,1944,1944,4104,2200,4104,5616,1598,1836,1836,1814,1728,2160,1944,1728,388,2106,1512,1512,1404,1728,1728,1620,2052,1296,1944,1728,1598,2052,1728,1944,3240,3672,1131,4266,4266,1836,1944,2821,3672,2592,3564,1512,2592,2376,1620,1512,2570,3002,4320,2376,3456,1026,2668,1337,3240,4968,3672,2808,12950,1404,3024,2950,5300,6900,5694,1250,5000,5000,3456,4536,5050,393,744,2872,1099,1000,19008,4950,2450,2217,1404,11011,1898,1491,2950,1922,1800,6594,998,1544,2160,1280,999,3331,3886,3365,2188,5311,2188,389,493,493,2376,540,499,2592,2376,1728,1998,1598,1512,16200,1296,2786,3024,1512,1543,null,null,11580,6980,2500,5800,4104,2500,2900,4280,2475,2650,2992,7730,885,2376,2980,2376,6027,null,885,885,null,null,null,5990,879,3132,43000,690,5580,3900,9800,9150,6760,7000,107348,2580,22586,15500,2100,6480,8641,8414,11581,2600,3024,5510,9581,1554,4545,4599,3240,880,4200,3599,2830,3378,3500,3700,674,450,1509,680,12861,12980,2211,30000,8233,8980,3240,null,null,null,2376,2196,2183,680,3218,1944,1944,1490,2360,1728,2592,3024,1728,1728,1944,3672,1900,1227,3002,1680,15800,1620,3024,1536,2592,1944,114000,2376,821,1404,1109,12000,1109,1458,2161,2854,2419,752,1130,818,2776,1300,1512,2484,1404,3672,3002,3564,3240,1944,907,1400,1944,734,1382,1620,3672,842,3456,3240,6000,2130,4622,971,889,623,1482,2492,1980,3780,8187,3024,4104,1040,907,1290,2796,1620,1944,1944,1944,1728,1728,2680,2800,2592,3780,2376,1944,2160,2592,4104,2700,1080,2592,1404,3024,3240,1512,3456,2497,1512,864,3000,3672,2000,1000,54800,1620,896,767,134235,35250,1620,1728,52694,38520,3700,2999,127115,87526,31866,76050,80510,44514,84180,91081,821578,null,null],"key.url":["http://www.amazon.co.jp/dp/B0178W3VQ2","http://www.amazon.co.jp/dp/B00G3Q94PM","http://www.amazon.co.jp/dp/4774178667","http://www.amazon.co.jp/dp/B0007CM3GK","http://www.amazon.co.jp/dp/B001P2TEMM","http://www.amazon.co.jp/dp/B005J0PN44","http://www.amazon.co.jp/dp/B0194TZEAS","http://www.amazon.co.jp/dp/B00DFV14SS","http://www.amazon.co.jp/dp/B00O9N37EK","http://www.amazon.co.jp/dp/B01D9ONWV2","http://www.amazon.co.jp/dp/B014440C5U","http://www.amazon.co.jp/dp/B00JOVCTKK","http://www.amazon.co.jp/dp/B01C70EA7Y","http://www.amazon.co.jp/dp/B005G22XA2","http://www.amazon.co.jp/dp/B000MU8L04","http://www.amazon.co.jp/dp/B014VOLK7M","http://www.amazon.co.jp/dp/4196695124","http://www.amazon.co.jp/dp/B000P5SB1K","http://www.amazon.co.jp/dp/B000RDH760","http://www.amazon.co.jp/dp/B003UDA2CU","http://www.amazon.co.jp/dp/B01E9TM27G","http://www.amazon.co.jp/dp/B00ISHLAYC","http://www.amazon.co.jp/dp/B001U1FV0W","http://www.amazon.co.jp/dp/B0169OPWAI","http://www.amazon.co.jp/dp/B00OSUKR06","http://www.amazon.co.jp/dp/B000M80Z50","http://www.amazon.co.jp/dp/B000M84FEW","http://www.amazon.co.jp/dp/B0060UTUFK","http://www.amazon.co.jp/dp/B00J865EYY","http://www.amazon.co.jp/dp/B001TP3GCE","http://www.amazon.co.jp/dp/B00N85L5IA","http://www.amazon.co.jp/dp/B00N85L5OY","http://www.amazon.co.jp/dp/B008AM2K3K","http://www.amazon.co.jp/dp/B014440F3E","http://www.amazon.co.jp/dp/B00O9Z81DU","http://www.amazon.co.jp/dp/B00MX4E2ZU","http://www.amazon.co.jp/dp/B00MHCYMQM","http://www.amazon.co.jp/dp/B002QE643A","http://www.amazon.co.jp/dp/B00318BJL2","http://www.amazon.co.jp/dp/B01D9FP20A","http://www.amazon.co.jp/dp/B00H98NDSW","http://www.amazon.co.jp/dp/B00FMNNQII","http://www.amazon.co.jp/dp/B0012AZ1MY","http://www.amazon.co.jp/dp/B013JL513C","http://www.amazon.co.jp/dp/B013SEIXYY","http://www.amazon.co.jp/dp/B013FNGA70","http://www.amazon.co.jp/dp/B00NV9LSGW","http://www.amazon.co.jp/dp/489595837X","http://www.amazon.co.jp/dp/B01CHZK438","http://www.amazon.co.jp/dp/B00JX5J3RY","http://www.amazon.co.jp/dp/B0168AROI6","http://www.amazon.co.jp/dp/4000240277","http://www.amazon.co.jp/dp/B019JNV1LA","http://www.amazon.co.jp/dp/B00OLBZEVO","http://www.amazon.co.jp/dp/B01BXF78RI","http://www.amazon.co.jp/dp/B00PF54BFK","http://www.amazon.co.jp/dp/4774142042","http://www.amazon.co.jp/dp/B00QMGSAYY","http://www.amazon.co.jp/dp/B0083F93BG","http://www.amazon.co.jp/dp/B001UQ4KEK","http://www.amazon.co.jp/dp/4062179822","http://www.amazon.co.jp/dp/B00HJH54QW","http://www.amazon.co.jp/dp/B00F08ID3S","http://www.amazon.co.jp/dp/4890137068","http://www.amazon.co.jp/dp/4890137246","http://www.amazon.co.jp/dp/4499280869","http://www.amazon.co.jp/dp/B000GQMKJC","http://www.amazon.co.jp/dp/B00G1XDKHA","http://www.amazon.co.jp/dp/B00TF765E4","http://www.amazon.co.jp/dp/B01CDRI4VY","http://www.amazon.co.jp/dp/B001KWJTCW","http://www.amazon.co.jp/dp/B0017S14RW","http://www.amazon.co.jp/dp/B01C826G4G","http://www.amazon.co.jp/dp/B012YMXM60","http://www.amazon.co.jp/dp/B0122VY956","http://www.amazon.co.jp/dp/4150312249","http://www.amazon.co.jp/dp/4562051833","http://www.amazon.co.jp/dp/4062562316","http://www.amazon.co.jp/dp/B00ANHCWTC","http://www.amazon.co.jp/dp/4774151432","http://www.amazon.co.jp/dp/B0083F91A4","http://www.amazon.co.jp/dp/B008GOP79G","http://www.amazon.co.jp/dp/B00OXDOU9M","http://www.amazon.co.jp/dp/4309464203","http://www.amazon.co.jp/dp/B006UJRA0S","http://www.amazon.co.jp/dp/B002SV0BL2","http://www.amazon.co.jp/dp/B011REIANG","http://www.amazon.co.jp/dp/B01ASMQVCK","http://www.amazon.co.jp/dp/B005NX4BHC","http://www.amazon.co.jp/dp/4062162318","http://www.amazon.co.jp/dp/B018587LG4","http://www.amazon.co.jp/dp/B00LMO8A46","http://www.amazon.co.jp/dp/4152085835","http://www.amazon.co.jp/dp/4756136494","http://www.amazon.co.jp/dp/4488013511","http://www.amazon.co.jp/dp/B003SSMB0S","http://www.amazon.co.jp/dp/4873115671","http://www.amazon.co.jp/dp/4062645750","http://www.amazon.co.jp/dp/415071102X","http://www.amazon.co.jp/dp/4150705518","http://www.amazon.co.jp/dp/4150705542","http://www.amazon.co.jp/dp/4840223939","http://www.amazon.co.jp/dp/B00WFAY08G","http://www.amazon.co.jp/dp/B00IF7CL5W","http://www.amazon.co.jp/dp/B00X7TNHM4","http://www.amazon.co.jp/dp/B004TI3CG8","http://www.amazon.co.jp/dp/B001V9KFQ8","http://www.amazon.co.jp/dp/B0089SVBT4","http://www.amazon.co.jp/dp/B00JSB23HU","http://www.amazon.co.jp/dp/4774178659","http://www.amazon.co.jp/dp/B0141NFWSG","http://www.amazon.co.jp/dp/4062932466","http://www.amazon.co.jp/dp/B01586FJEC","http://www.amazon.co.jp/dp/B00OXBWTBU","http://www.amazon.co.jp/dp/4488508022","http://www.amazon.co.jp/dp/B0000C3WWU","http://www.amazon.co.jp/dp/4061389742","http://www.amazon.co.jp/dp/448008665X","http://www.amazon.co.jp/dp/4393485246","http://www.amazon.co.jp/dp/B003U5TG5C","http://www.amazon.co.jp/dp/B00NH12T9E","http://www.amazon.co.jp/dp/4592710932","http://www.amazon.co.jp/dp/B0009Q1DNS","http://www.amazon.co.jp/dp/B0084XZAGY","http://www.amazon.co.jp/dp/B00YQVR714","http://www.amazon.co.jp/dp/4562052589","http://www.amazon.co.jp/dp/4150312087","http://www.amazon.co.jp/dp/B014FSFWUK","http://www.amazon.co.jp/dp/B003GY5EXK","http://www.amazon.co.jp/dp/B0013UOVIS","http://www.amazon.co.jp/dp/B00H4MWMWQ","http://www.amazon.co.jp/dp/B007EHHTFG","http://www.amazon.co.jp/dp/4894567431","http://www.amazon.co.jp/dp/4101171319","http://www.amazon.co.jp/dp/B003YUG8YU","http://www.amazon.co.jp/dp/B00BAN5DIA","http://www.amazon.co.jp/dp/4840235600","http://www.amazon.co.jp/dp/4047306932","http://www.amazon.co.jp/dp/4774173703","http://www.amazon.co.jp/dp/4873113911","http://www.amazon.co.jp/dp/4140810106","http://www.amazon.co.jp/dp/B00IUDXH2W","http://www.amazon.co.jp/dp/4774171972","http://www.amazon.co.jp/dp/B00CR941FW","http://www.amazon.co.jp/dp/4943983871","http://www.amazon.co.jp/dp/B008TK42U2","http://www.amazon.co.jp/dp/4101253331","http://www.amazon.co.jp/dp/4101092117","http://www.amazon.co.jp/dp/B00C9XJMTG","http://www.amazon.co.jp/dp/406217880X","http://www.amazon.co.jp/dp/4750514500","http://www.amazon.co.jp/dp/4122040337","http://www.amazon.co.jp/dp/4898153895","http://www.amazon.co.jp/dp/B00LBT72LY","http://www.amazon.co.jp/dp/4860814983","http://www.amazon.co.jp/dp/4488734081","http://www.amazon.co.jp/dp/B00J4BVAC8","http://www.amazon.co.jp/dp/B0099G1LWM","http://www.amazon.co.jp/dp/B00PU5C5IA","http://www.amazon.co.jp/dp/B00Y7IMCW0","http://www.amazon.co.jp/dp/B00IJ1YXWS","http://www.amazon.co.jp/dp/B00AX387EK","http://www.amazon.co.jp/dp/431400181X","http://www.amazon.co.jp/dp/4488006515","http://www.amazon.co.jp/dp/B00OAR57XO","http://www.amazon.co.jp/dp/B00ED95GDK","http://www.amazon.co.jp/dp/457920929X","http://www.amazon.co.jp/dp/B0038TXGMY","http://www.amazon.co.jp/dp/B000QS2YXC","http://www.amazon.co.jp/dp/4907064225","http://www.amazon.co.jp/dp/B00LBW3M1K","http://www.amazon.co.jp/dp/B00FGZ5AOA","http://www.amazon.co.jp/dp/B000HFXVZO","http://www.amazon.co.jp/dp/B00IF0JSDC","http://www.amazon.co.jp/dp/B00GFI2D5G","http://www.amazon.co.jp/dp/B0002YM124","http://www.amazon.co.jp/dp/B01148A84Y","http://www.amazon.co.jp/dp/B0039PV1ZQ","http://www.amazon.co.jp/dp/B005MGW3Y8","http://www.amazon.co.jp/dp/4781611559","http://www.amazon.co.jp/dp/B00D0YVYFS","http://www.amazon.co.jp/dp/B00GV8838Q","http://www.amazon.co.jp/dp/4041032660","http://www.amazon.co.jp/dp/B005UWIJ7O","http://www.amazon.co.jp/dp/4816351817","http://www.amazon.co.jp/dp/B00AYP76GC","http://www.amazon.co.jp/dp/B008D8E3GI","http://www.amazon.co.jp/dp/B004YU8V2Q","http://www.amazon.co.jp/dp/B008D8E3B8","http://www.amazon.co.jp/dp/B00E39V7G0","http://www.amazon.co.jp/dp/B0050G230E","http://www.amazon.co.jp/dp/B001ZWPF1G","http://www.amazon.co.jp/dp/B003M78ELA","http://www.amazon.co.jp/dp/4796880011","http://www.amazon.co.jp/dp/B000EETIGY","http://www.amazon.co.jp/dp/4199504230","http://www.amazon.co.jp/dp/4403671624","http://www.amazon.co.jp/dp/B00BWFGN4O","http://www.amazon.co.jp/dp/B000MQ3UM2","http://www.amazon.co.jp/dp/4863590903","http://www.amazon.co.jp/dp/4774172707","http://www.amazon.co.jp/dp/4873116988","http://www.amazon.co.jp/dp/4579212347","http://www.amazon.co.jp/dp/430962183X","http://www.amazon.co.jp/dp/B00AEFB2E4","http://www.amazon.co.jp/dp/B00KST3AT6","http://www.amazon.co.jp/dp/4121008073","http://www.amazon.co.jp/dp/4061389319","http://www.amazon.co.jp/dp/B00D2JZMT0","http://www.amazon.co.jp/dp/4061389556","http://www.amazon.co.jp/dp/B00G21ZIEY","http://www.amazon.co.jp/dp/479813516X","http://www.amazon.co.jp/dp/B002ZGP3X6","http://www.amazon.co.jp/dp/4166610147","http://www.amazon.co.jp/dp/4488683010","http://www.amazon.co.jp/dp/B008URB9NC","http://www.amazon.co.jp/dp/B005WRWBNK","http://www.amazon.co.jp/dp/B00C6W1JDM","http://www.amazon.co.jp/dp/B00JPG28JG","http://www.amazon.co.jp/dp/400006973X","http://www.amazon.co.jp/dp/B0031N9P2W","http://www.amazon.co.jp/dp/4897847443","http://www.amazon.co.jp/dp/4788960869","http://www.amazon.co.jp/dp/479804315X","http://www.amazon.co.jp/dp/4774170577","http://www.amazon.co.jp/dp/4150116784","http://www.amazon.co.jp/dp/4150116776","http://www.amazon.co.jp/dp/B00S2ESNT6","http://www.amazon.co.jp/dp/4862042554","http://www.amazon.co.jp/dp/4391142201","http://www.amazon.co.jp/dp/4061385496","http://www.amazon.co.jp/dp/4883379353","http://www.amazon.co.jp/dp/4320123719","http://www.amazon.co.jp/dp/4122052831","http://www.amazon.co.jp/dp/412203521X","http://www.amazon.co.jp/dp/4326601647","http://www.amazon.co.jp/dp/4788505843","http://www.amazon.co.jp/dp/B0072VJ7S6","http://www.amazon.co.jp/dp/4034380500","http://www.amazon.co.jp/dp/4873117097","http://www.amazon.co.jp/dp/4794968310","http://www.amazon.co.jp/dp/4480015760","http://www.amazon.co.jp/dp/430946369X","http://www.amazon.co.jp/dp/4061590928","http://www.amazon.co.jp/dp/4845983486","http://www.amazon.co.jp/dp/400331851X","http://www.amazon.co.jp/dp/4005004415","http://www.amazon.co.jp/dp/4001164051","http://www.amazon.co.jp/dp/4800231736","http://www.amazon.co.jp/dp/4403671330","http://www.amazon.co.jp/dp/4535583811","http://www.amazon.co.jp/dp/4062990385","http://www.amazon.co.jp/dp/B00A1FIDBC","http://www.amazon.co.jp/dp/4873114799","http://www.amazon.co.jp/dp/4405091528","http://www.amazon.co.jp/dp/440509134X","http://www.amazon.co.jp/dp/4396766289","http://www.amazon.co.jp/dp/4496026414","http://www.amazon.co.jp/dp/4480426965","http://www.amazon.co.jp/dp/B008YC233S","http://www.amazon.co.jp/dp/B000VBC7M2","http://www.amazon.co.jp/dp/4062055848","http://www.amazon.co.jp/dp/4130420658","http://www.amazon.co.jp/dp/482226470X","http://www.amazon.co.jp/dp/4000260030","http://www.amazon.co.jp/dp/4480082492","http://www.amazon.co.jp/dp/4622019728","http://www.amazon.co.jp/dp/4480790519","http://www.amazon.co.jp/dp/4826901267","http://www.amazon.co.jp/dp/431400147X","http://www.amazon.co.jp/dp/4774163678","http://www.amazon.co.jp/dp/4582760708","http://www.amazon.co.jp/dp/4041025494","http://www.amazon.co.jp/dp/4101050147","http://www.amazon.co.jp/dp/B002COSV58","http://www.amazon.co.jp/dp/B00MVEN898","http://www.amazon.co.jp/dp/4844328433","http://www.amazon.co.jp/dp/479812964X","http://www.amazon.co.jp/dp/4798111112","http://www.amazon.co.jp/dp/B00H99QIB0","http://www.amazon.co.jp/dp/B009YDW5NO","http://www.amazon.co.jp/dp/B00LNCTX48","http://www.amazon.co.jp/dp/4774167681","http://www.amazon.co.jp/dp/4774164259","http://www.amazon.co.jp/dp/4774164240","http://www.amazon.co.jp/dp/4774164224","http://www.amazon.co.jp/dp/4881666606","http://www.amazon.co.jp/dp/4062191075","http://www.amazon.co.jp/dp/4344026241","http://www.amazon.co.jp/dp/4774167975","http://www.amazon.co.jp/dp/4043441053","http://www.amazon.co.jp/dp/B0001AE1X6","http://www.amazon.co.jp/dp/B00MH40AWA","http://www.amazon.co.jp/dp/4309413226","http://www.amazon.co.jp/dp/4101800073","http://www.amazon.co.jp/dp/4061389734","http://www.amazon.co.jp/dp/4776795140","http://www.amazon.co.jp/dp/B00K63W82Y","http://www.amazon.co.jp/dp/4022509597","http://www.amazon.co.jp/dp/404460116X","http://www.amazon.co.jp/dp/4863132883","http://www.amazon.co.jp/dp/B00NW8VWTK","http://www.amazon.co.jp/dp/4794220685","http://www.amazon.co.jp/dp/B0094EBEYE","http://www.amazon.co.jp/dp/404891393X","http://www.amazon.co.jp/dp/B00019P6I6","http://www.amazon.co.jp/dp/400600253X","http://www.amazon.co.jp/dp/4003369513","http://www.amazon.co.jp/dp/4480094962","http://www.amazon.co.jp/dp/4488702015","http://www.amazon.co.jp/dp/4488027253","http://www.amazon.co.jp/dp/4061498916","http://www.amazon.co.jp/dp/4774154385","http://www.amazon.co.jp/dp/487311621X","http://www.amazon.co.jp/dp/B00G44EQRY","http://www.amazon.co.jp/dp/4087474402","http://www.amazon.co.jp/dp/434482539X","http://www.amazon.co.jp/dp/4774169838","http://www.amazon.co.jp/dp/B00J5S09OK","http://www.amazon.co.jp/dp/4122049660","http://www.amazon.co.jp/dp/4844334743","http://www.amazon.co.jp/dp/4873115655","http://www.amazon.co.jp/dp/4873116309","http://www.amazon.co.jp/dp/4860112520","http://www.amazon.co.jp/dp/4408550531","http://www.amazon.co.jp/dp/4838705638","http://www.amazon.co.jp/dp/4140910844","http://www.amazon.co.jp/dp/4480067647","http://www.amazon.co.jp/dp/4535984018","http://www.amazon.co.jp/dp/4488178057","http://www.amazon.co.jp/dp/4150116342","http://www.amazon.co.jp/dp/4798101427","http://www.amazon.co.jp/dp/487311585X","http://www.amazon.co.jp/dp/B0002XG8KQ","http://www.amazon.co.jp/dp/4048869973","http://www.amazon.co.jp/dp/4062182025","http://www.amazon.co.jp/dp/4488749011","http://www.amazon.co.jp/dp/4874152198","http://www.amazon.co.jp/dp/4063767183","http://www.amazon.co.jp/dp/4150119503","http://www.amazon.co.jp/dp/4309761402","http://www.amazon.co.jp/dp/B001U09KKA","http://www.amazon.co.jp/dp/448842001X","http://www.amazon.co.jp/dp/B00008XWUL","http://www.amazon.co.jp/dp/4924938831","http://www.amazon.co.jp/dp/4560030456","http://www.amazon.co.jp/dp/4101445060","http://www.amazon.co.jp/dp/B0015MUYDU","http://www.amazon.co.jp/dp/B00DU6NZE4","http://www.amazon.co.jp/dp/477415654X","http://www.amazon.co.jp/dp/4488014240","http://www.amazon.co.jp/dp/B000FQNNUI","http://www.amazon.co.jp/dp/B0076FL49S","http://www.amazon.co.jp/dp/4000077155","http://www.amazon.co.jp/dp/4000068334","http://www.amazon.co.jp/dp/4000077139","http://www.amazon.co.jp/dp/4000077120","http://www.amazon.co.jp/dp/4000077112","http://www.amazon.co.jp/dp/B000PK50PK","http://www.amazon.co.jp/dp/B0030DC3RC","http://www.amazon.co.jp/dp/4822281868","http://www.amazon.co.jp/dp/4484881047","http://www.amazon.co.jp/dp/4388251143","http://www.amazon.co.jp/dp/4873112672","http://www.amazon.co.jp/dp/4039651006","http://www.amazon.co.jp/dp/B00ATYCF1Y","http://www.amazon.co.jp/dp/B00AF3STTQ","http://www.amazon.co.jp/dp/B002EBDMU8","http://www.amazon.co.jp/dp/4093592071","http://www.amazon.co.jp/dp/B007T2PHKA","http://www.amazon.co.jp/dp/4198616221","http://www.amazon.co.jp/dp/4775307924","http://www.amazon.co.jp/dp/4757211392","http://www.amazon.co.jp/dp/4582762891","http://www.amazon.co.jp/dp/142150197X","http://www.amazon.co.jp/dp/1591164761","http://www.amazon.co.jp/dp/1591164788","http://www.amazon.co.jp/dp/406159043X","http://www.amazon.co.jp/dp/4061590987","http://www.amazon.co.jp/dp/1933164166","http://www.amazon.co.jp/dp/4797350997","http://www.amazon.co.jp/dp/B0010E8MKA","http://www.amazon.co.jp/dp/B000EBDF5W","http://www.amazon.co.jp/dp/B000K2VEYE","http://www.amazon.co.jp/dp/4488612016","http://www.amazon.co.jp/dp/4757523432","http://www.amazon.co.jp/dp/4003364023","http://www.amazon.co.jp/dp/4393485211","http://www.amazon.co.jp/dp/4560047464","http://www.amazon.co.jp/dp/415010431X","http://www.amazon.co.jp/dp/416721735X","http://www.amazon.co.jp/dp/4150115842","http://www.amazon.co.jp/dp/4878923229","http://www.amazon.co.jp/dp/4794204302","http://www.amazon.co.jp/dp/4309242200","http://www.amazon.co.jp/dp/406211299X","http://www.amazon.co.jp/dp/4061495119","http://www.amazon.co.jp/dp/4488104029","http://www.amazon.co.jp/dp/4048736744","http://www.amazon.co.jp/dp/4102001131","http://www.amazon.co.jp/dp/4309204066","http://www.amazon.co.jp/dp/4001106876","http://www.amazon.co.jp/dp/4480081976","http://www.amazon.co.jp/dp/4782802110","http://www.amazon.co.jp/dp/432012362X","http://www.amazon.co.jp/dp/4873117356","http://www.amazon.co.jp/dp/4873116945","http://www.amazon.co.jp/dp/4627852118","http://www.amazon.co.jp/dp/4004301394","http://www.amazon.co.jp/dp/4004300185","http://www.amazon.co.jp/dp/4274217515","http://www.amazon.co.jp/dp/4797376279","http://www.amazon.co.jp/dp/4621061240","http://www.amazon.co.jp/dp/4621061224","http://www.amazon.co.jp/dp/B01BR8CXZI","http://www.amazon.co.jp/dp/406271633X","http://www.amazon.co.jp/dp/4907583222","http://www.amazon.co.jp/dp/4796676724","http://www.amazon.co.jp/dp/4591100618","http://www.amazon.co.jp/dp/4274067491","http://www.amazon.co.jp/dp/B019FGVE5E","http://www.amazon.co.jp/dp/1938377001","http://www.amazon.co.jp/dp/0596100167","http://www.amazon.co.jp/dp/4798119970","http://www.amazon.co.jp/dp/4894715007","http://www.amazon.co.jp/dp/4101346224","http://www.amazon.co.jp/dp/B00M0EVVKW","http://www.amazon.co.jp/dp/4062996219","http://www.amazon.co.jp/dp/430605263X","http://www.amazon.co.jp/dp/479531912X","http://www.amazon.co.jp/dp/4751100386","http://www.amazon.co.jp/dp/4106020750","http://www.amazon.co.jp/dp/B00A7MAZ74","http://www.amazon.co.jp/dp/4393957040","http://www.amazon.co.jp/dp/4480687599","http://www.amazon.co.jp/dp/4101419051","http://www.amazon.co.jp/dp/B008S56F1W","http://www.amazon.co.jp/dp/B0091BFTD2","http://www.amazon.co.jp/dp/400006973X","http://www.amazon.co.jp/dp/4802510136","http://www.amazon.co.jp/dp/B0026FVI7Q","http://www.amazon.co.jp/dp/4044191107","http://www.amazon.co.jp/dp/430609409X","http://www.amazon.co.jp/dp/4845914530","http://www.amazon.co.jp/dp/4103328924","http://www.amazon.co.jp/dp/4062639971","http://www.amazon.co.jp/dp/4163759204","http://www.amazon.co.jp/dp/4887063415","http://www.amazon.co.jp/dp/4861998336","http://www.amazon.co.jp/dp/4807916076","http://www.amazon.co.jp/dp/4916092910","http://www.amazon.co.jp/dp/4254125844","http://www.amazon.co.jp/dp/4254125836","http://www.amazon.co.jp/dp/4887245165","http://www.amazon.co.jp/dp/4757103611","http://www.amazon.co.jp/dp/B00E5XAWXI","http://www.amazon.co.jp/dp/B00ESAZEV8","http://www.amazon.co.jp/dp/4480422331","http://www.amazon.co.jp/dp/1491911603","http://www.amazon.co.jp/dp/B00NW357PK","http://www.amazon.co.jp/dp/4875022220","http://www.amazon.co.jp/dp/430924744X","http://www.amazon.co.jp/dp/4006022115","http://www.amazon.co.jp/dp/B00CAKOVQM","http://www.amazon.co.jp/dp/4822230546","http://www.amazon.co.jp/dp/B007RIMBWI","http://www.amazon.co.jp/dp/B014W0892E","http://www.amazon.co.jp/dp/B007UMEIP4","http://www.amazon.co.jp/dp/4750514527","http://www.amazon.co.jp/dp/416372060X","http://www.amazon.co.jp/dp/4163716300","http://www.amazon.co.jp/dp/4309264948","http://www.amazon.co.jp/dp/B0000059TV","http://www.amazon.co.jp/dp/4061177206","http://www.amazon.co.jp/dp/4873024633","http://www.amazon.co.jp/dp/B00ZI2X7MI","http://www.amazon.co.jp/dp/4336040435","http://www.amazon.co.jp/dp/4306041719","http://www.amazon.co.jp/dp/B00MM3AVZ2","http://www.amazon.co.jp/dp/4861825369","http://www.amazon.co.jp/dp/4847060202","http://www.amazon.co.jp/dp/4787270354","http://www.amazon.co.jp/dp/4327377392","http://www.amazon.co.jp/dp/4760109943","http://www.amazon.co.jp/dp/B000J74EB0","http://www.amazon.co.jp/dp/4788503867","http://www.amazon.co.jp/dp/B00GOREDJM","http://www.amazon.co.jp/dp/4480088164","http://www.amazon.co.jp/dp/4480088776","http://www.amazon.co.jp/dp/4480096868","http://www.amazon.co.jp/dp/4480096906","http://www.amazon.co.jp/dp/4781903797","http://www.amazon.co.jp/dp/0060164700","http://www.amazon.co.jp/dp/4326151285","http://www.amazon.co.jp/dp/4150401330","http://www.amazon.co.jp/dp/B00J861PF6","http://www.amazon.co.jp/dp/4800247047","http://www.amazon.co.jp/dp/402331420X","http://www.amazon.co.jp/dp/4000248545","http://www.amazon.co.jp/dp/4062921464","http://www.amazon.co.jp/dp/B000BPNB3W","http://www.amazon.co.jp/dp/B000J7Y334","http://www.amazon.co.jp/dp/4622049716","http://www.amazon.co.jp/dp/1617291056","http://www.amazon.co.jp/dp/B00CM9CBZY","http://www.amazon.co.jp/dp/B00FS426BO","http://www.amazon.co.jp/dp/4864712972","http://www.amazon.co.jp/dp/4309246354","http://www.amazon.co.jp/dp/B00APO69H4","http://www.amazon.co.jp/dp/B00XLYUA0W","http://www.amazon.co.jp/dp/4569617360","http://www.amazon.co.jp/dp/B0000064X5","http://www.amazon.co.jp/dp/4062008165","http://www.amazon.co.jp/dp/4782800541","http://www.amazon.co.jp/dp/3540921443","http://www.amazon.co.jp/dp/4560092656","http://www.amazon.co.jp/dp/4622080338","http://www.amazon.co.jp/dp/462208032X","http://www.amazon.co.jp/dp/4622080311","http://www.amazon.co.jp/dp/B00TCM8TB4","http://www.amazon.co.jp/dp/4480024565","http://www.amazon.co.jp/dp/4061398423","http://www.amazon.co.jp/dp/4480095853","http://www.amazon.co.jp/dp/458800350X","http://www.amazon.co.jp/dp/4863671377","http://www.amazon.co.jp/dp/4480086196","http://www.amazon.co.jp/dp/458254438X","http://www.amazon.co.jp/dp/4622079089","http://www.amazon.co.jp/dp/1447803892","http://www.amazon.co.jp/dp/4480083448","http://www.amazon.co.jp/dp/4480083421","http://www.amazon.co.jp/dp/4336054029","http://www.amazon.co.jp/dp/4804800220","http://www.amazon.co.jp/dp/B0041CGL9M","http://www.amazon.co.jp/dp/B003N52XBI","http://www.amazon.co.jp/dp/4938456575","http://www.amazon.co.jp/dp/4863131461","http://www.amazon.co.jp/dp/4833471043","http://www.amazon.co.jp/dp/4320029488","http://www.amazon.co.jp/dp/4003367510","http://www.amazon.co.jp/dp/4274068587","http://www.amazon.co.jp/dp/4757143206","http://www.amazon.co.jp/dp/4415306012","http://www.amazon.co.jp/dp/4121017900","http://www.amazon.co.jp/dp/4815807124","http://www.amazon.co.jp/dp/0471332801","http://www.amazon.co.jp/dp/4309909280","http://www.amazon.co.jp/dp/4309715621","http://www.amazon.co.jp/dp/B00N4M618G","http://www.amazon.co.jp/dp/0714839655","http://www.amazon.co.jp/dp/4627826613","http://www.amazon.co.jp/dp/4767816920","http://www.amazon.co.jp/dp/4774172707","http://www.amazon.co.jp/dp/1934356441","http://www.amazon.co.jp/dp/0137053460","http://www.amazon.co.jp/dp/4003355024","http://www.amazon.co.jp/dp/4003355016","http://www.amazon.co.jp/dp/4622017709","http://www.amazon.co.jp/dp/4622078597","http://www.amazon.co.jp/dp/4523260206","http://www.amazon.co.jp/dp/4622039702","http://www.amazon.co.jp/dp/4622078368","http://www.amazon.co.jp/dp/4622078767","http://www.amazon.co.jp/dp/4839926298","http://www.amazon.co.jp/dp/B00UKG5KRW","http://www.amazon.co.jp/dp/4622070057","http://www.amazon.co.jp/dp/B00APR9FJU","http://www.amazon.co.jp/dp/4874660029","http://www.amazon.co.jp/dp/4167387018","http://www.amazon.co.jp/dp/4004313317","http://www.amazon.co.jp/dp/4756136591","http://www.amazon.co.jp/dp/4862234925","http://www.amazon.co.jp/dp/4864103194","http://www.amazon.co.jp/dp/4798139211","http://www.amazon.co.jp/dp/4764904438","http://www.amazon.co.jp/dp/4434130331","http://www.amazon.co.jp/dp/4414401178","http://www.amazon.co.jp/dp/B009GXM2OE","http://www.amazon.co.jp/dp/B009GXM2AS","http://www.amazon.co.jp/dp/4862462456","http://www.amazon.co.jp/dp/0321636414","http://www.amazon.co.jp/dp/4817193603","http://www.amazon.co.jp/dp/462207866X","http://www.amazon.co.jp/dp/4121600622","http://www.amazon.co.jp/dp/4838715064","http://www.amazon.co.jp/dp/430924470X","http://www.amazon.co.jp/dp/4532319552","http://www.amazon.co.jp/dp/B00BB4QHTW","http://www.amazon.co.jp/dp/4061795643","http://www.amazon.co.jp/dp/4478016380","http://www.amazon.co.jp/dp/4822249212","http://www.amazon.co.jp/dp/414081554X","http://www.amazon.co.jp/dp/1491904909","http://www.amazon.co.jp/dp/B00BB9K3M4","http://www.amazon.co.jp/dp/4873115116","http://www.amazon.co.jp/dp/4062139073","http://www.amazon.co.jp/dp/B0034XUQIQ","http://www.amazon.co.jp/dp/B005UWI8M0","http://www.amazon.co.jp/dp/B0006Q8LFE","http://www.amazon.co.jp/dp/4887063040","http://www.amazon.co.jp/dp/4480091416","http://www.amazon.co.jp/dp/190456383X","http://www.amazon.co.jp/dp/4130820850","http://www.amazon.co.jp/dp/4774155942","http://www.amazon.co.jp/dp/4621077678","http://www.amazon.co.jp/dp/4062578565","http://www.amazon.co.jp/dp/4480085262","http://www.amazon.co.jp/dp/4900211532","http://www.amazon.co.jp/dp/1885254865","http://www.amazon.co.jp/dp/4873117011","http://www.amazon.co.jp/dp/4339024791","http://www.amazon.co.jp/dp/4764904691","http://www.amazon.co.jp/dp/4774169269","http://www.amazon.co.jp/dp/463504761X","http://www.amazon.co.jp/dp/4635150240","http://www.amazon.co.jp/dp/4635047520","http://www.amazon.co.jp/dp/4873116767","http://www.amazon.co.jp/dp/4873116929","http://www.amazon.co.jp/dp/1935202715","http://www.amazon.co.jp/dp/4473032558","http://www.amazon.co.jp/dp/0262680920","http://www.amazon.co.jp/dp/4873116988","http://www.amazon.co.jp/dp/4480425411","http://www.amazon.co.jp/dp/4327377368","http://www.amazon.co.jp/dp/B003VRVJJU","http://www.amazon.co.jp/dp/B00006S25C","http://www.amazon.co.jp/dp/4003394313","http://www.amazon.co.jp/dp/4582767508","http://www.amazon.co.jp/dp/B00DIAKR8E","http://www.amazon.co.jp/dp/B00004YTQZ","http://www.amazon.co.jp/dp/4873116678","http://www.amazon.co.jp/dp/B0050L7OIA","http://www.amazon.co.jp/dp/B0050L5VMG","http://www.amazon.co.jp/dp/4309255507","http://www.amazon.co.jp/dp/3642063748","http://www.amazon.co.jp/dp/1119998956","http://www.amazon.co.jp/dp/4396614918","http://www.amazon.co.jp/dp/4863131410","http://www.amazon.co.jp/dp/4635150240","http://www.amazon.co.jp/dp/4122010713","http://www.amazon.co.jp/dp/4274069117","http://www.amazon.co.jp/dp/4320026683","http://www.amazon.co.jp/dp/4787233238","http://www.amazon.co.jp/dp/4797369701","http://www.amazon.co.jp/dp/4167651815","http://www.amazon.co.jp/dp/0199566445","http://www.amazon.co.jp/dp/4105067028","http://www.amazon.co.jp/dp/410506701X","http://www.amazon.co.jp/dp/4105067036","http://www.amazon.co.jp/dp/4822245640","http://www.amazon.co.jp/dp/4775970372","http://www.amazon.co.jp/dp/4306045935","http://www.amazon.co.jp/dp/4306052613","http://www.amazon.co.jp/dp/4306073033","http://www.amazon.co.jp/dp/4062578271","http://www.amazon.co.jp/dp/4254127928","http://www.amazon.co.jp/dp/4409100041","http://www.amazon.co.jp/dp/4003259025","http://www.amazon.co.jp/dp/4329004208","http://www.amazon.co.jp/dp/4329004194","http://www.amazon.co.jp/dp/B0083E9MFO","http://www.amazon.co.jp/dp/B007LC9BDM","http://www.amazon.co.jp/dp/482228512X","http://www.amazon.co.jp/dp/4122010713","http://www.amazon.co.jp/dp/4579501306","http://www.amazon.co.jp/dp/4782802110","http://www.amazon.co.jp/dp/4766420128","http://www.amazon.co.jp/dp/4622016672","http://www.amazon.co.jp/dp/4873115914","http://www.amazon.co.jp/dp/4797369736","http://www.amazon.co.jp/dp/4764904071","http://www.amazon.co.jp/dp/4764904063","http://www.amazon.co.jp/dp/4764901846","http://www.amazon.co.jp/dp/4254121784","http://www.amazon.co.jp/dp/4254121814","http://www.amazon.co.jp/dp/B00327A5EE","http://www.amazon.co.jp/dp/4766123689","http://www.amazon.co.jp/dp/4794912668","http://www.amazon.co.jp/dp/4568504287","http://www.amazon.co.jp/dp/3874398137","http://www.amazon.co.jp/dp/4906700322","http://www.amazon.co.jp/dp/4582767605","http://www.amazon.co.jp/dp/4152092211","http://www.amazon.co.jp/dp/4320122801","http://www.amazon.co.jp/dp/4048860690","http://www.amazon.co.jp/dp/4320024990","http://www.amazon.co.jp/dp/458280179X","http://www.amazon.co.jp/dp/4582801722","http://www.amazon.co.jp/dp/4582801714","http://www.amazon.co.jp/dp/B006VKKAWQ","http://www.amazon.co.jp/dp/4393360346","http://www.amazon.co.jp/dp/B001P4WGGQ","http://www.amazon.co.jp/dp/B002BSJLE0","http://www.amazon.co.jp/dp/B0034XVY6Y","http://www.amazon.co.jp/dp/B001GLIDRY","http://www.amazon.co.jp/dp/B001I9IDSS","http://www.amazon.co.jp/dp/B003LKLW30","http://www.amazon.co.jp/dp/4894715287","http://www.amazon.co.jp/dp/4130802518","http://www.amazon.co.jp/dp/4839700524","http://www.amazon.co.jp/dp/4309706509","http://www.amazon.co.jp/dp/4862486045","http://www.amazon.co.jp/dp/4003326318","http://www.amazon.co.jp/dp/4003326326","http://www.amazon.co.jp/dp/4805512245","http://www.amazon.co.jp/dp/4480090495","http://www.amazon.co.jp/dp/B00005R6O1","http://www.amazon.co.jp/dp/4422114360","http://www.amazon.co.jp/dp/4003368614","http://www.amazon.co.jp/dp/0713416505","http://www.amazon.co.jp/dp/B000XAMECE","http://www.amazon.co.jp/dp/4791755561","http://www.amazon.co.jp/dp/489176550X","http://www.amazon.co.jp/dp/442220226X","http://www.amazon.co.jp/dp/443401238X","http://www.amazon.co.jp/dp/4000260030","http://www.amazon.co.jp/dp/4062571641","http://www.amazon.co.jp/dp/0521663504","http://www.amazon.co.jp/dp/3721201450","http://www.amazon.co.jp/dp/B005ELZNH0","http://www.amazon.co.jp/dp/4418112227","http://www.amazon.co.jp/dp/0123814790","http://www.amazon.co.jp/dp/4003279638","http://www.amazon.co.jp/dp/0972652914","http://www.amazon.co.jp/dp/4798121967","http://www.amazon.co.jp/dp/4061426060","http://www.amazon.co.jp/dp/0321601912","http://www.amazon.co.jp/dp/4838718209","http://www.amazon.co.jp/dp/4062182734","http://www.amazon.co.jp/dp/4873117127","http://www.amazon.co.jp/dp/487311697X","http://www.amazon.co.jp/dp/B008XEYYZC","http://www.amazon.co.jp/dp/B007EOZ1IQ","http://www.amazon.co.jp/dp/B003MU9ETS","http://www.amazon.co.jp/dp/B003MU9ET8","http://www.amazon.co.jp/dp/B00840PFCQ","http://www.amazon.co.jp/dp/B001TZ5AXC","http://www.amazon.co.jp/dp/B00FFUKDJ8","http://www.amazon.co.jp/dp/4774159182","http://www.amazon.co.jp/dp/B00DAO6DG8","http://www.amazon.co.jp/dp/B004GTIWW4","http://www.amazon.co.jp/dp/4872339592","http://www.amazon.co.jp/dp/B001TP8L3S","http://www.amazon.co.jp/dp/B001TZASY8","http://www.amazon.co.jp/dp/B003WIGEUW","http://www.amazon.co.jp/dp/B0033HQ10K","http://www.amazon.co.jp/dp/B0029ZFVVW","http://www.amazon.co.jp/dp/B001TZ7JXG","http://www.amazon.co.jp/dp/B009SKAS5A","http://www.amazon.co.jp/dp/4774149748","http://www.amazon.co.jp/dp/B00A08IVT4","http://www.amazon.co.jp/dp/4274068056","http://www.amazon.co.jp/dp/4873112885","http://www.amazon.co.jp/dp/4873114454","http://www.amazon.co.jp/dp/4797361190","http://www.amazon.co.jp/dp/4774145211","http://www.amazon.co.jp/dp/4274064379","http://www.amazon.co.jp/dp/B000EEJ91I","http://www.amazon.co.jp/dp/B001BP58CI","http://www.amazon.co.jp/dp/B002ZGLIIU","http://www.amazon.co.jp/dp/477414164X","http://www.amazon.co.jp/dp/4774143073","http://www.amazon.co.jp/dp/4873114713","http://www.amazon.co.jp/dp/4774135666","http://www.amazon.co.jp/dp/B00BL9MS04","http://www.amazon.co.jp/dp/B00I8I76YY","http://www.amazon.co.jp/dp/B007WQ2GPM","http://www.amazon.co.jp/dp/B013U094TY","http://www.amazon.co.jp/dp/B01EHMPUHO","http://www.amazon.co.jp/dp/B014VWR8T8","http://www.amazon.co.jp/dp/B015IZT854","http://www.amazon.co.jp/dp/4873117526","http://www.amazon.co.jp/dp/4621300253","http://www.amazon.co.jp/dp/B01ARADUEU","http://www.amazon.co.jp/dp/B015E1STPC","http://www.amazon.co.jp/dp/B01C2GW20A","http://www.amazon.co.jp/dp/B00S95PEIQ","http://www.amazon.co.jp/dp/4797382570","http://www.amazon.co.jp/dp/4774176737","http://www.amazon.co.jp/dp/4822262960","http://www.amazon.co.jp/dp/4839951993","http://www.amazon.co.jp/dp/4152095423","http://www.amazon.co.jp/dp/4478460019","http://www.amazon.co.jp/dp/487311764X","http://www.amazon.co.jp/dp/4873117437","http://www.amazon.co.jp/dp/B015E132XG","http://www.amazon.co.jp/dp/B014UMUG2U","http://www.amazon.co.jp/dp/4534045840","http://www.amazon.co.jp/dp/4796871276","http://www.amazon.co.jp/dp/4088708857","http://www.amazon.co.jp/dp/4582287360","http://www.amazon.co.jp/dp/4797347783","http://www.amazon.co.jp/dp/4862761828","http://www.amazon.co.jp/dp/0124104096","http://www.amazon.co.jp/dp/4873114985","http://www.amazon.co.jp/dp/B004TI3CG8","http://www.amazon.co.jp/dp/4750514500","http://www.amazon.co.jp/dp/4873114055","http://www.amazon.co.jp/dp/4822285243","http://www.amazon.co.jp/dp/4062577380","http://www.amazon.co.jp/dp/4835449207","http://www.amazon.co.jp/dp/4582762891","http://www.amazon.co.jp/dp/4336024707","http://www.amazon.co.jp/dp/4822280535","http://www.amazon.co.jp/dp/4535787778","http://www.amazon.co.jp/dp/4791768515","http://www.amazon.co.jp/dp/478850362X","http://www.amazon.co.jp/dp/B00IE1U2YG","http://www.amazon.co.jp/dp/4478027102","http://www.amazon.co.jp/dp/4480026010","http://www.amazon.co.jp/dp/4488251021","http://www.amazon.co.jp/dp/4873115094","http://www.amazon.co.jp/dp/B00AYB06YA","http://www.amazon.co.jp/dp/4876524297","http://www.amazon.co.jp/dp/4796871721","http://www.amazon.co.jp/dp/0521663504","http://www.amazon.co.jp/dp/4314010754","http://www.amazon.co.jp/dp/4309461719","http://www.amazon.co.jp/dp/4566020762","http://www.amazon.co.jp/dp/4480038817","http://www.amazon.co.jp/dp/4087467341","http://www.amazon.co.jp/dp/4891762411","http://www.amazon.co.jp/dp/4907758073","http://www.amazon.co.jp/dp/4336049394","http://www.amazon.co.jp/dp/4150119716","http://www.amazon.co.jp/dp/4087601412","http://www.amazon.co.jp/dp/4062760223","http://www.amazon.co.jp/dp/4560071500","http://www.amazon.co.jp/dp/4320025377","http://www.amazon.co.jp/dp/4863320582","http://www.amazon.co.jp/dp/4153350206","http://www.amazon.co.jp/dp/4336058938","http://www.amazon.co.jp/dp/4532318092","http://www.amazon.co.jp/dp/4532511763","http://www.amazon.co.jp/dp/4759816623","http://www.amazon.co.jp/dp/4396766289","http://www.amazon.co.jp/dp/4798113468","http://www.amazon.co.jp/dp/4641163863","http://www.amazon.co.jp/dp/B00BB4QHTW","http://www.amazon.co.jp/dp/B006W5IA4K","http://www.amazon.co.jp/dp/4044602042","http://www.amazon.co.jp/dp/4750323616","http://www.amazon.co.jp/dp/4488531024","http://www.amazon.co.jp/dp/4480085262","http://www.amazon.co.jp/dp/413012062X","http://www.amazon.co.jp/dp/4879842575","http://www.amazon.co.jp/dp/4150503133","http://www.amazon.co.jp/dp/4121004817","http://www.amazon.co.jp/dp/4309709486","http://www.amazon.co.jp/dp/4757525370","http://www.amazon.co.jp/dp/439678337X","http://www.amazon.co.jp/dp/413080250X","http://www.amazon.co.jp/dp/4062578565","http://www.amazon.co.jp/dp/456007190X","http://www.amazon.co.jp/dp/B007TGYW34","http://www.amazon.co.jp/dp/4062061619","http://www.amazon.co.jp/dp/0262133210","http://www.amazon.co.jp/dp/0262731037","http://www.amazon.co.jp/dp/4130633570","http://www.amazon.co.jp/dp/4822284786","http://www.amazon.co.jp/dp/4000802097","http://www.amazon.co.jp/dp/4488142060","http://www.amazon.co.jp/dp/4535787476","http://www.amazon.co.jp/dp/4873116775","http://www.amazon.co.jp/dp/B0031U0MJA","http://www.amazon.co.jp/dp/4569817955","http://www.amazon.co.jp/dp/4863912803","http://www.amazon.co.jp/dp/4150311420","http://www.amazon.co.jp/dp/4003318528","http://www.amazon.co.jp/dp/4153350117","http://www.amazon.co.jp/dp/433605116X","http://www.amazon.co.jp/dp/4003230817","http://www.amazon.co.jp/dp/430920614X","http://www.amazon.co.jp/dp/4560092613","http://www.amazon.co.jp/dp/B00A7S3H50","http://www.amazon.co.jp/dp/4828857133","http://www.amazon.co.jp/dp/4789719685","http://www.amazon.co.jp/dp/B0041N52X2","http://www.amazon.co.jp/dp/B002JQN2KS","http://www.amazon.co.jp/dp/B0029LGPUW","http://www.amazon.co.jp/dp/B00005HMS4","http://www.amazon.co.jp/dp/4320026578","http://www.amazon.co.jp/dp/B003Y5HU5G","http://www.amazon.co.jp/dp/4426678005","http://www.amazon.co.jp/dp/B01EMJWC8W","http://www.amazon.co.jp/dp/B01FSDQZ16","http://www.amazon.co.jp/dp/B00UAPDCAK","http://www.amazon.co.jp/dp/B00UAPDATI","http://www.amazon.co.jp/dp/B00UAPDCFK","http://www.amazon.co.jp/dp/B00UAPDCAU","http://www.amazon.co.jp/dp/B00UAPDC8M","http://www.amazon.co.jp/dp/4471191160","http://www.amazon.co.jp/dp/4254171005","http://www.amazon.co.jp/dp/0521784506","http://www.amazon.co.jp/dp/4845614979","http://www.amazon.co.jp/dp/111883481X","http://www.amazon.co.jp/dp/4062883589","http://www.amazon.co.jp/dp/B01BYL60ES","http://www.amazon.co.jp/dp/4199505067","http://www.amazon.co.jp/dp/4873117488","http://www.amazon.co.jp/dp/4627880219","http://www.amazon.co.jp/dp/4101142114","http://www.amazon.co.jp/dp/4061821490","http://www.amazon.co.jp/dp/4844380605","http://www.amazon.co.jp/dp/4320057805","http://www.amazon.co.jp/dp/4150120595","http://www.amazon.co.jp/dp/B00PFNRFYQ","http://www.amazon.co.jp/dp/4535984263","http://www.amazon.co.jp/dp/4788509326","http://www.amazon.co.jp/dp/052168689X","http://www.amazon.co.jp/dp/4873114640","http://www.amazon.co.jp/dp/4047916366","http://www.amazon.co.jp/dp/4839951160","http://www.amazon.co.jp/dp/4873116465","http://www.amazon.co.jp/dp/4501328908","http://www.amazon.co.jp/dp/4845625911","http://www.amazon.co.jp/dp/4254127960","http://www.amazon.co.jp/dp/4062632977","http://www.amazon.co.jp/dp/4334039022","http://www.amazon.co.jp/dp/4000063219","http://www.amazon.co.jp/dp/B000J7X4L6","http://www.amazon.co.jp/dp/B00TPL99ZW","http://www.amazon.co.jp/dp/B004OGYKAW","http://www.amazon.co.jp/dp/B0038TXFCA","http://www.amazon.co.jp/dp/4163902805","http://www.amazon.co.jp/dp/4255008515","http://www.amazon.co.jp/dp/4326299088","http://www.amazon.co.jp/dp/4791768582","http://www.amazon.co.jp/dp/4320121902","http://www.amazon.co.jp/dp/4062570378","http://www.amazon.co.jp/dp/4041036380","http://www.amazon.co.jp/dp/432012393X","http://www.amazon.co.jp/dp/B00GV1A23W","http://www.amazon.co.jp/dp/4000054554","http://www.amazon.co.jp/dp/B00FJR7K5C","http://www.amazon.co.jp/dp/4274218171","http://www.amazon.co.jp/dp/4622079119","http://www.amazon.co.jp/dp/1482253445","http://www.amazon.co.jp/dp/B00PYZ2VR6","http://www.amazon.co.jp/dp/B00GAN7U2C","http://www.amazon.co.jp/dp/4873117410","http://www.amazon.co.jp/dp/4871483517","http://www.amazon.co.jp/dp/490812406X","http://www.amazon.co.jp/dp/4000052063","http://www.amazon.co.jp/dp/4535783659","http://www.amazon.co.jp/dp/4061557955","http://www.amazon.co.jp/dp/4797366575","http://www.amazon.co.jp/dp/4254295405","http://www.amazon.co.jp/dp/4000068520","http://www.amazon.co.jp/dp/4254127596","http://www.amazon.co.jp/dp/4431712186","http://www.amazon.co.jp/dp/4916092929","http://www.amazon.co.jp/dp/404070715X","http://www.amazon.co.jp/dp/4621065459","http://www.amazon.co.jp/dp/4152094478","http://www.amazon.co.jp/dp/4641121605","http://www.amazon.co.jp/dp/4339024910","http://www.amazon.co.jp/dp/4152088265","http://www.amazon.co.jp/dp/4320014731","http://www.amazon.co.jp/dp/0199671222","http://www.amazon.co.jp/dp/4627847114","http://www.amazon.co.jp/dp/0412109301","http://www.amazon.co.jp/dp/1584888490","http://www.amazon.co.jp/dp/4254126972","http://www.amazon.co.jp/dp/B000Q36E0G","http://www.amazon.co.jp/dp/B00XMMKZ7Q","http://www.amazon.co.jp/dp/4905158281","http://www.amazon.co.jp/dp/4480096728","http://www.amazon.co.jp/dp/0806942592","http://www.amazon.co.jp/dp/B002L5R9BU","http://www.amazon.co.jp/dp/B00GQ696WK","http://www.amazon.co.jp/dp/B00OMPYWCG","http://www.amazon.co.jp/dp/B00NIF99TW","http://www.amazon.co.jp/dp/B00HYQ910I","http://www.amazon.co.jp/dp/1439840954","http://www.amazon.co.jp/dp/B00U1ZWRBY","http://www.amazon.co.jp/dp/B003OCFYCA","http://www.amazon.co.jp/dp/B00A6N4JJE","http://www.amazon.co.jp/dp/0824780191","http://www.amazon.co.jp/dp/0960676406","http://www.amazon.co.jp/dp/041220570X","http://www.amazon.co.jp/dp/012637242X","http://www.amazon.co.jp/dp/4883379353","http://www.amazon.co.jp/dp/477417369X","http://www.amazon.co.jp/dp/4320005953","http://www.amazon.co.jp/dp/4339027588","http://www.amazon.co.jp/dp/4892429279","http://www.amazon.co.jp/dp/4274131491","http://www.amazon.co.jp/dp/B00OGZN83G","http://www.amazon.co.jp/dp/4309018157","http://www.amazon.co.jp/dp/146127821X","http://www.amazon.co.jp/dp/4489020457","http://www.amazon.co.jp/dp/4873117151","http://www.amazon.co.jp/dp/4627849710","http://www.amazon.co.jp/dp/B00000085X","http://www.amazon.co.jp/dp/4627090196","http://www.amazon.co.jp/dp/B00B19JBW2","http://www.amazon.co.jp/dp/4326503084","http://www.amazon.co.jp/dp/B009GUJZCY","http://www.amazon.co.jp/dp/4480015949","http://www.amazon.co.jp/dp/448009525X","http://www.amazon.co.jp/dp/4535785449","http://www.amazon.co.jp/dp/486354135X","http://www.amazon.co.jp/dp/B003WI3LNU","http://www.amazon.co.jp/dp/B00NP38CGS","http://www.amazon.co.jp/dp/B001MCGBX0","http://www.amazon.co.jp/dp/0963488414","http://www.amazon.co.jp/dp/4627836503","http://www.amazon.co.jp/dp/4130629166","http://www.amazon.co.jp/dp/B00009OOI6","http://www.amazon.co.jp/dp/B006FCRNDY","http://www.amazon.co.jp/dp/4900997307","http://www.amazon.co.jp/dp/4874085601","http://www.amazon.co.jp/dp/4320123727","http://www.amazon.co.jp/dp/0387245448","http://www.amazon.co.jp/dp/1584886242","http://www.amazon.co.jp/dp/0817649700","http://www.amazon.co.jp/dp/B0078WZSK0","http://www.amazon.co.jp/dp/0961392142","http://www.amazon.co.jp/dp/0201076160","http://www.amazon.co.jp/dp/4274068307","http://www.amazon.co.jp/dp/4254126670","http://www.amazon.co.jp/dp/0471769886","http://www.amazon.co.jp/dp/4431712143","http://www.amazon.co.jp/dp/0195314530","http://www.amazon.co.jp/dp/047136357X","http://www.amazon.co.jp/dp/4815807124","http://www.amazon.co.jp/dp/0471026409","http://www.amazon.co.jp/dp/0471002550","http://www.amazon.co.jp/dp/4314000163","http://www.amazon.co.jp/dp/4314000120","http://www.amazon.co.jp/dp/4880082392","http://www.amazon.co.jp/dp/B003VWI0UQ","http://www.amazon.co.jp/dp/B00GZBZDOQ","http://www.amazon.co.jp/dp/B001W0ZBPQ","http://www.amazon.co.jp/dp/B001W0ZBTW","http://www.amazon.co.jp/dp/4797360712","http://www.amazon.co.jp/dp/4862462553","http://www.amazon.co.jp/dp/B013LBJ6D6","http://www.amazon.co.jp/dp/B01DC88KFS","http://www.amazon.co.jp/dp/4434124234","http://www.amazon.co.jp/dp/B00KRCHINI","http://www.amazon.co.jp/dp/B01D1XQFY2","http://www.amazon.co.jp/dp/B01B17BWWK","http://www.amazon.co.jp/dp/4396764464","http://www.amazon.co.jp/dp/B0013K6DL6","http://www.amazon.co.jp/dp/B001U786Q2","http://www.amazon.co.jp/dp/B00BQWLJGA","http://www.amazon.co.jp/dp/B00APVOZGY","http://www.amazon.co.jp/dp/B0007CM3FQ","http://www.amazon.co.jp/dp/B00C18K97S","http://www.amazon.co.jp/dp/404866686X","http://www.amazon.co.jp/dp/4048667572","http://www.amazon.co.jp/dp/4048657097","http://www.amazon.co.jp/dp/4091266509","http://www.amazon.co.jp/dp/4575239054","http://www.amazon.co.jp/dp/B00AJE15LU","http://www.amazon.co.jp/dp/4832246372","http://www.amazon.co.jp/dp/B006K8DD6Y","http://www.amazon.co.jp/dp/4757547692","http://www.amazon.co.jp/dp/4048651633","http://www.amazon.co.jp/dp/B00FGY5B90","http://www.amazon.co.jp/dp/4150311404","http://www.amazon.co.jp/dp/B0018DEX92","http://www.amazon.co.jp/dp/4905385040","http://www.amazon.co.jp/dp/B00F92268I","http://www.amazon.co.jp/dp/B0067WPNVG","http://www.amazon.co.jp/dp/B005NGO7B4","http://www.amazon.co.jp/dp/B0018KKQBO","http://www.amazon.co.jp/dp/B0018KKQCS","http://www.amazon.co.jp/dp/B004GSP0UC","http://www.amazon.co.jp/dp/4797365250","http://www.amazon.co.jp/dp/4061385496","http://www.amazon.co.jp/dp/4061385240","http://www.amazon.co.jp/dp/4535984018","http://www.amazon.co.jp/dp/4101800022","http://www.amazon.co.jp/dp/4887063040","http://www.amazon.co.jp/dp/4861009103","http://www.amazon.co.jp/dp/4766001710","http://www.amazon.co.jp/dp/477832241X","http://www.amazon.co.jp/dp/4778322347","http://www.amazon.co.jp/dp/4592710630","http://www.amazon.co.jp/dp/4091886647","http://www.amazon.co.jp/dp/4774138975","http://www.amazon.co.jp/dp/4568502772","http://www.amazon.co.jp/dp/4924956880","http://www.amazon.co.jp/dp/4094087648","http://www.amazon.co.jp/dp/4887062605","http://www.amazon.co.jp/dp/415011742X","http://www.amazon.co.jp/dp/4873116929","http://www.amazon.co.jp/dp/475610326X","http://www.amazon.co.jp/dp/4582767508","http://www.amazon.co.jp/dp/B007ZJ8A0G","http://www.amazon.co.jp/dp/4309961924","http://www.amazon.co.jp/dp/4061591274","http://www.amazon.co.jp/dp/4767814553","http://www.amazon.co.jp/dp/490262575X","http://www.amazon.co.jp/dp/4816341870","http://www.amazon.co.jp/dp/4492314067","http://www.amazon.co.jp/dp/B0036UG6IQ","http://www.amazon.co.jp/dp/4873112729","http://www.amazon.co.jp/dp/B00P0L4YOW","http://www.amazon.co.jp/dp/4774150207","http://www.amazon.co.jp/dp/4797347783","http://www.amazon.co.jp/dp/B00FEBDDRC","http://www.amazon.co.jp/dp/4121006240","http://www.amazon.co.jp/dp/479668039X","http://www.amazon.co.jp/dp/4622077531","http://www.amazon.co.jp/dp/4621066048","http://www.amazon.co.jp/dp/B00GSHI02Y","http://www.amazon.co.jp/dp/B00KNRBFM2","http://www.amazon.co.jp/dp/4480091246","http://www.amazon.co.jp/dp/B00C2R1C92","http://www.amazon.co.jp/dp/4480093583","http://www.amazon.co.jp/dp/4344001400","http://www.amazon.co.jp/dp/4048869574","http://www.amazon.co.jp/dp/B005HZZG9I","http://www.amazon.co.jp/dp/B00CA9B0VW","http://www.amazon.co.jp/dp/4797374144","http://www.amazon.co.jp/dp/4048865366","http://www.amazon.co.jp/dp/4152091053","http://www.amazon.co.jp/dp/4000055267","http://www.amazon.co.jp/dp/B00BLETB04","http://www.amazon.co.jp/dp/4480864253","http://www.amazon.co.jp/dp/4484152215","http://www.amazon.co.jp/dp/B00UJ42A3C","http://www.amazon.co.jp/dp/B00UJ42A0K","http://www.amazon.co.jp/dp/4274065782","http://www.amazon.co.jp/dp/B00GU4R7QA","http://www.amazon.co.jp/dp/B00WM54V5Q","http://www.amazon.co.jp/dp/4534050615","http://www.amazon.co.jp/dp/B00JD94N4I","http://www.amazon.co.jp/dp/B00KS3FA4A","http://www.amazon.co.jp/dp/4873114608","http://www.amazon.co.jp/dp/B00J7K42JE","http://www.amazon.co.jp/dp/4478017298","http://www.amazon.co.jp/dp/4532311888","http://www.amazon.co.jp/dp/4478004595","http://www.amazon.co.jp/dp/B00FMI2XIW","http://www.amazon.co.jp/dp/B00DIYRKQW","http://www.amazon.co.jp/dp/4822281116","http://www.amazon.co.jp/dp/4622080117","http://www.amazon.co.jp/dp/4122049547","http://www.amazon.co.jp/dp/4478013241","http://www.amazon.co.jp/dp/4122053188","http://www.amazon.co.jp/dp/4480015752","http://www.amazon.co.jp/dp/4794805225","http://www.amazon.co.jp/dp/4622016672","http://www.amazon.co.jp/dp/B00CPLJK6C","http://www.amazon.co.jp/dp/4478470650","http://www.amazon.co.jp/dp/B00JGEYL56","http://www.amazon.co.jp/dp/4532110718","http://www.amazon.co.jp/dp/4845282240","http://www.amazon.co.jp/dp/4336024707","http://www.amazon.co.jp/dp/4041212073","http://www.amazon.co.jp/dp/4061497464","http://www.amazon.co.jp/dp/4122000467","http://www.amazon.co.jp/dp/4488195059","http://www.amazon.co.jp/dp/4488417019","http://www.amazon.co.jp/dp/4532104815","http://www.amazon.co.jp/dp/4877461124","http://www.amazon.co.jp/dp/4622081814","http://www.amazon.co.jp/dp/4122043441","http://www.amazon.co.jp/dp/4766001710","http://www.amazon.co.jp/dp/B00GSGV2AM","http://www.amazon.co.jp/dp/4862761208","http://www.amazon.co.jp/dp/4320025636","http://www.amazon.co.jp/dp/4641124124","http://www.amazon.co.jp/dp/4478374031","http://www.amazon.co.jp/dp/B00N70M9Y0","http://www.amazon.co.jp/dp/B00DUBHAYU","http://www.amazon.co.jp/dp/B001HXYEYW","http://www.amazon.co.jp/dp/B00FJISZJG","http://www.amazon.co.jp/dp/B00XVZSYUE","http://www.amazon.co.jp/dp/B00GQ630WW","http://www.amazon.co.jp/dp/B00MWOB8X0","http://www.amazon.co.jp/dp/B00NH140MI","http://www.amazon.co.jp/dp/B00EETOTWS","http://www.amazon.co.jp/dp/B00P8TBPUC","http://www.amazon.co.jp/dp/B00243GLWC","http://www.amazon.co.jp/dp/B0047C8856","http://www.amazon.co.jp/dp/B00BHAXR84","http://www.amazon.co.jp/dp/B008J8OBGY","http://www.amazon.co.jp/dp/B005ZN4SAU","http://www.amazon.co.jp/dp/B00C3X6H7C","http://www.amazon.co.jp/dp/B001H9NVKO","http://www.amazon.co.jp/dp/B004XYQLG6","http://www.amazon.co.jp/dp/B003I05L8K","http://www.amazon.co.jp/dp/B0098D4GYG","http://www.amazon.co.jp/dp/B00810X0TO","http://www.amazon.co.jp/dp/B004XKI9JC","http://www.amazon.co.jp/dp/B004XKI9GU","http://www.amazon.co.jp/dp/B00B3M6350","http://www.amazon.co.jp/dp/B009AUIE2W","http://www.amazon.co.jp/dp/B00IM2F5EO","http://www.amazon.co.jp/dp/B00BB76L90","http://www.amazon.co.jp/dp/B000TUR6RG","http://www.amazon.co.jp/dp/B00AIAK52K","http://www.amazon.co.jp/dp/B0067X0IRE","http://www.amazon.co.jp/dp/B006QZ9QXU","http://www.amazon.co.jp/dp/B007K4FLTO","http://www.amazon.co.jp/dp/B00AH4IFSS","http://www.amazon.co.jp/dp/B002FGTWOC","http://www.amazon.co.jp/dp/B007X3CY9M","http://www.amazon.co.jp/dp/B0081LRCJW","http://www.amazon.co.jp/dp/B006MN62X8","http://www.amazon.co.jp/dp/B005U8WTYM","http://www.amazon.co.jp/dp/B005LUKBHQ","http://www.amazon.co.jp/dp/B008GXT6SK","http://www.amazon.co.jp/dp/B008GXQWOG","http://www.amazon.co.jp/dp/B000F8OECM","http://www.amazon.co.jp/dp/B007RJPJL2","http://www.amazon.co.jp/dp/B007RJPKIY","http://www.amazon.co.jp/dp/B00ASSGJ3Q","http://www.amazon.co.jp/dp/B009AUIE2W","http://www.amazon.co.jp/dp/B00R2NTWFW","http://www.amazon.co.jp/dp/4816355618","http://www.amazon.co.jp/dp/B00E9Q9DPE","http://www.amazon.co.jp/dp/B0089K5KIK","http://www.amazon.co.jp/dp/B00N1GLGEO","http://www.amazon.co.jp/dp/B00OUOUVMO","http://www.amazon.co.jp/dp/B00KQF36ZK","http://www.amazon.co.jp/dp/B001OGJV40","http://www.amazon.co.jp/dp/B0011DS6GK","http://www.amazon.co.jp/dp/B002ORPZ5C","http://www.amazon.co.jp/dp/B00DSHX2KM","http://www.amazon.co.jp/dp/4416812728",null,null,null,null,null,null,null,null,null,null,null,null,"http://www.amazon.co.jp/dp/B00180MQGM","http://www.amazon.co.jp/dp/B00974M5ZS","http://www.amazon.co.jp/dp/B013FHRHG4","http://www.amazon.co.jp/dp/4774176982","http://www.amazon.co.jp/dp/B0090ISPUU","http://www.amazon.co.jp/dp/B0002Q0WGO","http://www.amazon.co.jp/dp/B0031Z260I","http://www.amazon.co.jp/dp/B003P9FBAM","http://www.amazon.co.jp/dp/B003P9HIKI","http://www.amazon.co.jp/dp/B00JKJX9Z0","http://www.amazon.co.jp/dp/B01B8HS0RI","http://www.amazon.co.jp/dp/B00NV07IVU","http://www.amazon.co.jp/dp/B005UWIJ7O","http://www.amazon.co.jp/dp/4621089919","http://www.amazon.co.jp/dp/476490487X","http://www.amazon.co.jp/dp/406153825X","http://www.amazon.co.jp/dp/B003157VP8","http://www.amazon.co.jp/dp/B00E19UYO8","http://www.amazon.co.jp/dp/B0015XN26K","http://www.amazon.co.jp/dp/B007RUVYGU","http://www.amazon.co.jp/dp/4627847114","http://www.amazon.co.jp/dp/B00IJND9GW","http://www.amazon.co.jp/dp/B00GJIF2VY","http://www.amazon.co.jp/dp/B004OQ5SGC","http://www.amazon.co.jp/dp/B005FDO2D8","http://www.amazon.co.jp/dp/B00EU7VVIO","http://www.amazon.co.jp/dp/B007RKJTLC","http://www.amazon.co.jp/dp/B00PTH00H2","http://www.amazon.co.jp/dp/B00GUEDYY4","http://www.amazon.co.jp/dp/B00GUEDYV2","http://www.amazon.co.jp/dp/B00GUEDXH2","http://www.amazon.co.jp/dp/B00GUEDXHM","http://www.amazon.co.jp/dp/B000FQSLE6","http://www.amazon.co.jp/dp/B00C9SX5DA","http://www.amazon.co.jp/dp/B007V6MQJY","http://www.amazon.co.jp/dp/B00JXEYMN0","http://www.amazon.co.jp/dp/B007JQE752","http://www.amazon.co.jp/dp/4048686291","http://www.amazon.co.jp/dp/1107661366","http://www.amazon.co.jp/dp/4764904691","http://www.amazon.co.jp/dp/B001J2YSE2","http://www.amazon.co.jp/dp/B0083D7LQC","http://www.amazon.co.jp/dp/B004GGSYWA","http://www.amazon.co.jp/dp/B0076E0FG2","http://www.amazon.co.jp/dp/4833473488","http://www.amazon.co.jp/dp/B005HTARAW","http://www.amazon.co.jp/dp/B00F9S6GBU","http://www.amazon.co.jp/dp/B004PU9LV0","http://www.amazon.co.jp/dp/B003U5UW4Q","http://www.amazon.co.jp/dp/B00EU29082","http://www.amazon.co.jp/dp/B008AF0KMA","http://www.amazon.co.jp/dp/476490408X","http://www.amazon.co.jp/dp/4320122178","http://www.amazon.co.jp/dp/B017FQRX60","http://www.amazon.co.jp/dp/B018VDNQXK","http://www.amazon.co.jp/dp/B0186YBOME","http://www.amazon.co.jp/dp/B018RW2KDM","http://www.amazon.co.jp/dp/B00TLRU6GG","http://www.amazon.co.jp/dp/B015CLNR56","http://www.amazon.co.jp/dp/B00JGDILOE","http://www.amazon.co.jp/dp/B00HI6IV00","http://www.amazon.co.jp/dp/B001RON2G2","http://www.amazon.co.jp/dp/B0009PLEEC","http://www.amazon.co.jp/dp/B0009PLEDI","http://www.amazon.co.jp/dp/B00GIFU5XS","http://www.amazon.co.jp/dp/B00IXCK2T6","http://www.amazon.co.jp/dp/B010KJY4DY","http://www.amazon.co.jp/dp/B00RTCEBK2","http://www.amazon.co.jp/dp/B00NOL4EO0","http://www.amazon.co.jp/dp/B00HZY1KN0","http://www.amazon.co.jp/dp/B00RTEXM7I","http://www.amazon.co.jp/dp/B00T8UBO44","http://www.amazon.co.jp/dp/B00QPZRZJI","http://www.amazon.co.jp/dp/B00E5VWYXG","http://www.amazon.co.jp/dp/B008TJMJ76","http://www.amazon.co.jp/dp/B0019SO1C0","http://www.amazon.co.jp/dp/B0012VVAXC","http://www.amazon.co.jp/dp/B00U8ARIWK","http://www.amazon.co.jp/dp/B00I90JXE2","http://www.amazon.co.jp/dp/B00BES5YPS","http://www.amazon.co.jp/dp/B00171OOWQ","http://www.amazon.co.jp/dp/B012SFPJAK","http://www.amazon.co.jp/dp/B012SFORS0","http://www.amazon.co.jp/dp/B00171MV3A","http://www.amazon.co.jp/dp/B0091AMQ5M","http://www.amazon.co.jp/dp/B005KOTX0E","http://www.amazon.co.jp/dp/4782805020","http://www.amazon.co.jp/dp/4339024910","http://www.amazon.co.jp/dp/4000054554","http://www.amazon.co.jp/dp/406152903X","http://www.amazon.co.jp/dp/4061529048","http://www.amazon.co.jp/dp/4000069721","http://www.amazon.co.jp/dp/4000069713","http://www.amazon.co.jp/dp/4802510209","http://www.amazon.co.jp/dp/B00DZG4H00","http://www.amazon.co.jp/dp/B00H2ABRKS","http://www.amazon.co.jp/dp/B00P8TDWUI","http://www.amazon.co.jp/dp/B004VC7VCS","http://www.amazon.co.jp/dp/B0092XHIJC","http://www.amazon.co.jp/dp/B00YA95UFM","http://www.amazon.co.jp/dp/B00IHUPB54","http://www.amazon.co.jp/dp/B00C7G6JQE","http://www.amazon.co.jp/dp/B00NIJYU2O","http://www.amazon.co.jp/dp/B00NTLOKO4","http://www.amazon.co.jp/dp/B00L7JD0ZU","http://www.amazon.co.jp/dp/4916092910","http://www.amazon.co.jp/dp/B010NFPB8M","http://www.amazon.co.jp/dp/B00B556KG2","http://www.amazon.co.jp/dp/B0043XYENO","http://www.amazon.co.jp/dp/4839954747","http://www.amazon.co.jp/dp/B015WXM1WE","http://www.amazon.co.jp/dp/B00F0FQ8EM","http://www.amazon.co.jp/dp/4822279987","http://www.amazon.co.jp/dp/B0079WCAK0","http://www.amazon.co.jp/dp/B00HCVQRCA","http://www.amazon.co.jp/dp/B006WTXKO6","http://www.amazon.co.jp/dp/B00IHW5W10","http://www.amazon.co.jp/dp/B0146CT8ZK","http://www.amazon.co.jp/dp/4000069721","http://www.amazon.co.jp/dp/476490487X","http://www.amazon.co.jp/dp/B0090ZK18M","http://www.amazon.co.jp/dp/B0056J0YWO","http://www.amazon.co.jp/dp/B004S04SCE","http://www.amazon.co.jp/dp/B0056J1U0E","http://www.amazon.co.jp/dp/B003XY79WW","http://www.amazon.co.jp/dp/B00EVMGLPG","http://www.amazon.co.jp/dp/B0055EHOF0","http://www.amazon.co.jp/dp/B0055X04YY","http://www.amazon.co.jp/dp/B00UF67UHU","http://www.amazon.co.jp/dp/B01BBFYWZG","http://www.amazon.co.jp/dp/B00AB7PLLK","http://www.amazon.co.jp/dp/B00MVL0SUS","http://www.amazon.co.jp/dp/4622039494","http://www.amazon.co.jp/dp/4478011656","http://www.amazon.co.jp/dp/4903241785","http://www.amazon.co.jp/dp/B00M2CZZOA","http://www.amazon.co.jp/dp/4641123551","http://www.amazon.co.jp/dp/B00CHYMG8G","http://www.amazon.co.jp/dp/B000FQOJ7O","http://www.amazon.co.jp/dp/4774176311","http://www.amazon.co.jp/dp/4774164291","http://www.amazon.co.jp/dp/4797376333","http://www.amazon.co.jp/dp/4774170577","http://www.amazon.co.jp/dp/B000177FXW","http://www.amazon.co.jp/dp/B00TZF96HO","http://www.amazon.co.jp/dp/B0162EAZBQ","http://www.amazon.co.jp/dp/B00UF6P8M4","http://www.amazon.co.jp/dp/B00G8SEJ32","http://www.amazon.co.jp/dp/B005EV786Y","http://www.amazon.co.jp/dp/B001OGJV40","http://www.amazon.co.jp/dp/B001HLBY10","http://www.amazon.co.jp/dp/B019GVI5PU","http://www.amazon.co.jp/dp/4000298518","http://www.amazon.co.jp/dp/4382055415","http://www.amazon.co.jp/dp/4774142298","http://www.amazon.co.jp/dp/4534051735","http://www.amazon.co.jp/dp/4774150541","http://www.amazon.co.jp/dp/4256190201","http://www.amazon.co.jp/dp/B005FOT8TK","http://www.amazon.co.jp/dp/B001JLRAC0","http://www.amazon.co.jp/dp/B009KGH7RO","http://www.amazon.co.jp/dp/B007QAVV82","http://www.amazon.co.jp/dp/B0064JMY3W","http://www.amazon.co.jp/dp/4041026105","http://www.amazon.co.jp/dp/402273115X","http://www.amazon.co.jp/dp/B00GYSH1XQ","http://www.amazon.co.jp/dp/4839955212","http://www.amazon.co.jp/dp/B00NTQ4TVI","http://www.amazon.co.jp/dp/4883379353","http://www.amazon.co.jp/dp/4815808074","http://www.amazon.co.jp/dp/4862270026","http://www.amazon.co.jp/dp/4621063243","http://www.amazon.co.jp/dp/4757160429","http://www.amazon.co.jp/dp/4621082574","http://www.amazon.co.jp/dp/4478820090","http://www.amazon.co.jp/dp/4890133569","http://www.amazon.co.jp/dp/4480020470","http://www.amazon.co.jp/dp/416765170X","http://www.amazon.co.jp/dp/4822296288","http://www.amazon.co.jp/dp/4796403787","http://www.amazon.co.jp/dp/4931199690","http://www.amazon.co.jp/dp/4320019237","http://www.amazon.co.jp/dp/4798134996","http://www.amazon.co.jp/dp/4320121163","http://www.amazon.co.jp/dp/4897979595","http://www.amazon.co.jp/dp/4763133586","http://www.amazon.co.jp/dp/4798134902","http://www.amazon.co.jp/dp/4320123670","http://www.amazon.co.jp/dp/4873115795","http://www.amazon.co.jp/dp/4873116538","http://www.amazon.co.jp/dp/432012362X","http://www.amazon.co.jp/dp/4254126654","http://www.amazon.co.jp/dp/4320110161","http://www.amazon.co.jp/dp/4535787158","http://www.amazon.co.jp/dp/4774163015","http://www.amazon.co.jp/dp/4774160911","http://www.amazon.co.jp/dp/4873113938","http://www.amazon.co.jp/dp/4895927342","http://www.amazon.co.jp/dp/4627852118","http://www.amazon.co.jp/dp/4873116554","http://www.amazon.co.jp/dp/4797366575","http://www.amazon.co.jp/dp/4489020368","http://www.amazon.co.jp/dp/4822249786","http://www.amazon.co.jp/dp/4774163260","http://www.amazon.co.jp/dp/4489021607","http://www.amazon.co.jp/dp/B00SH21ARA","http://www.amazon.co.jp/dp/4767809436","http://www.amazon.co.jp/dp/4583623518","http://www.amazon.co.jp/dp/B0001PW264","http://www.amazon.co.jp/dp/B00KXP9QF2","http://www.amazon.co.jp/dp/B00GS7EINO","http://www.amazon.co.jp/dp/B0015XNAFS","http://www.amazon.co.jp/dp/B000KJFUB0","http://www.amazon.co.jp/dp/4844334689","http://www.amazon.co.jp/dp/B00PEDSZKU","http://www.amazon.co.jp/dp/B000FTDUP8","http://www.amazon.co.jp/dp/B001339HD4","http://www.amazon.co.jp/dp/4844323911","http://www.amazon.co.jp/dp/4391144220","http://www.amazon.co.jp/dp/4391144239","http://www.amazon.co.jp/dp/B00C7DXUPA","http://www.amazon.co.jp/dp/B00C7DXURS",null,null,null,null,"http://www.amazon.co.jp/dp/B01DAABJLA","http://www.amazon.co.jp/dp/B017EIHLC0","http://www.amazon.co.jp/dp/B001AI4IV8","http://www.amazon.co.jp/dp/B000PJ59MK","http://www.amazon.co.jp/dp/B008H0IPJS","http://www.amazon.co.jp/dp/B0015WS42S","http://www.amazon.co.jp/dp/B00AE8C37G","http://www.amazon.co.jp/dp/B001BYDN5I","http://www.amazon.co.jp/dp/B019VZJ5YG","http://www.amazon.co.jp/dp/B0144FKLFU","http://www.amazon.co.jp/dp/B00JGQCANO","http://www.amazon.co.jp/dp/B012FQ984U","http://www.amazon.co.jp/dp/B01ARS9NA2","http://www.amazon.co.jp/dp/B01ASQ2G6G","http://www.amazon.co.jp/dp/486064249X","http://www.amazon.co.jp/dp/4872178513","http://www.amazon.co.jp/dp/4327441104","http://www.amazon.co.jp/dp/4309411479","http://www.amazon.co.jp/dp/4757419368","http://www.amazon.co.jp/dp/4255006652","http://www.amazon.co.jp/dp/4808603519","http://www.amazon.co.jp/dp/4877315845","http://www.amazon.co.jp/dp/4876150907","http://www.amazon.co.jp/dp/B00MALYESG","http://www.amazon.co.jp/dp/B009SK85B4","http://www.amazon.co.jp/dp/4797331623","http://www.amazon.co.jp/dp/4797327030","http://www.amazon.co.jp/dp/4797337206","http://www.amazon.co.jp/dp/B00F4QOMWM","http://www.amazon.co.jp/dp/4797341866","http://www.amazon.co.jp/dp/4873116686","http://www.amazon.co.jp/dp/4798046140","http://www.amazon.co.jp/dp/B00Y04YM6U","http://www.amazon.co.jp/dp/B00WRYDQVM","http://www.amazon.co.jp/dp/4862900232","http://www.amazon.co.jp/dp/4774171972","http://www.amazon.co.jp/dp/4774178020","http://www.amazon.co.jp/dp/4781701973","http://www.amazon.co.jp/dp/4327440981","http://www.amazon.co.jp/dp/4757416202","http://www.amazon.co.jp/dp/4798015164","http://www.amazon.co.jp/dp/4887245610","http://www.amazon.co.jp/dp/4887245092","http://www.amazon.co.jp/dp/4757411375","http://www.amazon.co.jp/dp/4902889021","http://www.amazon.co.jp/dp/4757420927","http://www.amazon.co.jp/dp/488724438X","http://www.amazon.co.jp/dp/4887245408","http://www.amazon.co.jp/dp/4887245661","http://www.amazon.co.jp/dp/4902091194","http://www.amazon.co.jp/dp/4902091305","http://www.amazon.co.jp/dp/479813161X","http://www.amazon.co.jp/dp/4757416180","http://www.amazon.co.jp/dp/4757418051","http://www.amazon.co.jp/dp/4939076709","http://www.amazon.co.jp/dp/4844332015","http://www.amazon.co.jp/dp/487731704X","http://www.amazon.co.jp/dp/4876151652","http://www.amazon.co.jp/dp/475741269X","http://www.amazon.co.jp/dp/4095110082","http://www.amazon.co.jp/dp/B00PE0BD4I","http://www.amazon.co.jp/dp/4048669273","http://www.amazon.co.jp/dp/4863921063","http://www.amazon.co.jp/dp/4863920784","http://www.amazon.co.jp/dp/4023312843","http://www.amazon.co.jp/dp/4478009899","http://www.amazon.co.jp/dp/4478024294","http://www.amazon.co.jp/dp/4478025614","http://www.amazon.co.jp/dp/4478024286","http://www.amazon.co.jp/dp/4756911056","http://www.amazon.co.jp/dp/4862280250","http://www.amazon.co.jp/dp/4484112078","http://www.amazon.co.jp/dp/476127011X","http://www.amazon.co.jp/dp/4862901603","http://www.amazon.co.jp/dp/4479794964","http://www.amazon.co.jp/dp/479803925X","http://www.amazon.co.jp/dp/4873116694","http://www.amazon.co.jp/dp/4791768736","http://www.amazon.co.jp/dp/B009K2448S","http://www.amazon.co.jp/dp/4764903350","http://www.amazon.co.jp/dp/4764903342","http://www.amazon.co.jp/dp/4860641124","http://www.amazon.co.jp/dp/4757424205","http://www.amazon.co.jp/dp/B009B5JOIY","http://www.amazon.co.jp/dp/4621066072","http://www.amazon.co.jp/dp/4384054629","http://www.amazon.co.jp/dp/4872177606","http://www.amazon.co.jp/dp/4894712059","http://www.amazon.co.jp/dp/4534052049","http://www.amazon.co.jp/dp/4797345233","http://www.amazon.co.jp/dp/4822296075","http://www.amazon.co.jp/dp/4478025819","http://www.amazon.co.jp/dp/4478017212","http://www.amazon.co.jp/dp/4774162531","http://www.amazon.co.jp/dp/4774159182","http://www.amazon.co.jp/dp/4844334794","http://www.amazon.co.jp/dp/487311473X","http://www.amazon.co.jp/dp/4774154644","http://www.amazon.co.jp/dp/4309463800","http://www.amazon.co.jp/dp/477415654X","http://www.amazon.co.jp/dp/B00BVUTH0M","http://www.amazon.co.jp/dp/4844333518","http://www.amazon.co.jp/dp/443420159X","http://www.amazon.co.jp/dp/4798124702","http://www.amazon.co.jp/dp/B001EJNSLE","http://www.amazon.co.jp/dp/4794214251","http://www.amazon.co.jp/dp/4797363282","http://www.amazon.co.jp/dp/B016TEVCYS","http://www.amazon.co.jp/dp/B009GAMO3G","http://www.amazon.co.jp/dp/B015ZRJ8NW","http://www.amazon.co.jp/dp/B00XP5KLLK","http://www.amazon.co.jp/dp/B00GKKFSNS","http://www.amazon.co.jp/dp/B0101IIT3A","http://www.amazon.co.jp/dp/B005FOVUS2","http://www.amazon.co.jp/dp/4873114489","http://www.amazon.co.jp/dp/427405019X","http://www.amazon.co.jp/dp/B00VDVY1C8","http://www.amazon.co.jp/dp/B00VECG31I","http://www.amazon.co.jp/dp/B00QK1P6G6","http://www.amazon.co.jp/dp/B019O46114","http://www.amazon.co.jp/dp/B008X7JVIE","http://www.amazon.co.jp/dp/B0094P203M","http://www.amazon.co.jp/dp/B00RB15O7U","http://www.amazon.co.jp/dp/B00N7JPNRG","http://www.amazon.co.jp/dp/B00JHVL782","http://www.amazon.co.jp/dp/B002QEFQNY","http://www.amazon.co.jp/dp/B003A3EOSS","http://www.amazon.co.jp/dp/B01DK4SCSY","http://www.amazon.co.jp/dp/B0034XNETE","http://www.amazon.co.jp/dp/B008YRGZLY","http://www.amazon.co.jp/dp/B00JBYOTXA","http://www.amazon.co.jp/dp/B017VK3OHW","http://www.amazon.co.jp/dp/B00KQ9MNLO","http://www.amazon.co.jp/dp/B002VZY62K","http://www.amazon.co.jp/dp/B00SKIZ6US","http://www.amazon.co.jp/dp/B00LIO4FE4","http://www.amazon.co.jp/dp/B00UC19V0M","http://www.amazon.co.jp/dp/B00H4KZ66W","http://www.amazon.co.jp/dp/B00J5ARYQE","http://www.amazon.co.jp/dp/B001TM6J4O","http://www.amazon.co.jp/dp/B001TZ1YX2","http://www.amazon.co.jp/dp/B001P30C1S","http://www.amazon.co.jp/dp/B00QUXKIL2","http://www.amazon.co.jp/dp/B0043A0B2U","http://www.amazon.co.jp/dp/B0029ZFVVW","http://www.amazon.co.jp/dp/B001ISVRYQ","http://www.amazon.co.jp/dp/B004BPLOGE","http://www.amazon.co.jp/dp/B004BPPH30","http://www.amazon.co.jp/dp/B000MRURNQ","http://www.amazon.co.jp/dp/4798143669","http://www.amazon.co.jp/dp/B0077IIQO0","http://www.amazon.co.jp/dp/B001DHHWIW","http://www.amazon.co.jp/dp/4478027595","http://www.amazon.co.jp/dp/4478501769","http://www.amazon.co.jp/dp/4478029040","http://www.amazon.co.jp/dp/4883353540","http://www.amazon.co.jp/dp/480072032X","http://www.amazon.co.jp/dp/4534040016","http://www.amazon.co.jp/dp/B003OQ57YG","http://www.amazon.co.jp/dp/4766785983","http://www.amazon.co.jp/dp/4839956758","http://www.amazon.co.jp/dp/4844334662","http://www.amazon.co.jp/dp/4788907186","http://www.amazon.co.jp/dp/4864101906","http://www.amazon.co.jp/dp/4478012105","http://www.amazon.co.jp/dp/B00O2KU9XW","http://www.amazon.co.jp/dp/B01CQH48KC","http://www.amazon.co.jp/dp/B0140XPF8E","http://www.amazon.co.jp/dp/B013I245DO","http://www.amazon.co.jp/dp/B01915IICQ","http://www.amazon.co.jp/dp/B01CNBN8WU","http://www.amazon.co.jp/dp/B01CONR5OE","http://www.amazon.co.jp/dp/B005N4X6M2","http://www.amazon.co.jp/dp/B008SRJLSE","http://www.amazon.co.jp/dp/B00857CQAM","http://www.amazon.co.jp/dp/B016QAH2N0","http://www.amazon.co.jp/dp/4774178667","http://www.amazon.co.jp/dp/B008P56QAU","http://www.amazon.co.jp/dp/4832244833","http://www.amazon.co.jp/dp/4844336355","http://www.amazon.co.jp/dp/B00OXPDYGK","http://www.amazon.co.jp/dp/4873116864","http://www.amazon.co.jp/dp/B005F25MQ0","http://www.amazon.co.jp/dp/BT00DHI8G4","http://www.amazon.co.jp/dp/4813053882","http://www.amazon.co.jp/dp/4832241044","http://www.amazon.co.jp/dp/4832242520","http://www.amazon.co.jp/dp/404728159X","http://www.amazon.co.jp/dp/B01DU8PXQY","http://www.amazon.co.jp/dp/B003FSEMU8","http://www.amazon.co.jp/dp/B005UJ0XH6","http://www.amazon.co.jp/dp/B00S688IC0","http://www.amazon.co.jp/dp/B00KIBWQXA","http://www.amazon.co.jp/dp/B01852TSLQ","http://www.amazon.co.jp/dp/B00C905644","http://www.amazon.co.jp/dp/B00O9K2K5U","http://www.amazon.co.jp/dp/B00NHMEQ1M","http://www.amazon.co.jp/dp/B015MNRRM8","http://www.amazon.co.jp/dp/B00G3WIIT4","http://www.amazon.co.jp/dp/B00B1N8ZQG","http://www.amazon.co.jp/dp/B00DISR0CM","http://www.amazon.co.jp/dp/B01B36W822","http://www.amazon.co.jp/dp/B004U8IVK4","http://www.amazon.co.jp/dp/B015OR9R8O","http://www.amazon.co.jp/dp/B0132I6TSI","http://www.amazon.co.jp/dp/B01823H4Y6","http://www.amazon.co.jp/dp/B004D2FY3Y","http://www.amazon.co.jp/dp/B001T19WN0","http://www.amazon.co.jp/dp/B00KRT8CZO","http://www.amazon.co.jp/dp/B007C0JZ2A","http://www.amazon.co.jp/dp/4339027510","http://www.amazon.co.jp/dp/B002NGNGSC","http://www.amazon.co.jp/dp/B00I8BBZNE","http://www.amazon.co.jp/dp/B00I8BBWI2","http://www.amazon.co.jp/dp/B001ET5NUS","http://www.amazon.co.jp/dp/B001ET5NUI","http://www.amazon.co.jp/dp/B004LL5O46","http://www.amazon.co.jp/dp/B001804CLY","http://www.amazon.co.jp/dp/B005TESKW2","http://www.amazon.co.jp/dp/B001ET5NU8","http://www.amazon.co.jp/dp/B001ET5NTY","http://www.amazon.co.jp/dp/B00DIYEJWU","http://www.amazon.co.jp/dp/B00DIYEJUM","http://www.amazon.co.jp/dp/B00DIYEJLQ","http://www.amazon.co.jp/dp/B001ET5NTO","http://www.amazon.co.jp/dp/B00DIYEJTI","http://www.amazon.co.jp/dp/B002QQ7F4K","http://www.amazon.co.jp/dp/B008M4OXHW","http://www.amazon.co.jp/dp/B0055QAKTK","http://www.amazon.co.jp/dp/B00436G1IM","http://www.amazon.co.jp/dp/B007OO5X9S","http://www.amazon.co.jp/dp/B00C9ULKNU","http://www.amazon.co.jp/dp/1441979336","http://www.amazon.co.jp/dp/0521874157","http://www.amazon.co.jp/dp/B0020AY49Q","http://www.amazon.co.jp/dp/4339027553",null,"http://www.amazon.co.jp/dp/4802510209","http://www.amazon.co.jp/dp/B01DNJ6Z6C","http://www.amazon.co.jp/dp/B019GJL81U","http://www.amazon.co.jp/dp/4801301622","http://www.amazon.co.jp/dp/4797380357","http://www.amazon.co.jp/dp/4484151014","http://www.amazon.co.jp/dp/484413695X","http://www.amazon.co.jp/dp/4905073413","http://www.amazon.co.jp/dp/B01DZSZYAO","http://www.amazon.co.jp/dp/482226470X","http://www.amazon.co.jp/dp/4797376279","http://www.amazon.co.jp/dp/4822251551","http://www.amazon.co.jp/dp/4799318713","http://www.amazon.co.jp/dp/4416115156","http://www.amazon.co.jp/dp/4822250296","http://www.amazon.co.jp/dp/4873115094","http://www.amazon.co.jp/dp/B01EEVSJZS","http://www.amazon.co.jp/dp/B011A2XCZ6","http://www.amazon.co.jp/dp/4774179841","http://www.amazon.co.jp/dp/B01AXRCDTU","http://www.amazon.co.jp/dp/B018QMI7PI","http://www.amazon.co.jp/dp/4478064784","http://www.amazon.co.jp/dp/4873117682","http://www.amazon.co.jp/dp/B00HD05KAA","http://www.amazon.co.jp/dp/4384058357","http://www.amazon.co.jp/dp/4860644662","http://www.amazon.co.jp/dp/098478280X","http://www.amazon.co.jp/dp/B008XRHUA0","http://www.amazon.co.jp/dp/4862761828","http://www.amazon.co.jp/dp/4041043271","http://www.amazon.co.jp/dp/4093897646","http://www.amazon.co.jp/dp/B00CM1CFVC","http://www.amazon.co.jp/dp/B008RVNZY2","http://www.amazon.co.jp/dp/B00E9M2VG6","http://www.amazon.co.jp/dp/4418164006","http://www.amazon.co.jp/dp/B000Z1WP48","http://www.amazon.co.jp/dp/B00FE9VYNO","http://www.amazon.co.jp/dp/B000N92VFU","http://www.amazon.co.jp/dp/B00260NNDI","http://www.amazon.co.jp/dp/B00NH7WDGM","http://www.amazon.co.jp/dp/4896803388","http://www.amazon.co.jp/dp/4774142042","http://www.amazon.co.jp/dp/B0044ULMFY","http://www.amazon.co.jp/dp/4582824811","http://www.amazon.co.jp/dp/4048996053","http://www.amazon.co.jp/dp/4860636988","http://www.amazon.co.jp/dp/4873117607","http://www.amazon.co.jp/dp/4774178020","http://www.amazon.co.jp/dp/4844337238","http://www.amazon.co.jp/dp/4873117437","http://www.amazon.co.jp/dp/4150504113","http://www.amazon.co.jp/dp/B00W761PM2","http://www.amazon.co.jp/dp/4636930533","http://www.amazon.co.jp/dp/4041929075","http://www.amazon.co.jp/dp/4061598724","http://www.amazon.co.jp/dp/4061598716","http://www.amazon.co.jp/dp/4861008522","http://www.amazon.co.jp/dp/4140884800","http://www.amazon.co.jp/dp/4873117526","http://www.amazon.co.jp/dp/4802510020","http://www.amazon.co.jp/dp/B00H6YDJWE","http://www.amazon.co.jp/dp/B014IXLKLW","http://www.amazon.co.jp/dp/B01ASNW1QO","http://www.amazon.co.jp/dp/B00W373CO4","http://www.amazon.co.jp/dp/B003AOBZAC","http://www.amazon.co.jp/dp/B00GG9ANEC","http://www.amazon.co.jp/dp/B00EN6Q7M2","http://www.amazon.co.jp/dp/B002WRDKRY","http://www.amazon.co.jp/dp/B01B4F4C9E","http://www.amazon.co.jp/dp/4872574230","http://www.amazon.co.jp/dp/B000062VGH","http://www.amazon.co.jp/dp/0804839328","http://www.amazon.co.jp/dp/4863130503","http://www.amazon.co.jp/dp/4863131410","http://www.amazon.co.jp/dp/B003EVW53W","http://www.amazon.co.jp/dp/B00ZP96B4U","http://www.amazon.co.jp/dp/0452298776","http://www.amazon.co.jp/dp/4103054557","http://www.amazon.co.jp/dp/4822250709","http://www.amazon.co.jp/dp/4822264947","http://www.amazon.co.jp/dp/4833421194","http://www.amazon.co.jp/dp/4907435444","http://www.amazon.co.jp/dp/4798138584","http://www.amazon.co.jp/dp/B002IIELU2","http://www.amazon.co.jp/dp/B009DTWKM0","http://www.amazon.co.jp/dp/462108951X","http://www.amazon.co.jp/dp/4862761682","http://www.amazon.co.jp/dp/4791768442","http://www.amazon.co.jp/dp/4478029296","http://www.amazon.co.jp/dp/4833420163","http://www.amazon.co.jp/dp/4873116597","http://www.amazon.co.jp/dp/4877833757","http://www.amazon.co.jp/dp/462108786X","http://www.amazon.co.jp/dp/4062579537","http://www.amazon.co.jp/dp/4627817711","http://www.amazon.co.jp/dp/4405093075","http://www.amazon.co.jp/dp/4621086553","http://www.amazon.co.jp/dp/4627849710","http://www.amazon.co.jp/dp/4766419898","http://www.amazon.co.jp/dp/487311697X","http://www.amazon.co.jp/dp/B000QXDGNE","http://www.amazon.co.jp/dp/4484031019","http://www.amazon.co.jp/dp/4484881047","http://www.amazon.co.jp/dp/B008REE2ZA","http://www.amazon.co.jp/dp/4621066072","http://www.amazon.co.jp/dp/B008REE2DC","http://www.amazon.co.jp/dp/B008REDXG4","http://www.amazon.co.jp/dp/B003VDQZNY","http://www.amazon.co.jp/dp/4532319269","http://www.amazon.co.jp/dp/4794220588","http://www.amazon.co.jp/dp/B017R6W4SK","http://www.amazon.co.jp/dp/B01AURIESW","http://www.amazon.co.jp/dp/B01C3SCKT0","http://www.amazon.co.jp/dp/409143472X","http://www.amazon.co.jp/dp/4091434398","http://www.amazon.co.jp/dp/B005XFCZS2","http://www.amazon.co.jp/dp/B005U8WTYM","http://www.amazon.co.jp/dp/B014US3FQI","http://www.amazon.co.jp/dp/B00U6YCIT6","http://www.amazon.co.jp/dp/B00X2JS3I2","http://www.amazon.co.jp/dp/B00KWSR60M","http://www.amazon.co.jp/dp/B00X6BSGC4","http://www.amazon.co.jp/dp/B00SMPL4WI","http://www.amazon.co.jp/dp/B00HWRHEA8","http://www.amazon.co.jp/dp/B00IEKR1EQ","http://www.amazon.co.jp/dp/B00EY6AV50","http://www.amazon.co.jp/dp/B009C742Y2","http://www.amazon.co.jp/dp/B00KXNIBPK","http://www.amazon.co.jp/dp/B003BLGFWM","http://www.amazon.co.jp/dp/B00JOCVZD6"]},"evals":[],"jsHooks":[]}</script>
+<p class="caption">
+(#fig:160621_fig2_price_bubble)商品価格を円の大きさで示す。色はランダム
+</p>
+</div>
+<p>商品金額の箱ひげ図を描くと、こうした少数の大きな金額の商品によって箱が潰されてしまいました。これらの値は外れ値として処理して、改めて平均価格を求めてみます。</p>
+<pre class="r"><code>outlier.values &lt;- boxplot.stats(df.wishlist.item$price)$out
+df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.values)</code></pre>
+<pre class="r"><code>mean(df.omit.outlier$price, na.rm = TRUE)
+## [1] 2490.293</code></pre>
+<p>今度は2,490.293円と無難な値段になりました。ほしい商品をプレゼントしてもらうにはこのくらいにしておくのが良いのでしょうか。</p>
+</div>
+<div class="section level3">
+<h3>ほしいものリスト内の商品数</h3>
+<p>ほしいものリストの商品数の平均は63.1724138でしたが、最小・最大数は次のようになっています。</p>
+<pre class="r"><code>df.summary %&gt;% dplyr::summarise(min = min(n), max = max(n)) %&gt;% 
+  kable(format = &quot;markdown&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="right">min</th>
+<th align="right">max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">402</td>
+</tr>
+</tbody>
+</table>
+<p>個々のほしいものリストに含まれている商品数をグラフにするとこのようになります。ほしいものを100件詰め込むのはそれはそれで難しい話のようです。候補をたくさん用意するのは良さそうですが加減が必要そうです。</p>
+<pre class="r"><code>df.summary %&gt;% 
+  dplyr::mutate(id = with(., reorder(id, n, median))) %&gt;%
+  ggplot(aes(id, n)) + geom_bar(stat = &quot;identity&quot;)</code></pre>
+<div class="figure" style="text-align: center">
+<img src="figures/160621_fig3-1.png" alt="ほしいものリスト内の商品数" width="672" />
+<p class="caption">
+(#fig:160621_fig3)ほしいものリスト内の商品数
+</p>
+</div>
+</div>
+<div class="section level3">
+<h3>今後の方針</h3>
+<p>簡単な傾向を見ただけですが、今回はここで終わります。今後は次のような項目について調べたいです。</p>
+<ul>
+<li>商品カテゴリーの区分… 今回はスクレイピングの件数から自重しましたが、こっちの方が気になる気もあります。</li>
+<li>ほしい物ものリスト経由で、第三者からの提供があったのか調べたい
+<ul>
+<li>公開先、公開理由によって、提供される可能性は大きく異なるのか検証（結婚、進学・卒業は高いけど、引っ越しは低い、とか）</li>
+</ul></li>
+</ul>
+<p>気が向いたら続編として実行したいと思います。</p>
+<p>Enjoy :)</p>
+</div>
+</div>
+<div class="section level2">
+<h2>💻 実行環境</h2>
+<table>
+<thead>
+<tr class="header">
+<th align="left">package</th>
+<th align="left">version</th>
+<th align="left">source</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">bubbles</td>
+<td align="left">0.2</td>
+<td align="left">Github (<a href="mailto:jcheng5/bubbles@6724e43">jcheng5/bubbles@6724e43</a>)</td>
+</tr>
+<tr class="even">
+<td align="left">cowplot</td>
+<td align="left">0.7.0</td>
+<td align="left">CRAN (R 3.3.1)</td>
+</tr>
+<tr class="odd">
+<td align="left">DescTools</td>
+<td align="left">0.99.18</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="even">
+<td align="left">dplyr</td>
+<td align="left">0.5.0</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">foreach</td>
+<td align="left">1.4.3</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="even">
+<td align="left">ggplot2</td>
+<td align="left">2.2.0</td>
+<td align="left">CRAN (R 3.3.2)</td>
+</tr>
+<tr class="odd">
+<td align="left">knitr</td>
+<td align="left">1.15</td>
+<td align="left">CRAN (R 3.3.2)</td>
+</tr>
+<tr class="even">
+<td align="left">magrittr</td>
+<td align="left">1.5</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">pacman</td>
+<td align="left">0.4.1</td>
+<td align="left">CRAN (R 3.2.4)</td>
+</tr>
+<tr class="even">
+<td align="left">purrr</td>
+<td align="left">0.2.2</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">remoji</td>
+<td align="left">0.1.0</td>
+<td align="left">Github (<a href="mailto:richfitz/remoji@dc00779">richfitz/remoji@dc00779</a>)</td>
+</tr>
+<tr class="even">
+<td align="left">rvest</td>
+<td align="left">0.3.2</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">scales</td>
+<td align="left">0.4.1</td>
+<td align="left">cran (<span class="citation">@0.4.1</span>)</td>
+</tr>
+<tr class="even">
+<td align="left">stringr</td>
+<td align="left">1.1.0</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">tibble</td>
+<td align="left">1.2</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="even">
+<td align="left">tidyr</td>
+<td align="left">0.6.0</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="odd">
+<td align="left">viridis</td>
+<td align="left">0.3.4</td>
+<td align="left">CRAN (R 3.3.0)</td>
+</tr>
+<tr class="even">
+<td align="left">xml2</td>
+<td align="left">1.0.0.9001</td>
+<td align="left">Github (<a href="mailto:hadley/xml2@86f8939">hadley/xml2@86f8939</a>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+
+    
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="../../post/hello-world/"
+                class="button big previous">Hello World</a></li>
+    
+
+    
+        <li><a href="../../post/iot_flex_dashboard/"
+                class="button big next">我が家のあたたかみ、明るさ、そして生活費についてflex dashboardを使って確認できるようになりました</a></li>
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/amazon_wish_list\/';
+    var disqus_title = '人は贈り物に何を求めているのか: AmazonのWishlistから見えてくるもの';
+    var disqus_url = '\/post\/amazon_wish_list\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <a href="../../" class="logo"><img src="../../img/main/logo.jpg" alt="me" /></a>
+                
+            
+            
+                <header>
+                    <h2>Sincere Pumpkin Patch</h2>
+                    <p></p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/uribo" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//foursquare.com/u_ribo" target="_blank" title="Foursquare" class="fa fa-foursquare"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/_suika" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+<li><a href="//instagram.com/u_ribo" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/ur1bo" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+<li><a href="//twitter.com/u_ribo" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+<li><a href="mailto:suika1127@gmail.com" title="Email" class="fa fa-envelope"></a></li>
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-11'>
+                                    September 11, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/tabulizer_fantastic_extract_data_from_pdf/">tabulizerパッケージによるPDF表データからのデータ取得</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-24'>
+                                    August 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/rstan_rcpp_troubles/">Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-19'>
+                                    August 19, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/mesh_code_mapping/">標準地域メッシュによる地図の塗り分け</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-09'>
+                                    August 9, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /post/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="../../categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/r/">R</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>Howdy, I&#39;m Shinya. Engineer, Data Science Enthusiast and Ecologist. This blog is my knowledge work for R that data science language. Most of my work is in the open source R code, which you can find and install on my GitHub https://github.com/uribo .</p>
+
+            <ul class="actions">
+                <li><a href="../../about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+            </ul>
+
+            <p class="copyright">&copy; suryu.me. The contents on this site are licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.<br>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="../../js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+

@@ -1,0 +1,676 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>DataCampの力を借りてR学習ページを作る</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17" />
+        
+
+
+        
+            <meta name="author" content="Shinya Uryu">
+        
+        
+            <meta name="description" content="DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。">
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="DataCampの力を借りてR学習ページを作る"/>
+<meta name="twitter:description" content="DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。"/>
+<meta name="twitter:site" content="@u_ribo"/>
+
+
+        <meta property="og:title" content="DataCampの力を借りてR学習ページを作る" />
+<meta property="og:description" content="DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/datacamp_tutorial/" />
+
+
+<meta property="og:updated_time" content="2016-09-11T09:20:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="DataCampの力を借りてR学習ページを作る">
+<meta itemprop="description" content="DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。">
+
+
+<meta itemprop="dateModified" content="2016-09-11T09:20:00&#43;00:00" />
+<meta itemprop="wordCount" content="1028">
+
+
+
+<meta itemprop="keywords" content="R," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="../../css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+
+
+
+
+
+
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="../../">Wonderful R World</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="../../post">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../categories">
+                        
+                            <i class="fa fa-list-alt">&nbsp;</i>Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../project">
+                        
+                            <i class="fa fa-diamond">&nbsp;</i>Project
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../about">
+                        
+                            <i class="fa fa-user">&nbsp;</i>About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="../../post">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../categories">
+                            <h3>
+                                
+                                    <i class="fa fa-list-alt">&nbsp;</i>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../project">
+                            <h3>
+                                
+                                    <i class="fa fa-diamond">&nbsp;</i>
+                                
+                                Project
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../about">
+                            <h3>
+                                
+                                    <i class="fa fa-user">&nbsp;</i>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/tabulizer_fantastic_extract_data_from_pdf/"><p>tabulizerパッケージによるPDF表データからのデータ取得</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/rstan_rcpp_troubles/"><p>Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/mesh_code_mapping/"><p>標準地域メッシュによる地図の塗り分け</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=%2fpost%2fdatacamp_tutorial%2f&text=DataCamp%e3%81%ae%e5%8a%9b%e3%82%92%e5%80%9f%e3%82%8a%e3%81%a6R%e5%ad%a6%e7%bf%92%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e4%bd%9c%e3%82%8b&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=%2fpost%2fdatacamp_tutorial%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fdatacamp_tutorial%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=%2fpost%2fdatacamp_tutorial%2f&title=DataCamp%e3%81%ae%e5%8a%9b%e3%82%92%e5%80%9f%e3%82%8a%e3%81%a6R%e5%ad%a6%e7%bf%92%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e4%bd%9c%e3%82%8b" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fdatacamp_tutorial%2f&title=DataCamp%e3%81%ae%e5%8a%9b%e3%82%92%e5%80%9f%e3%82%8a%e3%81%a6R%e5%ad%a6%e7%bf%92%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e4%bd%9c%e3%82%8b" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fdatacamp_tutorial%2f&title=DataCamp%e3%81%ae%e5%8a%9b%e3%82%92%e5%80%9f%e3%82%8a%e3%81%a6R%e5%ad%a6%e7%bf%92%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e4%bd%9c%e3%82%8b" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fdatacamp_tutorial%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h1>
+            
+        
+        
+            <p>DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。</p>
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-09-11'>
+            September 11, 2016</time>
+        <span class="author">Shinya Uryu</span>
+        
+            <p>3 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+
+    
+
+    <div id="content">
+
+
+<script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
+<p>R言語を取り扱うオンライン学習系サービスの中でも、<a href="https://www.datacamp.com/">DataCamp</a>は他のオンライン学習系サービスと比べて少し頭が抜けている感じがある。それは個人的には<a href="https://github.com/datacamp/datacamp-light">datacamp-light</a>と呼ばれる独自のシステムによるRあるいはPythonコードの実践を、動画を見た直後、オンラインで実行することができるという点が大きいように思う。</p>
+<p>そんなDataCampであるが、datacamp-lightをRMarkdown上でも利用可能にする<strong><code>{tutorial}</code></strong>パッケージを<a href="https://github.com/datacamp/tutorial">開発している</a>。 これを利用すると誰もがDataCampのような、利用者にコードを書いてもらってインタラクティブに解答のチェックを行うというシステムを構築できるようになる。今回のように個人ブログに埋め込んだり、Shinyのアプリケーションとして利用したりBookdownの中で利用できたり（検証はしていない）して夢が広がりそうなパッケージなので早速試してみたい。パッケージはすでにCRANに登録されているのでインストールは簡単。</p>
+<pre class="r"><code>install.packages(&quot;tutorial&quot;)</code></pre>
+<p>RMarkdown上でdatacamp-lightを利用するにはチャンクコードで次のような宣言をしておく必要がある。</p>
+<pre><code>```{r include = FALSE}
+tutorial::go_interactive()
+```</code></pre>
+<p>datacamp-lightは、RMarkdown中のチャンクコードの引数を利用してdatacamp-light形式の記述を行うことで機能する。重要なのは引数<em>ex</em>と引数<em>type</em>の２つだ。</p>
+<p>引数<em>ex</em>は問題を識別するためのIDのようなもので、問題設定のコードとヒント、解答用コードのチャンク間で統一したものを利用する必要がある。<em>type</em>引数には<code>pre-exercise-code</code>、<code>sample-code</code>、<code>solution</code>、<code>hint</code>、<code>sct</code>を指定できる。これらの値はそれぞれ、問題の内部で利用したいRパッケージやオブジェクト、問題の画面に出力されるコード、正解用のチャンク、ヒント、正解チェックとエラーハンドリングとして利用される。肝になるのが<em>type</em>=<code>sct</code>を指定した時のコードで、ユーザーが記述した回答に対する挙動を指定する。ここではコードテストとして<a href="https://github.com/datacamp/testwhat"><strong><code>{testwhat}</code></strong></a>の関数を通じて実行される。</p>
+<p>まだ使い方を覚えたわけではないが、とりあえず試してみた結果で問題を作ってみた。</p>
+<div id="-" class="section level3">
+<h3>問題１: ホクソエムに含まれないものを選べ</h3>
+<div data-datacamp-exercise="" data-height="300" data-encoded="true">
+eyJsYW5ndWFnZSI6InIiLCJwcmVfZXhlcmNpc2VfY29kZSI6ImhveG9tIDwtIGMoXCJob3hvLW1cIiwgXCJob3hvLW1vbmFnaVwiLCBcImhveG8tdW1cIiwgXCJIYWxleSBXaWNoYW1cIiwgXCJob3hvLXVyaVwiKSIsInNhbXBsZSI6IiMgQ2hvb3NlIHRob3NlIHRoYXQgYXJlIG5vdCAnSE9YTy1NJ1xuaG94b20gPC0gYyhcImhveG8tbVwiLCBcImhveG8tbW9uYWdpXCIsIFwiaG94by11bVwiLCBcIkhhbGV5IFdpY2hhbVwiLCBcImhveG8tdXJpXCIpIiwic29sdXRpb24iOiJob3hvbVs0XSIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiaG94b21bNF1cIiwgaW5jb3JyZWN0X21zZyA9IFwiSGUgaXMgR1JFQVQgYSBtZW1iZXIuXCIpXG5zdWNjZXNzX21zZyhcIkdyZWF0IVwiKSJ9
+</div>
+</div>
+<div id="-dplyriris" class="section level3">
+<h3>問題２: dplyrパッケージの関数を利用しirisデータを操作せよ</h3>
+<div data-datacamp-exercise="" data-height="300" data-encoded="true">
+eyJsYW5ndWFnZSI6InIiLCJwcmVfZXhlcmNpc2VfY29kZSI6ImxpYnJhcnkoZHBseXIpXG5cbmFucyA8LSBpcmlzICU+JSBmaWx0ZXIoU3BlY2llcyA9PSBcInNldG9zYVwiKSAlPiUgXG4gIHN1bW1hcmlzZV9pZihpcy5udW1lcmljLCBtZWFuKSIsInNhbXBsZSI6IiMgbG9hZCBkcGx5ciBsaWJyYXJ5XG5saWJyYXJ5KGRwbHlyKVxuXG4jIFNlbGVjdCBpcmlzIHNldG9zYSBhbmQgY2FsY3VsYXRlIG1lYW4gdmFsdWUgZm9yIGFsbCB2YXJpYWJsZXNcbnJlcyA8LSBpcmlzICU+JSBmaWx0ZXIoKSAlPiUgXG4gIHN1bW1hcmlzZV9pZigpXG5cbiMgUHJpbnQgcmVzdWx0Iiwic29sdXRpb24iOiJsaWJyYXJ5KGRwbHlyKVxuXG5yZXMgPC0gaXJpcyAlPiUgZmlsdGVyKFNwZWNpZXMgPT0gXCJzZXRvc2FcIikgJT4lIFxuICBzdW1tYXJpc2VfaWYoaXMubnVtZXJpYywgbWVhbilcblxucHJpbnQocmVzKSIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiYW5zXCIsIGluY29ycmVjdF9tc2cgPSBcIkZBTFNFXCIpXG5zdWNjZXNzX21zZyhcIkdyZWF0IVwiKSIsImhpbnQiOiJDaGVjayBpcmlzIGRhdGFzZXRzIHZhcmlhYmxlIHR5cGVzLiJ9
+</div>
+<p>マスターできれば楽しい学習サイトを作成できそうだし、学校などでのR講習にも使えそうだ。本気で取り組む場合はDataCampの<a href="https://github.com/datacamp/courses-intro-to-r">R入門で使われているコード</a>を参考にしてみるのが良さそう（<strong><code>{tutorial}</code></strong>を利用したRMarkdownファイルがある）。</p>
+</div>
+
+
+
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+
+    
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="../../post/tabulizer_fantastic_extract_data_from_pdf/"
+                class="button big previous">tabulizerパッケージによるPDF表データからのデータ取得</a></li>
+    
+
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/datacamp_tutorial\/';
+    var disqus_title = 'DataCampの力を借りてR学習ページを作る';
+    var disqus_url = '\/post\/datacamp_tutorial\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <a href="../../" class="logo"><img src="../../img/main/logo.jpg" alt="me" /></a>
+                
+            
+            
+                <header>
+                    <h2>Sincere Pumpkin Patch</h2>
+                    <p></p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/uribo" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//foursquare.com/u_ribo" target="_blank" title="Foursquare" class="fa fa-foursquare"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/_suika" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+<li><a href="//instagram.com/u_ribo" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/ur1bo" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+<li><a href="//twitter.com/u_ribo" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+<li><a href="mailto:suika1127@gmail.com" title="Email" class="fa fa-envelope"></a></li>
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-11'>
+                                    September 11, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/tabulizer_fantastic_extract_data_from_pdf/">tabulizerパッケージによるPDF表データからのデータ取得</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-24'>
+                                    August 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/rstan_rcpp_troubles/">Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-19'>
+                                    August 19, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/mesh_code_mapping/">標準地域メッシュによる地図の塗り分け</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-09'>
+                                    August 9, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /post/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="../../categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/r/">R</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>Howdy, I&#39;m Shinya. Engineer, Data Science Enthusiast and Ecologist. This blog is my knowledge work for R that data science language. Most of my work is in the open source R code, which you can find and install on my GitHub https://github.com/uribo .</p>
+
+            <ul class="actions">
+                <li><a href="../../about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+            </ul>
+
+            <p class="copyright">&copy; suryu.me. The contents on this site are licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.<br>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="../../js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+

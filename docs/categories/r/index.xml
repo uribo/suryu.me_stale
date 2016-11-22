@@ -1,68 +1,89 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>R on suryu.me</title>
-    <link>/categories/r/</link>
-    <description>Recent content in R on suryu.me</description>
+    <title>suryu.me</title>
+    <link>/categories/r/index.xml</link>
+    <description>Recent content on suryu.me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Sat, 19 Nov 2016 06:30:00 +0000</lastBuildDate>
     <atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Hello World</title>
       <link>/post/hello-world/</link>
-      <pubDate>Sat, 19 Nov 2016 06:30:00 +0000</pubDate>
+      <pubDate>Fri, 10 Jun 2016 06:30:00 +0000</pubDate>
       
       <guid>/post/hello-world/</guid>
       <description>&lt;!-- BLOGDOWN-BODY-BEFORE
 
 /BLOGDOWN-BODY-BEFORE --&gt;
 
-&lt;div id=&#34;r-markdown&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;R Markdown&lt;/h1&gt;
-&lt;p&gt;This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see &lt;a href=&#34;http://rmarkdown.rstudio.com&#34; class=&#34;uri&#34;&gt;http://rmarkdown.rstudio.com&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;You can embed an R code chunk like this:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;summary(cars)
-##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00
-fit &amp;lt;- lm(dist ~ speed, data = cars)
-fit
-## 
-## Call:
-## lm(formula = dist ~ speed, data = cars)
-## 
-## Coefficients:
-## (Intercept)        speed  
-##     -17.579        3.932&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(remoji)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これまで「はてなブログ」でちまちまと駄文を&lt;a href=&#34;http://uribo.hatenablog.com&#34;&gt;書き連ねていた&lt;/a&gt;わけだけど、ふと思い立ってこちらに引っ越すことにした。このサイトはR Markdownの&lt;a href=&#34;http://rmarkdown.rstudio.com/rmarkdown_websites.html&#34;&gt;ウェブサイト構築機能&lt;/a&gt;を使って作られている。その特徴としてページを作成する際のもとになっているのはR Markdownファイルとなっている。&lt;/p&gt;
+&lt;p&gt;何ヶ月か前からブログを移行する気持ちがあって着々と準備を進めていたのだけど公開までに時間がかかった。というのも、他の進捗がイマイチだったこともあってなんだか遊びっぽいことに注力してしまうのはアレな感じがあったからだ。といいつつ結局進捗よりもこちらが先になってしまった。それは反省。&lt;/p&gt;
+&lt;div id=&#34;r-markdown-websites&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;✏️ はてなブログからR Markdown Websitesへ&lt;/h2&gt;
+&lt;p&gt;引越しの理由について書いておきたい。はてなブログの良さはあるのだけど、次にあげるような理由があったので引っ越し先を検討していた。要約すると&lt;span class=&#34;hlt_bf&#34;&gt;「Rは最高！」というのを伝えるのに最適な環境を用意したかった&lt;/span&gt;のだ。&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;Rmdからmarkdownを生成してコピー＆ペーストでページを作成するのが面倒。（はてなAPIを使ってラッパーパッケージでも作れば良かったのかもしれないが）&lt;/li&gt;
+&lt;li&gt;htmlwidgetsを埋め込めない（はてなブログでは画像で対応していた）&lt;/li&gt;
+&lt;li&gt;公開する資料やコードが増えてきた&lt;/li&gt;
+&lt;li&gt;海外Rブロガーを見ていると独自ドメインでやっている人をちょいちょい見かけるのでそういう人たちへの憧れ&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;私自身が、Rを好きになってRに慣れていけた理由として、Rでもこんなことができる！という驚きによるものだったので、このウェブサイトによってRの魅力を伝えやすくなっているのではないかと期待する。&lt;/p&gt;
+&lt;p&gt;きっちりとしたブログサービスのはてなブログから移行した代わりに失ったものもいろいろあると思うが、まあ自由にやっていけるのは気楽な気がしているので今は良い。&lt;/p&gt;
+&lt;div id=&#34;r-markdown-websites&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;👍 R Markdown Websitesの良いところ&lt;/h3&gt;
+&lt;p&gt;R Markdown Websitesを使えば、Rmdを元にウェブサイトの構築が簡単に行える。それはそれで別に記事を書きたいので簡単に述べておくと、サイトの構造を&lt;code&gt;_site.yml&lt;/code&gt;および&lt;code&gt;_navbar.yml&lt;/code&gt;に書いておき、Rmd形式でページを書いた後に次のコードを実行するだけでhtmlファイルが生成される。R Markdownを使ったウェブサイト構築の特徴ともいえるのだが、このサイトでもページとしてのURLに階層性はほとんどなく、ほぼすべてのページがトップディレクトリ直下に置かれている。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# ディレクトリ全体のRmdファイルを対象にレンダー
+rmarkdown::render_site()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;もちろん、個々のRmdをレンダーしても良くって、その際はいつものRStudioのKnitボタンを押せば良い。&lt;/p&gt;
+&lt;p&gt;個人的には下記のようにhtmlwidgetsをそのまま表示できるのがとても嬉しい 😄。 &lt;strong&gt;&lt;code&gt;{leaflet}&lt;/code&gt;&lt;/strong&gt;や &lt;strong&gt;&lt;code&gt;{highcharter}&lt;/code&gt;&lt;/strong&gt;だって表示させることができる。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(leaflet)
+leaflet(width = 600, height = 400) %&amp;gt;% addTiles() %&amp;gt;% 
+  setView(lng = 135.0, lat = 38.0, zoom = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;htmlwidget-1eafd2efdc6cb805adc5&#34; style=&#34;width:600px;height:400px;&#34; class=&#34;leaflet html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1eafd2efdc6cb805adc5&#34;&gt;{&#34;x&#34;:{&#34;options&#34;:{&#34;crs&#34;:{&#34;crsClass&#34;:&#34;L.CRS.EPSG3857&#34;,&#34;code&#34;:null,&#34;proj4def&#34;:null,&#34;projectedBounds&#34;:null,&#34;options&#34;:{}}},&#34;calls&#34;:[{&#34;method&#34;:&#34;addTiles&#34;,&#34;args&#34;:[&#34;http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&#34;,null,null,{&#34;minZoom&#34;:0,&#34;maxZoom&#34;:18,&#34;maxNativeZoom&#34;:null,&#34;tileSize&#34;:256,&#34;subdomains&#34;:&#34;abc&#34;,&#34;errorTileUrl&#34;:&#34;&#34;,&#34;tms&#34;:false,&#34;continuousWorld&#34;:false,&#34;noWrap&#34;:false,&#34;zoomOffset&#34;:0,&#34;zoomReverse&#34;:false,&#34;opacity&#34;:1,&#34;zIndex&#34;:null,&#34;unloadInvisibleTiles&#34;:null,&#34;updateWhenIdle&#34;:null,&#34;detectRetina&#34;:false,&#34;reuseTiles&#34;:false,&#34;attribution&#34;:&#34;&amp;copy; &lt;a href=\&#34;http://openstreetmap.org\&#34;&gt;OpenStreetMap\u003c/a&gt; contributors, &lt;a href=\&#34;http://creativecommons.org/licenses/by-sa/2.0/\&#34;&gt;CC-BY-SA\u003c/a&gt;&#34;}]}],&#34;setView&#34;:[[38,135],3,[]]},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(highcharter)
+data(&amp;quot;favorite_bars&amp;quot;)
+data(&amp;quot;favorite_pies&amp;quot;)
+
+hc &amp;lt;- highchart() %&amp;gt;% 
+  hc_chart(type = &amp;quot;column&amp;quot;, inverted = TRUE) %&amp;gt;% 
+  hc_title(text = &amp;quot;A highcharter chart&amp;quot;) %&amp;gt;% 
+  hc_xAxis(categories = 2012:2016) %&amp;gt;% 
+  hc_yAxis(opposite = TRUE, showFirstLabel = FALSE,
+           showLastLabel = FALSE) %&amp;gt;% 
+  hc_add_series(data = c(3900,  4200,  5700,  8500, 11900),
+                name = &amp;quot;Downloads&amp;quot;,
+                inverted = FALSE) %&amp;gt;% 
+  hc_legend(layout = &amp;quot;vertical&amp;quot;)
+
+hc&lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
-&lt;div id=&#34;including-plots&#34; class=&#34;section level1&#34;&gt;
-&lt;h1&gt;Including Plots&lt;/h1&gt;
-&lt;p&gt;You can also embed plots. See Figure &lt;a href=&#34;#fig:pie&#34;&gt;1&lt;/a&gt; for example:&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;par(mar = c(0, 1, 0, 1))
-pie(
-  c(280, 60, 20),
-  c(&amp;#39;Sky&amp;#39;, &amp;#39;Sunny side of pyramid&amp;#39;, &amp;#39;Shady side of pyramid&amp;#39;),
-  col = c(&amp;#39;#0292D8&amp;#39;, &amp;#39;#F7EA39&amp;#39;, &amp;#39;#C4B632&amp;#39;),
-  init.angle = -50, border = NA
-)&lt;/code&gt;&lt;/pre&gt;
-&lt;div class=&#34;figure&#34;&gt;&lt;span id=&#34;fig:pie&#34;&gt;&lt;/span&gt;
-&lt;img src=&#34;#####../content/post/hello-world_files/figure-html/pie-1.png&#34; alt=&#34;A fancy pie chart.&#34; width=&#34;672&#34; /&gt;
-&lt;p class=&#34;caption&#34;&gt;
-Figure 1: A fancy pie chart.
-&lt;/p&gt;
 &lt;/div&gt;
+&lt;div class=&#34;section level2&#34;&gt;
+&lt;h2&gt;🏡 一人暮らしの方&lt;/h2&gt;
+&lt;p&gt;そして、ついでというか無関係な話題になるけど、現実世界の自分も住まいを変えた。今はトーキョーで大学生時代以来の一人暮らしをしている。というかその前段階として働くようになった。&lt;/p&gt;
+&lt;p&gt;５月の頭に引越しをしたので、一人暮らしを始めて一ヶ月が経った。最初は冷蔵庫も洗濯機も物干し竿もなくてアレだったけど、今は随分と生活に必要なものが揃ってきた。 部屋にはパソコンと椅子、本くらいしか持ってくるものがなくて、ベッドやらは新調した。少しずつものを増やして&lt;del&gt;いきたい&lt;/del&gt;毎週のようにAmazonから何かが届いていたが、だいぶ落ち着いてきた気がする。&lt;/p&gt;
+&lt;p&gt;６月に入り、2016年も折り返し地点に来ようとしている。進捗は…なわけだけど、ここで気持ちを整理した（気がする）。最近は特にアウトプットの機会が減ってきているような気がしているので、進捗を含めて努力していきたい。&lt;/p&gt;
+&lt;p&gt;Enjoy :)&lt;/p&gt;
 &lt;/div&gt;
 
 
 
 &lt;!-- BLOGDOWN-HEAD
 
+&lt;script src=&#34;#####../content/post/hello-world_files/htmlwidgets-0.8/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;#####../content/post/hello-world_files/jquery-1.12.4/jquery.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;#####../content/post/hello-world_files/leaflet-0.7.7/leaflet.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;#####../content/post/hello-world_files/leaflet-0.7.7/leaflet.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;#####../content/post/hello-world_files/leafletfix-1.0.0/leafletfix.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;link href=&#34;#####../content/post/hello-world_files/leaflet-label-0.2.2/leaflet.label.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;#####../content/post/hello-world_files/leaflet-label-0.2.2/leaflet.label.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;#####../content/post/hello-world_files/Proj4Leaflet-0.7.2/proj4-compressed.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;#####../content/post/hello-world_files/Proj4Leaflet-0.7.2/proj4leaflet.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;#####../content/post/hello-world_files/leaflet-binding-1.0.2.9006/leaflet.js&#34;&gt;&lt;/script&gt;
 
 
 

@@ -10,7 +10,7 @@
 
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="generator" content="Hugo 0.16" />
+        <meta name="generator" content="Hugo 0.17" />
         
 
 
@@ -28,7 +28,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-11-19T06:30:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-09-11T09:20:00&#43;00:00"/>
 
 
 
@@ -215,7 +215,19 @@
 
                 
                     <li>
-                        <a href="./post/hello-world/"><p>Hello World</p></a>
+                        <a href="./post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="./post/tabulizer_fantastic_extract_data_from_pdf/"><p>tabulizerパッケージによるPDF表データからのデータ取得</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="./post/rstan_rcpp_troubles/"><p>Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="./post/mesh_code_mapping/"><p>標準地域メッシュによる地図の塗り分け</p></a>
                     </li>
                 
             </ul>
@@ -232,8 +244,10 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/hello-world/">Hello World</a></h2>
+            <h2><a href="./post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h2>
         
+        
+            <p>DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。</p>
         
     </div>
     <div class="meta">
@@ -242,11 +256,11 @@
         
 
         <time class="published"
-            datetime='2016-11-19'>
-            November 19, 2016</time>
+            datetime='2016-09-11'>
+            September 11, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>1 minute read</p>
+            <p>3 minute read</p>
         
         
     </div>
@@ -259,44 +273,29 @@
     <div id="content">
 
 
-<div id="r-markdown" class="section level1">
-<h1>R Markdown</h1>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)
-##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00
-fit &lt;- lm(dist ~ speed, data = cars)
-fit
-## 
-## Call:
-## lm(formula = dist ~ speed, data = cars)
-## 
-## Coefficients:
-## (Intercept)        speed  
-##     -17.579        3.932</code></pre>
+<script src="https://cdn.datacamp.com/datacamp-light-latest.min.js"></script>
+<p>R言語を取り扱うオンライン学習系サービスの中でも、<a href="https://www.datacamp.com/">DataCamp</a>は他のオンライン学習系サービスと比べて少し頭が抜けている感じがある。それは個人的には<a href="https://github.com/datacamp/datacamp-light">datacamp-light</a>と呼ばれる独自のシステムによるRあるいはPythonコードの実践を、動画を見た直後、オンラインで実行することができるという点が大きいように思う。</p>
+<p>そんなDataCampであるが、datacamp-lightをRMarkdown上でも利用可能にする<strong><code>{tutorial}</code></strong>パッケージを<a href="https://github.com/datacamp/tutorial">開発している</a>。 これを利用すると誰もがDataCampのような、利用者にコードを書いてもらってインタラクティブに解答のチェックを行うというシステムを構築できるようになる。今回のように個人ブログに埋め込んだり、Shinyのアプリケーションとして利用したりBookdownの中で利用できたり（検証はしていない）して夢が広がりそうなパッケージなので早速試してみたい。パッケージはすでにCRANに登録されているのでインストールは簡単。</p>
+<pre class="r"><code>install.packages(&quot;tutorial&quot;)</code></pre>
+<p>RMarkdown上でdatacamp-lightを利用するにはチャンクコードで次のような宣言をしておく必要がある。</p>
+<pre><code>```{r include = FALSE}
+tutorial::go_interactive()
+```</code></pre>
+<p>datacamp-lightは、RMarkdown中のチャンクコードの引数を利用してdatacamp-light形式の記述を行うことで機能する。重要なのは引数<em>ex</em>と引数<em>type</em>の２つだ。</p>
+<p>引数<em>ex</em>は問題を識別するためのIDのようなもので、問題設定のコードとヒント、解答用コードのチャンク間で統一したものを利用する必要がある。<em>type</em>引数には<code>pre-exercise-code</code>、<code>sample-code</code>、<code>solution</code>、<code>hint</code>、<code>sct</code>を指定できる。これらの値はそれぞれ、問題の内部で利用したいRパッケージやオブジェクト、問題の画面に出力されるコード、正解用のチャンク、ヒント、正解チェックとエラーハンドリングとして利用される。肝になるのが<em>type</em>=<code>sct</code>を指定した時のコードで、ユーザーが記述した回答に対する挙動を指定する。ここではコードテストとして<a href="https://github.com/datacamp/testwhat"><strong><code>{testwhat}</code></strong></a>の関数を通じて実行される。</p>
+<p>まだ使い方を覚えたわけではないが、とりあえず試してみた結果で問題を作ってみた。</p>
+<div id="-" class="section level3">
+<h3>問題１: ホクソエムに含まれないものを選べ</h3>
+<div data-datacamp-exercise="" data-height="300" data-encoded="true">
+eyJsYW5ndWFnZSI6InIiLCJwcmVfZXhlcmNpc2VfY29kZSI6ImhveG9tIDwtIGMoXCJob3hvLW1cIiwgXCJob3hvLW1vbmFnaVwiLCBcImhveG8tdW1cIiwgXCJIYWxleSBXaWNoYW1cIiwgXCJob3hvLXVyaVwiKSIsInNhbXBsZSI6IiMgQ2hvb3NlIHRob3NlIHRoYXQgYXJlIG5vdCAnSE9YTy1NJ1xuaG94b20gPC0gYyhcImhveG8tbVwiLCBcImhveG8tbW9uYWdpXCIsIFwiaG94by11bVwiLCBcIkhhbGV5IFdpY2hhbVwiLCBcImhveG8tdXJpXCIpIiwic29sdXRpb24iOiJob3hvbVs0XSIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiaG94b21bNF1cIiwgaW5jb3JyZWN0X21zZyA9IFwiSGUgaXMgR1JFQVQgYSBtZW1iZXIuXCIpXG5zdWNjZXNzX21zZyhcIkdyZWF0IVwiKSJ9
 </div>
-<div id="including-plots" class="section level1">
-<h1>Including Plots</h1>
-<p>You can also embed plots. See Figure <a href="#fig:pie">1</a> for example:</p>
-<pre class="r"><code>par(mar = c(0, 1, 0, 1))
-pie(
-  c(280, 60, 20),
-  c(&#39;Sky&#39;, &#39;Sunny side of pyramid&#39;, &#39;Shady side of pyramid&#39;),
-  col = c(&#39;#0292D8&#39;, &#39;#F7EA39&#39;, &#39;#C4B632&#39;),
-  init.angle = -50, border = NA
-)</code></pre>
-<div class="figure"><span id="fig:pie"></span>
-<img src="figures/pie-1.png" alt="A fancy pie chart." width="672" />
-<p class="caption">
-Figure 1: A fancy pie chart.
-</p>
 </div>
+<div id="-dplyriris" class="section level3">
+<h3>問題２: dplyrパッケージの関数を利用しirisデータを操作せよ</h3>
+<div data-datacamp-exercise="" data-height="300" data-encoded="true">
+eyJsYW5ndWFnZSI6InIiLCJwcmVfZXhlcmNpc2VfY29kZSI6ImxpYnJhcnkoZHBseXIpXG5cbmFucyA8LSBpcmlzICU+JSBmaWx0ZXIoU3BlY2llcyA9PSBcInNldG9zYVwiKSAlPiUgXG4gIHN1bW1hcmlzZV9pZihpcy5udW1lcmljLCBtZWFuKSIsInNhbXBsZSI6IiMgbG9hZCBkcGx5ciBsaWJyYXJ5XG5saWJyYXJ5KGRwbHlyKVxuXG4jIFNlbGVjdCBpcmlzIHNldG9zYSBhbmQgY2FsY3VsYXRlIG1lYW4gdmFsdWUgZm9yIGFsbCB2YXJpYWJsZXNcbnJlcyA8LSBpcmlzICU+JSBmaWx0ZXIoKSAlPiUgXG4gIHN1bW1hcmlzZV9pZigpXG5cbiMgUHJpbnQgcmVzdWx0Iiwic29sdXRpb24iOiJsaWJyYXJ5KGRwbHlyKVxuXG5yZXMgPC0gaXJpcyAlPiUgZmlsdGVyKFNwZWNpZXMgPT0gXCJzZXRvc2FcIikgJT4lIFxuICBzdW1tYXJpc2VfaWYoaXMubnVtZXJpYywgbWVhbilcblxucHJpbnQocmVzKSIsInNjdCI6InRlc3Rfb3V0cHV0X2NvbnRhaW5zKFwiYW5zXCIsIGluY29ycmVjdF9tc2cgPSBcIkZBTFNFXCIpXG5zdWNjZXNzX21zZyhcIkdyZWF0IVwiKSIsImhpbnQiOiJDaGVjayBpcmlzIGRhdGFzZXRzIHZhcmlhYmxlIHR5cGVzLiJ9
+</div>
+<p>マスターできれば楽しい学習サイトを作成できそうだし、学校などでのR講習にも使えそうだ。本気で取り組む場合はDataCampの<a href="https://github.com/datacamp/courses-intro-to-r">R入門で使われているコード</a>を参考にしてみるのが良さそう（<strong><code>{tutorial}</code></strong>を利用したRMarkdownファイルがある）。</p>
 </div>
 
 
@@ -307,38 +306,17 @@ Figure 1: A fancy pie chart.
     <footer>
         <ul class="stats">
     
-        
-
-        
-        
-            <li>
-                
-                
-                    
-
-                    
-
-                    
-                        <i class="fa fa-list-alt">&nbsp;</i>
-                    
-
-                    
-                        Category
-                    
-                
-            </li>
-        
-    
 
     
-    
-        <li><a href='./categoriesr'>R</a></li>
     
 </ul>
 
     </footer>
 </article>
 <ul class="actions pagination">
+    
+        <li><a href="./post/tabulizer_fantastic_extract_data_from_pdf/"
+                class="button big previous">tabulizerパッケージによるPDF表データからのデータ取得</a></li>
     
 
     
@@ -351,9 +329,9 @@ Figure 1: A fancy pie chart.
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/hello-world\/';
-    var disqus_title = 'Hello World';
-    var disqus_url = '\/post\/hello-world\/';
+    var disqus_identifier = '\/post\/datacamp_tutorial\/';
+    var disqus_title = 'DataCampの力を借りてR学習ページを作る';
+    var disqus_url = '\/post\/datacamp_tutorial\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -377,43 +355,43 @@ Figure 1: A fancy pie chart.
             
 
 
-<li><a href="//twitter.com/share?url=%2fpost%2fhello-world%2f&text=Hello%20World&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=%2fpost%2fdatacamp_tutorial%2f&text=DataCamp%e3%81%ae%e5%8a%9b%e3%82%92%e5%80%9f%e3%82%8a%e3%81%a6R%e5%ad%a6%e7%bf%92%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e4%bd%9c%e3%82%8b&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=%2fpost%2fhello-world%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=%2fpost%2fdatacamp_tutorial%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fhello-world%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fdatacamp_tutorial%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=%2fpost%2fhello-world%2f&title=Hello%20World" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=%2fpost%2fdatacamp_tutorial%2f&title=DataCamp%e3%81%ae%e5%8a%9b%e3%82%92%e5%80%9f%e3%82%8a%e3%81%a6R%e5%ad%a6%e7%bf%92%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e4%bd%9c%e3%82%8b" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fhello-world%2f&title=Hello%20World" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fdatacamp_tutorial%2f&title=DataCamp%e3%81%ae%e5%8a%9b%e3%82%92%e5%80%9f%e3%82%8a%e3%81%a6R%e5%ad%a6%e7%bf%92%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e4%bd%9c%e3%82%8b" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fhello-world%2f&title=Hello%20World" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fdatacamp_tutorial%2f&title=DataCamp%e3%81%ae%e5%8a%9b%e3%82%92%e5%80%9f%e3%82%8a%e3%81%a6R%e5%ad%a6%e7%bf%92%e3%83%9a%e3%83%bc%e3%82%b8%e3%82%92%e4%bd%9c%e3%82%8b" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fhello-world%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fdatacamp_tutorial%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -535,18 +513,70 @@ Figure 1: A fancy pie chart.
                     <li>
                         <article>
                             <header>
-                                <h3><a href="./post/hello-world/">Hello World</a></h3>
+                                <h3><a href="./post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
                                 
                                     
                                 
                                 <time class="published" datetime=
-                                    '2016-11-19'>
-                                    November 19, 2016</time>
+                                    '2016-09-11'>
+                                    September 11, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="./post/tabulizer_fantastic_extract_data_from_pdf/">tabulizerパッケージによるPDF表データからのデータ取得</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-24'>
+                                    August 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="./post/rstan_rcpp_troubles/">Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-19'>
+                                    August 19, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="./post/mesh_code_mapping/">標準地域メッシュによる地図の塗り分け</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-09'>
+                                    August 9, 2016</time>
                             </header>
                         </article>
                     </li>
                 
 
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /post/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
                 
             </ul>
         </section>
@@ -601,7 +631,7 @@ Figure 1: A fancy pie chart.
                 
             </ul>
 
-            <p class="copyright">&copy; suryu.me. Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+            <p class="copyright">&copy; suryu.me. The contents on this site are licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.<br>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
         </section>
 
 </section>
