@@ -18,6 +18,7 @@
 
 /BLOGDOWN-BODY-BEFORE --&gt;
 
+&lt;p&gt;&lt;img src=&#34;../../img/161124_datapaste.gif&#34; style=&#34;display: block; margin: auto;&#34;&gt;&lt;/p&gt;
 &lt;p&gt;ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり&lt;strong&gt;&lt;code&gt;{rvest}&lt;/code&gt;&lt;/strong&gt;なりでスクレイピングすれば良いのだけど、もっと手軽に済ませたい。そんな時に役立つ2つのパッケージを紹介する。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;&lt;code&gt;{clipr}&lt;/code&gt;&lt;/strong&gt;は&lt;a href=&#34;https://cran.r-project.org/package=clipr&#34;&gt;CRANに登録されている&lt;/a&gt;が、&lt;strong&gt;&lt;code&gt;{datapasta}&lt;/code&gt;&lt;/strong&gt;の方はGitHubから開発版をインストールする。&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;clipr&amp;quot;)
@@ -48,10 +49,9 @@ write_clip(c(&amp;quot;この文字列はcliprから&amp;quot;, &amp;quot;読み
 &lt;pre&gt;&lt;code&gt;ホクソエム, ホクソモナギ, ホクそうむ&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;これをコピーして&lt;code&gt;vector_paste()&lt;/code&gt;を実行すると&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;c(&amp;quot;ホクソエム&amp;quot;,&amp;quot; ホクソモナギ&amp;quot;,&amp;quot; ホクそうむ&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;が出力される。また、 &lt;a href=&#34;https://ja.wikipedia.org/wiki/県&#34; class=&#34;uri&#34;&gt;https://ja.wikipedia.org/wiki/県&lt;/a&gt; のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして&lt;code&gt;tribble_paste()&lt;/code&gt;を実行する。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;../../img/161124_datapaste.gif&#34; style=&#34;display: block; margin: auto;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;が出力される。また、 &lt;a href=&#34;https://ja.wikipedia.org/wiki/県&#34; class=&#34;uri&#34;&gt;https://ja.wikipedia.org/wiki/県&lt;/a&gt; のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして&lt;code&gt;tribble_paste()&lt;/code&gt;を実行すると&lt;code&gt;tibble()&lt;/code&gt;にデータが与えられた状態となる。&lt;/p&gt;
 &lt;p&gt;素晴らしい。&lt;/p&gt;
-&lt;p&gt;RStudioを利用していれば、アドインとして&lt;strong&gt;&lt;code&gt;{datapaste}&lt;/code&gt;&lt;/strong&gt;の関数をショートカットで実行できるので捗る。&lt;/p&gt;
+&lt;p&gt;RStudioを利用していれば、アドインとして&lt;strong&gt;&lt;code&gt;{datapaste}&lt;/code&gt;&lt;/strong&gt;の関数をショートカットで実行できるのでさらに捗る。&lt;/p&gt;
 &lt;/div&gt;
 
 

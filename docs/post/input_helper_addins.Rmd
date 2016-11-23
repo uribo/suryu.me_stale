@@ -3,6 +3,8 @@ title: "clipr, datapasta: データ入力を支えるパッケージ"
 author: "Shinya Uryu"
 date: 2016-11-24T06:30:00
 categories: ["utility", "package"]
+description:
+    ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。
 output:
   html_document:
     toc: true
@@ -16,6 +18,8 @@ output:
 
 ```{r setup, child = "../../_blog_post_declare.Rmd"}
 ```
+
+<img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;">
 
 ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり**`{rvest}`**なりでスクレイピングすれば良いのだけど、もっと手軽に済ませたい。そんな時に役立つ2つのパッケージを紹介する。
 
@@ -72,10 +76,8 @@ library(datapasta)
 c("ホクソエム"," ホクソモナギ"," ホクそうむ")
 ```
 
-が出力される。また、 <https://ja.wikipedia.org/wiki/県> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして`tribble_paste()`を実行する。
-
-<img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;">
+が出力される。また、 <https://ja.wikipedia.org/wiki/県> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして`tribble_paste()`を実行すると`tibble()`にデータが与えられた状態となる。
 
 素晴らしい。
 
-RStudioを利用していれば、アドインとして**`{datapaste}`**の関数をショートカットで実行できるので捗る。
+RStudioを利用していれば、アドインとして**`{datapaste}`**の関数をショートカットで実行できるのでさらに捗る。

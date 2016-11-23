@@ -18,9 +18,7 @@
             <meta name="author" content="Shinya Uryu">
         
         
-            
-                <meta name="description" content="Tips for R and Python">
-            
+            <meta name="description" content="ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。">
         
 
         
@@ -30,13 +28,13 @@
 
 
 <meta name="twitter:title" content="clipr, datapasta: データ入力を支えるパッケージ"/>
-<meta name="twitter:description" content="ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり{rvest}なりでスクレイピングすれば良"/>
+<meta name="twitter:description" content="ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。"/>
 <meta name="twitter:site" content="@u_ribo"/>
 
 
         <meta name="twitter:image" content="https://suryu.me/img/banner.png"/>
         <meta property="og:title" content="clipr, datapasta: データ入力を支えるパッケージ" />
-<meta property="og:description" content="ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり{rvest}なりでスクレイピングすれば良" />
+<meta property="og:description" content="ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/input_helper_addins/" />
 
@@ -54,11 +52,11 @@
 
         
 <meta itemprop="name" content="clipr, datapasta: データ入力を支えるパッケージ">
-<meta itemprop="description" content="ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり{rvest}なりでスクレイピングすれば良">
+<meta itemprop="description" content="ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。">
 
 
 <meta itemprop="dateModified" content="2016-11-24T06:30:00&#43;00:00" />
-<meta itemprop="wordCount" content="1059">
+<meta itemprop="wordCount" content="1086">
 
 
 
@@ -324,6 +322,8 @@
             
         
         
+            <p>ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。</p>
+        
     </div>
     <div class="meta">
         
@@ -348,6 +348,7 @@
     <div id="content">
 
 
+<p><img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;"></p>
 <p>ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり<strong><code>{rvest}</code></strong>なりでスクレイピングすれば良いのだけど、もっと手軽に済ませたい。そんな時に役立つ2つのパッケージを紹介する。</p>
 <p><strong><code>{clipr}</code></strong>は<a href="https://cran.r-project.org/package=clipr">CRANに登録されている</a>が、<strong><code>{datapasta}</code></strong>の方はGitHubから開発版をインストールする。</p>
 <pre class="r"><code>install.packages(&quot;clipr&quot;)
@@ -378,10 +379,9 @@ write_clip(c(&quot;この文字列はcliprから&quot;, &quot;読み込まれた
 <pre><code>ホクソエム, ホクソモナギ, ホクそうむ</code></pre>
 <p>これをコピーして<code>vector_paste()</code>を実行すると</p>
 <pre class="r"><code>c(&quot;ホクソエム&quot;,&quot; ホクソモナギ&quot;,&quot; ホクそうむ&quot;)</code></pre>
-<p>が出力される。また、 <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして<code>tribble_paste()</code>を実行する。</p>
-<p><img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;"></p>
+<p>が出力される。また、 <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして<code>tribble_paste()</code>を実行すると<code>tibble()</code>にデータが与えられた状態となる。</p>
 <p>素晴らしい。</p>
-<p>RStudioを利用していれば、アドインとして<strong><code>{datapaste}</code></strong>の関数をショートカットで実行できるので捗る。</p>
+<p>RStudioを利用していれば、アドインとして<strong><code>{datapaste}</code></strong>の関数をショートカットで実行できるのでさらに捗る。</p>
 </div>
 
 

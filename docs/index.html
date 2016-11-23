@@ -248,6 +248,8 @@
             <h2><a href="./post/input_helper_addins/">clipr, datapasta: データ入力を支えるパッケージ</a></h2>
         
         
+            <p>ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。</p>
+        
     </div>
     <div class="meta">
         
@@ -272,6 +274,7 @@
     <div id="content">
 
 
+<p><img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;"></p>
 <p>ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり<strong><code>{rvest}</code></strong>なりでスクレイピングすれば良いのだけど、もっと手軽に済ませたい。そんな時に役立つ2つのパッケージを紹介する。</p>
 <p><strong><code>{clipr}</code></strong>は<a href="https://cran.r-project.org/package=clipr">CRANに登録されている</a>が、<strong><code>{datapasta}</code></strong>の方はGitHubから開発版をインストールする。</p>
 <pre class="r"><code>install.packages(&quot;clipr&quot;)
@@ -302,10 +305,9 @@ write_clip(c(&quot;この文字列はcliprから&quot;, &quot;読み込まれた
 <pre><code>ホクソエム, ホクソモナギ, ホクそうむ</code></pre>
 <p>これをコピーして<code>vector_paste()</code>を実行すると</p>
 <pre class="r"><code>c(&quot;ホクソエム&quot;,&quot; ホクソモナギ&quot;,&quot; ホクそうむ&quot;)</code></pre>
-<p>が出力される。また、 <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして<code>tribble_paste()</code>を実行する。</p>
-<p><img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;"></p>
+<p>が出力される。また、 <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして<code>tribble_paste()</code>を実行すると<code>tibble()</code>にデータが与えられた状態となる。</p>
 <p>素晴らしい。</p>
-<p>RStudioを利用していれば、アドインとして<strong><code>{datapaste}</code></strong>の関数をショートカットで実行できるので捗る。</p>
+<p>RStudioを利用していれば、アドインとして<strong><code>{datapaste}</code></strong>の関数をショートカットで実行できるのでさらに捗る。</p>
 </div>
 
 
