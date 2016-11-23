@@ -19,6 +19,7 @@ hasCJKLanguage = true
     socialAppearAtBottom = false
     # set this to the section name if section is not post
     viewMorePostLink     = "/post/"
+    default_blog_card = "/img/banner.png"
 
 # Optional Params
     categoriesByCount    = true
