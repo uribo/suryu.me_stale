@@ -29,7 +29,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-11-23T06:30:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-11-24T06:30:00&#43;00:00"/>
 
 
 
@@ -216,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/input_helper_addins/"><p>clipr, datapasta: データ入力を支えるパッケージ</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
                     </li>
                 
@@ -225,10 +229,6 @@
                 
                     <li>
                         <a href="./post/tabulizer_fantastic_extract_data_from_pdf/"><p>tabulizerパッケージによるPDF表データからのデータ取得</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/rstan_rcpp_troubles/"><p>Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</p></a>
                     </li>
                 
             </ul>
@@ -245,10 +245,8 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h2>
+            <h2><a href="./post/input_helper_addins/">clipr, datapasta: データ入力を支えるパッケージ</a></h2>
         
-        
-            <p>dplyrパッケージの現行バージョン (0.5.0)ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分けについてメモしておく。</p>
         
     </div>
     <div class="meta">
@@ -257,11 +255,11 @@
         
 
         <time class="published"
-            datetime='2016-11-23'>
-            November 23, 2016</time>
+            datetime='2016-11-24'>
+            November 24, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>4 minute read</p>
+            <p>3 minute read</p>
         
         
     </div>
@@ -274,127 +272,40 @@
     <div id="content">
 
 
-<pre class="r"><code>library(dplyr)</code></pre>
-<p><strong><code>{dplyr}</code></strong>パッケージの現行バージョン (0.5.0) ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分けについてメモしておく。</p>
-<p>簡単に整理するとこんな感じになる</p>
-<table>
-<thead>
-<tr class="header">
-<th>関数</th>
-<th>特徴</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>if_else()</code></td>
-<td><code>ifelse()</code>の拡張。欠損値に対する挙動も指定できる</td>
-</tr>
-<tr class="even">
-<td><code>case_when()</code></td>
-<td>ベクトルの各要素に対する挙動を指定。指定しない場合には欠損値として扱われるので注意</td>
-</tr>
-<tr class="odd">
-<td><code>recode()</code></td>
-<td>ベクトル内の特定の値だけを変更したいときに効果的。変換後の型に注意</td>
-</tr>
-</tbody>
-</table>
-<div id="if_else" class="section level2">
-<h2>if_else関数</h2>
-<p>ドキュメントによるとこの関数は、R標準の制御関数の一つである<code>ifelse()</code>と比べてより厳密 strict なものであるらしい。ここでの strict とはどういうことか。yutannihilation さんがこんな記事を書いてくれたのでこちらを読んでほしい。</p>
-<p><a href="http://notchained.hatenablog.com/entry/2016/11/23/112729">ifelse()は危険なのでやめてdplyr::if_else()を使いましょう</a></p>
-<p>真偽値の判定を実行するコード（xはyよりも大きい、xのクラスはzである、とか）と、真偽それぞれの状況の応答を引数に与えて実行する。またこの関数は、それだけでなくxの値が欠損値である場合についても特定の処理を実行するという特徴をもつ。欠損値に対する挙動は引数<em>missing</em>によって与える。</p>
-<pre class="r"><code>x &lt;- c(-3:3, NA)
-if_else(x &lt; 0, &quot;negative&quot;, &quot;positive&quot;, missing = &quot;missing&quot;)
-## [1] &quot;negative&quot; &quot;negative&quot; &quot;negative&quot; &quot;positive&quot; &quot;positive&quot; &quot;positive&quot;
-## [7] &quot;positive&quot; &quot;missing&quot;</code></pre>
-<p>この関数はもちろん <strong><code>{dplyr}</code></strong> の<code>mutate()</code>内で利用できる。</p>
-<pre class="r"><code>iris %&gt;% head() %&gt;% 
-  mutate(Sepal.Size = if_else(Sepal.Length &gt; 6.0, TRUE, FALSE))
-##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species Sepal.Size
-## 1          5.1         3.5          1.4         0.2  setosa      FALSE
-## 2          4.9         3.0          1.4         0.2  setosa      FALSE
-## 3          4.7         3.2          1.3         0.2  setosa      FALSE
-## 4          4.6         3.1          1.5         0.2  setosa      FALSE
-## 5          5.0         3.6          1.4         0.2  setosa      FALSE
-## 6          5.4         3.9          1.7         0.4  setosa      FALSE</code></pre>
-<p><code>if_else()</code>では真偽値の判定を入れ子にして複数の分岐を作成することもできるが、データの値を修正する場合には、次の<code>case_when()</code>を用いるのが良い。</p>
-</div>
-<div id="case_when" class="section level2">
-<h2>case_when関数</h2>
-<p>変換候補が複数あるとき、<code>if_else()</code>よりも<code>case_when()</code>を使うのが効率的だ。<code>case_when()</code>では関数名の通り、条件分岐によるベクトル内の要素の変更を行う。書き方が特殊なので慣れが必要。引数内で条件式とそれに該当する値の変更値をチルダ記号（<code>~</code>）で繋いで指定する。</p>
-<pre class="r"><code>x &lt;- c(-3:3, NA)
-case_when(
-  x &lt; 0 ~ &quot;negative&quot;,
-  x &gt; 0 ~ &quot;positive&quot;)
-## [1] &quot;negative&quot; &quot;negative&quot; &quot;negative&quot; NA         &quot;positive&quot; &quot;positive&quot;
-## [7] &quot;positive&quot; NA</code></pre>
-<p>上記のように引数に与えた複数の条件に対して値が変更されるが、気をつけないといけないのが要素の各値に対する挙動である。個々の挙動を指定しないと、条件に当てはまらない、つまり真となる条件のない要素については欠損値に置換されてしまう。先の例では元の欠損値に加え、0もNAになっている。</p>
-<p>で、これを<code>mutate()</code>の中で使うときの注意点。<code>mutate()</code>の中で関数を利用する場合、変数の参照は「<code>.$</code>」で行うということを思い出して次のようにする。</p>
-<pre class="r"><code>df.animals &lt;- tibble::frame_data(
-  ~team, ~rank,
-  &quot;mouse&quot;, 1,
-  &quot;cow&quot;, 2,
-  &quot;tiger&quot;, 3,
-  &quot;rabbit&quot;, 4
-)
+<p>ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり<strong><code>{rvest}</code></strong>なりでスクレイピングすれば良いのだけど、もっと手軽に済ませたい。そんな時に役立つ2つのパッケージを紹介する。</p>
+<p><strong><code>{clipr}</code></strong>は<a href="https://cran.r-project.org/package=clipr">CRANに登録されている</a>が、<strong><code>{datapasta}</code></strong>の方はGitHubから開発版をインストールする。</p>
+<pre class="r"><code>install.packages(&quot;clipr&quot;)
+devtools::install_github(&quot;MilesMcBain/datapasta&quot;)</code></pre>
+<div id="clipr" class="section level2">
+<h2>clipr</h2>
+<p><strong><code>{clipr}</code></strong>パッケージは現在コピーしているものの読み書きを実行する。OSごとに出力の違いが考慮されていたり、出力形式をオプションで変更できる。現在コピーしているテキストをRに出力させる<code>read_clip()</code>とRオブジェクトをコピーする<code>write_clip()</code>が主な関数となる。</p>
+<pre class="r"><code>library(clipr)
+# 現在コピーされている文字列を返す
+read_clip()
+# [1] &quot;cb &lt;- read_clip()&quot;
 
-df.animals %&gt;% 
-  mutate(
-    rank = case_when(
-      .$team == &quot;mouse&quot; ~ 3,
-      .$team == &quot;cow&quot; ~ 2,
-      .$team == &quot;tiger&quot; ~ 1,
-      .$team == &quot;rabbit&quot; ~3
-    )
-  )
-## # A tibble: 4 × 2
-##     team  rank
-##    &lt;chr&gt; &lt;dbl&gt;
-## 1  mouse     3
-## 2    cow     2
-## 3  tiger     1
-## 4 rabbit     3</code></pre>
+# write_clip を実行し、ペーストするとwrite_clipの内容が出力される
+write_clip(c(&quot;この文字列はcliprから&quot;, &quot;読み込まれた&quot;))
+# この文字列はcliprから
+# 読み込まれた</code></pre>
+<p>区切り文字を指定すればベクトルの要素として扱える。</p>
+<pre class="r"><code># breaks引数やobject.type引数を使ってコピーする内容を変更可能
+write_clip(c(&quot;この文字列はcliprから&quot;, &quot;読み込まれた&quot;), breaks = &quot;, &quot;)
+# この文字列はcliprから, 読み込まれた</code></pre>
+<p>また <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> の「現在の県と県に訳される行政区画」として記録されている表データをコピーしたあとで<code>read_clip_tbl()</code>を実行するとデータフレームが出力される。</p>
 </div>
-<div id="recode" class="section level2">
-<h2>recode</h2>
-<p>もう一つの関数、<code>recode()</code>。これはより細かいというか、個々の値に対して変換をしたいときに便利。これも引数で「対象の値 = 変換後の値」を記述する形式となる。変換するものがなければ省略して良いし、変換後の値だけを引数に与えても良い。その場合には要素の順に変換の対象としていく（この挙動がいまいち掴めない…）。</p>
-<pre class="r"><code>x &lt;- c(-3:3, NA)
-recode(x, `3` = 6L, `-3` = -8L)
-## [1] -8 -2 -1  0  1  2  6 NA
-
-# 1, 2, 3... が対象となる
-recode(x, 6L, -8L, 10L)
-## [1] -3 -2 -1  0  6 -8 10 NA</code></pre>
-<p>ベクトル内の要素は同じ型でなければいけないので、次のように整数と実数や数値ベクトルに文字列を混ぜようとすると怒られる。怒られるだけでなく、その他の値は欠損値となってしまう。</p>
-<pre class="r"><code># integerとnumericも区別されるので注意
-recode(x, `3` = 6)
-## [1] NA NA NA NA NA NA  6 NA
-recode(x, `3` = &quot;three&quot;)
-## [1] NA      NA      NA      NA      NA      NA      &quot;three&quot; NA</code></pre>
-<p>すべての要素の挙動を指定する必要はないが、指定したもの以外の値について<code>.default</code>引数を用いて一括で指定できる。</p>
-<pre class="r"><code>recode(x, `3` = &quot;three&quot;, .default = &quot;numeric&quot;)
-## [1] &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;three&quot;  
-## [8] NA</code></pre>
-<p>同様に欠損値に対しても<code>.missing</code>引数での置換を行える。</p>
-<pre class="r"><code>recode(x, `3` = &quot;three&quot;, .default = &quot;numeric&quot;, .missing = &quot;missing&quot;)
-## [1] &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;numeric&quot; &quot;three&quot;  
-## [8] &quot;missing&quot;</code></pre>
-<p>私は<code>mutate()</code>と組み合わせてこういう使い方をしばしば行う。ここでは「<code>.$</code>」を使わない</p>
-<pre class="r"><code>df.animals %&gt;% 
-  mutate(所属 = recode(team,
-                     mouse  = &quot;子&quot;,
-                     cow    = &quot;丑&quot;,
-                     tiger  = &quot;寅&quot;,
-                     rabbit = &quot;卯&quot;))
-## # A tibble: 4 × 3
-##     team  rank  所属
-##    &lt;chr&gt; &lt;dbl&gt; &lt;chr&gt;
-## 1  mouse     1    子
-## 2    cow     2    丑
-## 3  tiger     3    寅
-## 4 rabbit     4    卯</code></pre>
-<p>ベクトルをカテゴリデータにする<code>recode_factor()</code>関数もあるがここでは割愛。</p>
+<div id="datapasta" class="section level2">
+<h2>datapasta</h2>
+<p><strong><code>{datapasta}</code></strong>は先述の<strong><code>{clipr}</code></strong>に依存している。機能としては、エクセルの選択箇所を<code>c()</code>からなるベクトルで返してくれたり、適当にコピーした表をtibble形式に整形してくれたりする。</p>
+<pre class="r"><code>library(datapasta)</code></pre>
+<p>例えばウェブ上に次のような文字の羅列があるとする。</p>
+<pre><code>ホクソエム, ホクソモナギ, ホクそうむ</code></pre>
+<p>これをコピーして<code>vector_paste()</code>を実行すると</p>
+<pre class="r"><code>c(&quot;ホクソエム&quot;,&quot; ホクソモナギ&quot;,&quot; ホクそうむ&quot;)</code></pre>
+<p>が出力される。また、 <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして<code>tribble_paste()</code>を実行する。</p>
+<p><img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;"></p>
+<p>素晴らしい。</p>
+<p>RStudioを利用していれば、アドインとして<strong><code>{datapaste}</code></strong>の関数をショートカットで実行できるので捗る。</p>
 </div>
 
 
@@ -421,7 +332,7 @@ recode(x, `3` = &quot;three&quot;)
                     
 
                     
-                        Category
+                        Categories
                     
                 
             </li>
@@ -430,7 +341,9 @@ recode(x, `3` = &quot;three&quot;)
 
     
     
-        <li><a href='./categoriesdata_manipulation'>data_manipulation</a></li>
+        <li><a href='./categoriesutility'>utility</a></li>
+    
+        <li><a href='./categoriespackage'>package</a></li>
     
 </ul>
 
@@ -438,8 +351,8 @@ recode(x, `3` = &quot;three&quot;)
 </article>
 <ul class="actions pagination">
     
-        <li><a href="./post/datacamp_tutorial/"
-                class="button big previous">DataCampの力を借りてR学習ページを作る</a></li>
+        <li><a href="./post/dplyr_recode/"
+                class="button big previous">dplyrのベクトル要素変換用関数3種</a></li>
     
 
     
@@ -452,9 +365,9 @@ recode(x, `3` = &quot;three&quot;)
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/dplyr_recode\/';
-    var disqus_title = 'dplyrのベクトル要素変換用関数3種';
-    var disqus_url = '\/post\/dplyr_recode\/';
+    var disqus_identifier = '\/post\/input_helper_addins\/';
+    var disqus_title = 'clipr, datapasta: データ入力を支えるパッケージ';
+    var disqus_url = '\/post\/input_helper_addins\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -478,43 +391,43 @@ recode(x, `3` = &quot;three&quot;)
             
 
 
-<li><a href="//twitter.com/share?url=%2fpost%2fdplyr_recode%2f&text=dplyr%e3%81%ae%e3%83%99%e3%82%af%e3%83%88%e3%83%ab%e8%a6%81%e7%b4%a0%e5%a4%89%e6%8f%9b%e7%94%a8%e9%96%a2%e6%95%b03%e7%a8%ae&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=%2fpost%2finput_helper_addins%2f&text=clipr%2c%20datapasta%3a%20%e3%83%87%e3%83%bc%e3%82%bf%e5%85%a5%e5%8a%9b%e3%82%92%e6%94%af%e3%81%88%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=%2fpost%2fdplyr_recode%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=%2fpost%2finput_helper_addins%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fdplyr_recode%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2finput_helper_addins%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=%2fpost%2fdplyr_recode%2f&title=dplyr%e3%81%ae%e3%83%99%e3%82%af%e3%83%88%e3%83%ab%e8%a6%81%e7%b4%a0%e5%a4%89%e6%8f%9b%e7%94%a8%e9%96%a2%e6%95%b03%e7%a8%ae" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=%2fpost%2finput_helper_addins%2f&title=clipr%2c%20datapasta%3a%20%e3%83%87%e3%83%bc%e3%82%bf%e5%85%a5%e5%8a%9b%e3%82%92%e6%94%af%e3%81%88%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fdplyr_recode%2f&title=dplyr%e3%81%ae%e3%83%99%e3%82%af%e3%83%88%e3%83%ab%e8%a6%81%e7%b4%a0%e5%a4%89%e6%8f%9b%e7%94%a8%e9%96%a2%e6%95%b03%e7%a8%ae" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2finput_helper_addins%2f&title=clipr%2c%20datapasta%3a%20%e3%83%87%e3%83%bc%e3%82%bf%e5%85%a5%e5%8a%9b%e3%82%92%e6%94%af%e3%81%88%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fdplyr_recode%2f&title=dplyr%e3%81%ae%e3%83%99%e3%82%af%e3%83%88%e3%83%ab%e8%a6%81%e7%b4%a0%e5%a4%89%e6%8f%9b%e7%94%a8%e9%96%a2%e6%95%b03%e7%a8%ae" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2finput_helper_addins%2f&title=clipr%2c%20datapasta%3a%20%e3%83%87%e3%83%bc%e3%82%bf%e5%85%a5%e5%8a%9b%e3%82%92%e6%94%af%e3%81%88%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fdplyr_recode%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2finput_helper_addins%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -636,6 +549,20 @@ recode(x, `3` = &quot;three&quot;)
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/input_helper_addins/">clipr, datapasta: データ入力を支えるパッケージ</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-11-24'>
+                                    November 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h3>
                                 
                                     
@@ -671,20 +598,6 @@ recode(x, `3` = &quot;three&quot;)
                                 <time class="published" datetime=
                                     '2016-08-24'>
                                     August 24, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/rstan_rcpp_troubles/">Mac環境でのstanコードのコンパイルに失敗するときはMakevarsを確認すると良い</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-08-19'>
-                                    August 19, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -732,6 +645,24 @@ recode(x, `3` = &quot;three&quot;)
                         <article>
                             <header>
                                 <a href="./categories/data_manipulation/">data_manipulation</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="./categories/package/">package</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="./categories/utility/">utility</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>

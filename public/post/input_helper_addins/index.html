@@ -1,0 +1,741 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>clipr, datapasta: データ入力を支えるパッケージ</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17" />
+        
+
+
+        
+            <meta name="author" content="Shinya Uryu">
+        
+        
+            
+                <meta name="description" content="Tips for R and Python">
+            
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="clipr, datapasta: データ入力を支えるパッケージ"/>
+<meta name="twitter:description" content="ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり{rvest}なりでスクレイピングすれば良"/>
+<meta name="twitter:site" content="@u_ribo"/>
+
+
+        <meta name="twitter:image" content="https://suryu.me/img/banner.png"/>
+        <meta property="og:title" content="clipr, datapasta: データ入力を支えるパッケージ" />
+<meta property="og:description" content="ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり{rvest}なりでスクレイピングすれば良" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/input_helper_addins/" />
+
+
+<meta property="og:updated_time" content="2016-11-24T06:30:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="clipr, datapasta: データ入力を支えるパッケージ">
+<meta itemprop="description" content="ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり{rvest}なりでスクレイピングすれば良">
+
+
+<meta itemprop="dateModified" content="2016-11-24T06:30:00&#43;00:00" />
+<meta itemprop="wordCount" content="1059">
+
+
+
+<meta itemprop="keywords" content="R,data_manipulation,package,utility," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="../../css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+
+
+
+
+
+
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="../../">Wonderful R World</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="../../post">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../categories">
+                        
+                            <i class="fa fa-list-alt">&nbsp;</i>Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../project">
+                        
+                            <i class="fa fa-diamond">&nbsp;</i>Project
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../about">
+                        
+                            <i class="fa fa-user">&nbsp;</i>About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="../../post">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../categories">
+                            <h3>
+                                
+                                    <i class="fa fa-list-alt">&nbsp;</i>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../project">
+                            <h3>
+                                
+                                    <i class="fa fa-diamond">&nbsp;</i>
+                                
+                                Project
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../about">
+                            <h3>
+                                
+                                    <i class="fa fa-user">&nbsp;</i>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="../../post/input_helper_addins/"><p>clipr, datapasta: データ入力を支えるパッケージ</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/tabulizer_fantastic_extract_data_from_pdf/"><p>tabulizerパッケージによるPDF表データからのデータ取得</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=%2fpost%2finput_helper_addins%2f&text=clipr%2c%20datapasta%3a%20%e3%83%87%e3%83%bc%e3%82%bf%e5%85%a5%e5%8a%9b%e3%82%92%e6%94%af%e3%81%88%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=%2fpost%2finput_helper_addins%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2finput_helper_addins%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=%2fpost%2finput_helper_addins%2f&title=clipr%2c%20datapasta%3a%20%e3%83%87%e3%83%bc%e3%82%bf%e5%85%a5%e5%8a%9b%e3%82%92%e6%94%af%e3%81%88%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2finput_helper_addins%2f&title=clipr%2c%20datapasta%3a%20%e3%83%87%e3%83%bc%e3%82%bf%e5%85%a5%e5%8a%9b%e3%82%92%e6%94%af%e3%81%88%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2finput_helper_addins%2f&title=clipr%2c%20datapasta%3a%20%e3%83%87%e3%83%bc%e3%82%bf%e5%85%a5%e5%8a%9b%e3%82%92%e6%94%af%e3%81%88%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2finput_helper_addins%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="../../post/input_helper_addins/">clipr, datapasta: データ入力を支えるパッケージ</a></h1>
+            
+        
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-11-24'>
+            November 24, 2016</time>
+        <span class="author">Shinya Uryu</span>
+        
+            <p>3 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+
+    
+
+    <div id="content">
+
+
+<p>ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり<strong><code>{rvest}</code></strong>なりでスクレイピングすれば良いのだけど、もっと手軽に済ませたい。そんな時に役立つ2つのパッケージを紹介する。</p>
+<p><strong><code>{clipr}</code></strong>は<a href="https://cran.r-project.org/package=clipr">CRANに登録されている</a>が、<strong><code>{datapasta}</code></strong>の方はGitHubから開発版をインストールする。</p>
+<pre class="r"><code>install.packages(&quot;clipr&quot;)
+devtools::install_github(&quot;MilesMcBain/datapasta&quot;)</code></pre>
+<div id="clipr" class="section level2">
+<h2>clipr</h2>
+<p><strong><code>{clipr}</code></strong>パッケージは現在コピーしているものの読み書きを実行する。OSごとに出力の違いが考慮されていたり、出力形式をオプションで変更できる。現在コピーしているテキストをRに出力させる<code>read_clip()</code>とRオブジェクトをコピーする<code>write_clip()</code>が主な関数となる。</p>
+<pre class="r"><code>library(clipr)
+# 現在コピーされている文字列を返す
+read_clip()
+# [1] &quot;cb &lt;- read_clip()&quot;
+
+# write_clip を実行し、ペーストするとwrite_clipの内容が出力される
+write_clip(c(&quot;この文字列はcliprから&quot;, &quot;読み込まれた&quot;))
+# この文字列はcliprから
+# 読み込まれた</code></pre>
+<p>区切り文字を指定すればベクトルの要素として扱える。</p>
+<pre class="r"><code># breaks引数やobject.type引数を使ってコピーする内容を変更可能
+write_clip(c(&quot;この文字列はcliprから&quot;, &quot;読み込まれた&quot;), breaks = &quot;, &quot;)
+# この文字列はcliprから, 読み込まれた</code></pre>
+<p>また <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> の「現在の県と県に訳される行政区画」として記録されている表データをコピーしたあとで<code>read_clip_tbl()</code>を実行するとデータフレームが出力される。</p>
+</div>
+<div id="datapasta" class="section level2">
+<h2>datapasta</h2>
+<p><strong><code>{datapasta}</code></strong>は先述の<strong><code>{clipr}</code></strong>に依存している。機能としては、エクセルの選択箇所を<code>c()</code>からなるベクトルで返してくれたり、適当にコピーした表をtibble形式に整形してくれたりする。</p>
+<pre class="r"><code>library(datapasta)</code></pre>
+<p>例えばウェブ上に次のような文字の羅列があるとする。</p>
+<pre><code>ホクソエム, ホクソモナギ, ホクそうむ</code></pre>
+<p>これをコピーして<code>vector_paste()</code>を実行すると</p>
+<pre class="r"><code>c(&quot;ホクソエム&quot;,&quot; ホクソモナギ&quot;,&quot; ホクそうむ&quot;)</code></pre>
+<p>が出力される。また、 <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして<code>tribble_paste()</code>を実行する。</p>
+<p><img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;"></p>
+<p>素晴らしい。</p>
+<p>RStudioを利用していれば、アドインとして<strong><code>{datapaste}</code></strong>の関数をショートカットで実行できるので捗る。</p>
+</div>
+
+
+
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+                        <i class="fa fa-list-alt">&nbsp;</i>
+                    
+
+                    
+                        Categories
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='../../categoriesutility'>utility</a></li>
+    
+        <li><a href='../../categoriespackage'>package</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="../../post/dplyr_recode/"
+                class="button big previous">dplyrのベクトル要素変換用関数3種</a></li>
+    
+
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/input_helper_addins\/';
+    var disqus_title = 'clipr, datapasta: データ入力を支えるパッケージ';
+    var disqus_url = '\/post\/input_helper_addins\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <a href="../../" class="logo"><img src="../../img/main/logo.jpg" alt="me" /></a>
+                
+            
+            
+                <header>
+                    <h2>Sincere Pumpkin Patch</h2>
+                    <p></p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/uribo" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//foursquare.com/u_ribo" target="_blank" title="Foursquare" class="fa fa-foursquare"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/_suika" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+<li><a href="//instagram.com/u_ribo" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/ur1bo" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+<li><a href="//twitter.com/u_ribo" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+<li><a href="mailto:suika1127@gmail.com" title="Email" class="fa fa-envelope"></a></li>
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/input_helper_addins/">clipr, datapasta: データ入力を支えるパッケージ</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-11-24'>
+                                    November 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-11-23'>
+                                    November 23, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-09-11'>
+                                    September 11, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/tabulizer_fantastic_extract_data_from_pdf/">tabulizerパッケージによるPDF表データからのデータ取得</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-08-24'>
+                                    August 24, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /post/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="../../categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/r/">R</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/data_manipulation/">data_manipulation</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/package/">package</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/utility/">utility</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>Howdy, I&#39;m Shinya. Engineer, Data Science Enthusiast and Ecologist. This blog is my knowledge work for R that data science language. Most of my work is in the open source R code, which you can find and install on my GitHub https://github.com/uribo .</p>
+
+            <ul class="actions">
+                <li><a href="../../about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+            </ul>
+
+            <p class="copyright">&copy; suryu.me. The contents on this site are licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.<br>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="../../js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+

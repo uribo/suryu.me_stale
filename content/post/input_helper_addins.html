@@ -1,0 +1,67 @@
+---
+title: "clipr, datapasta: データ入力を支えるパッケージ"
+author: "Shinya Uryu"
+date: 2016-11-24T06:30:00
+categories: ["utility", "package"]
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    code_folding: show
+    fig_caption: true
+    df_print: kable
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり<strong><code>{rvest}</code></strong>なりでスクレイピングすれば良いのだけど、もっと手軽に済ませたい。そんな時に役立つ2つのパッケージを紹介する。</p>
+<p><strong><code>{clipr}</code></strong>は<a href="https://cran.r-project.org/package=clipr">CRANに登録されている</a>が、<strong><code>{datapasta}</code></strong>の方はGitHubから開発版をインストールする。</p>
+<pre class="r"><code>install.packages(&quot;clipr&quot;)
+devtools::install_github(&quot;MilesMcBain/datapasta&quot;)</code></pre>
+<div id="clipr" class="section level2">
+<h2>clipr</h2>
+<p><strong><code>{clipr}</code></strong>パッケージは現在コピーしているものの読み書きを実行する。OSごとに出力の違いが考慮されていたり、出力形式をオプションで変更できる。現在コピーしているテキストをRに出力させる<code>read_clip()</code>とRオブジェクトをコピーする<code>write_clip()</code>が主な関数となる。</p>
+<pre class="r"><code>library(clipr)
+# 現在コピーされている文字列を返す
+read_clip()
+# [1] &quot;cb &lt;- read_clip()&quot;
+
+# write_clip を実行し、ペーストするとwrite_clipの内容が出力される
+write_clip(c(&quot;この文字列はcliprから&quot;, &quot;読み込まれた&quot;))
+# この文字列はcliprから
+# 読み込まれた</code></pre>
+<p>区切り文字を指定すればベクトルの要素として扱える。</p>
+<pre class="r"><code># breaks引数やobject.type引数を使ってコピーする内容を変更可能
+write_clip(c(&quot;この文字列はcliprから&quot;, &quot;読み込まれた&quot;), breaks = &quot;, &quot;)
+# この文字列はcliprから, 読み込まれた</code></pre>
+<p>また <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> の「現在の県と県に訳される行政区画」として記録されている表データをコピーしたあとで<code>read_clip_tbl()</code>を実行するとデータフレームが出力される。</p>
+</div>
+<div id="datapasta" class="section level2">
+<h2>datapasta</h2>
+<p><strong><code>{datapasta}</code></strong>は先述の<strong><code>{clipr}</code></strong>に依存している。機能としては、エクセルの選択箇所を<code>c()</code>からなるベクトルで返してくれたり、適当にコピーした表をtibble形式に整形してくれたりする。</p>
+<pre class="r"><code>library(datapasta)</code></pre>
+<p>例えばウェブ上に次のような文字の羅列があるとする。</p>
+<pre><code>ホクソエム, ホクソモナギ, ホクそうむ</code></pre>
+<p>これをコピーして<code>vector_paste()</code>を実行すると</p>
+<pre class="r"><code>c(&quot;ホクソエム&quot;,&quot; ホクソモナギ&quot;,&quot; ホクそうむ&quot;)</code></pre>
+<p>が出力される。また、 <a href="https://ja.wikipedia.org/wiki/県" class="uri">https://ja.wikipedia.org/wiki/県</a> のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして<code>tribble_paste()</code>を実行する。</p>
+<p><img src="../../img/161124_datapaste.gif" style="display: block; margin: auto;"></p>
+<p>素晴らしい。</p>
+<p>RStudioを利用していれば、アドインとして<strong><code>{datapaste}</code></strong>の関数をショートカットで実行できるので捗る。</p>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>suryu.me</title>
+    <link>/categories/utility/index.xml</link>
+    <description>Recent content on suryu.me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="/categories/utility/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>clipr, datapasta: データ入力を支えるパッケージ</title>
+      <link>/post/input_helper_addins/</link>
+      <pubDate>Thu, 24 Nov 2016 06:30:00 +0000</pubDate>
+      
+      <guid>/post/input_helper_addins/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;p&gt;ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり&lt;strong&gt;&lt;code&gt;{rvest}&lt;/code&gt;&lt;/strong&gt;なりでスクレイピングすれば良いのだけど、もっと手軽に済ませたい。そんな時に役立つ2つのパッケージを紹介する。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{clipr}&lt;/code&gt;&lt;/strong&gt;は&lt;a href=&#34;https://cran.r-project.org/package=clipr&#34;&gt;CRANに登録されている&lt;/a&gt;が、&lt;strong&gt;&lt;code&gt;{datapasta}&lt;/code&gt;&lt;/strong&gt;の方はGitHubから開発版をインストールする。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;clipr&amp;quot;)
+devtools::install_github(&amp;quot;MilesMcBain/datapasta&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;clipr&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;clipr&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{clipr}&lt;/code&gt;&lt;/strong&gt;パッケージは現在コピーしているものの読み書きを実行する。OSごとに出力の違いが考慮されていたり、出力形式をオプションで変更できる。現在コピーしているテキストをRに出力させる&lt;code&gt;read_clip()&lt;/code&gt;とRオブジェクトをコピーする&lt;code&gt;write_clip()&lt;/code&gt;が主な関数となる。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(clipr)
+# 現在コピーされている文字列を返す
+read_clip()
+# [1] &amp;quot;cb &amp;lt;- read_clip()&amp;quot;
+
+# write_clip を実行し、ペーストするとwrite_clipの内容が出力される
+write_clip(c(&amp;quot;この文字列はcliprから&amp;quot;, &amp;quot;読み込まれた&amp;quot;))
+# この文字列はcliprから
+# 読み込まれた&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;区切り文字を指定すればベクトルの要素として扱える。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# breaks引数やobject.type引数を使ってコピーする内容を変更可能
+write_clip(c(&amp;quot;この文字列はcliprから&amp;quot;, &amp;quot;読み込まれた&amp;quot;), breaks = &amp;quot;, &amp;quot;)
+# この文字列はcliprから, 読み込まれた&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;また &lt;a href=&#34;https://ja.wikipedia.org/wiki/県&#34; class=&#34;uri&#34;&gt;https://ja.wikipedia.org/wiki/県&lt;/a&gt; の「現在の県と県に訳される行政区画」として記録されている表データをコピーしたあとで&lt;code&gt;read_clip_tbl()&lt;/code&gt;を実行するとデータフレームが出力される。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;datapasta&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;datapasta&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{datapasta}&lt;/code&gt;&lt;/strong&gt;は先述の&lt;strong&gt;&lt;code&gt;{clipr}&lt;/code&gt;&lt;/strong&gt;に依存している。機能としては、エクセルの選択箇所を&lt;code&gt;c()&lt;/code&gt;からなるベクトルで返してくれたり、適当にコピーした表をtibble形式に整形してくれたりする。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(datapasta)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;例えばウェブ上に次のような文字の羅列があるとする。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;ホクソエム, ホクソモナギ, ホクそうむ&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これをコピーして&lt;code&gt;vector_paste()&lt;/code&gt;を実行すると&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;c(&amp;quot;ホクソエム&amp;quot;,&amp;quot; ホクソモナギ&amp;quot;,&amp;quot; ホクそうむ&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;が出力される。また、 &lt;a href=&#34;https://ja.wikipedia.org/wiki/県&#34; class=&#34;uri&#34;&gt;https://ja.wikipedia.org/wiki/県&lt;/a&gt; のページにあるような表データをデータフレームとしてRで扱いたい場合には該当部分をコピーして&lt;code&gt;tribble_paste()&lt;/code&gt;を実行する。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;../../img/161124_datapaste.gif&#34; style=&#34;display: block; margin: auto;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;素晴らしい。&lt;/p&gt;
+&lt;p&gt;RStudioを利用していれば、アドインとして&lt;strong&gt;&lt;code&gt;{datapaste}&lt;/code&gt;&lt;/strong&gt;の関数をショートカットで実行できるので捗る。&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
