@@ -46,7 +46,9 @@
 &lt;/table&gt;
 &lt;div id=&#34;if_else&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;if_else関数&lt;/h2&gt;
-&lt;p&gt;ドキュメントによるとこの関数は、R標準の制御関数の一つである&lt;code&gt;ifelse()&lt;/code&gt;と比べてより厳密 strict なものであるらしい。真偽値の判定を実行するコード（xはyよりも大きい、xのクラスはzである、とか）と、真偽それぞれの状況の応答を引数に与えて実行する。またこの関数は、それだけでなくxの値が欠損値である場合についても特定の処理を実行するという特徴をもつ。欠損値に対する挙動は引数&lt;em&gt;missing&lt;/em&gt;によって与える。&lt;/p&gt;
+&lt;p&gt;ドキュメントによるとこの関数は、R標準の制御関数の一つである&lt;code&gt;ifelse()&lt;/code&gt;と比べてより厳密 strict なものであるらしい。ここでの strict とはどういうことか。yutannihilation さんがこんな記事を書いてくれたのでこちらを読んでほしい。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://notchained.hatenablog.com/entry/2016/11/23/112729&#34;&gt;ifelse()は危険なのでやめてdplyr::if_else()を使いましょう&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;真偽値の判定を実行するコード（xはyよりも大きい、xのクラスはzである、とか）と、真偽それぞれの状況の応答を引数に与えて実行する。またこの関数は、それだけでなくxの値が欠損値である場合についても特定の処理を実行するという特徴をもつ。欠損値に対する挙動は引数&lt;em&gt;missing&lt;/em&gt;によって与える。&lt;/p&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;x &amp;lt;- c(-3:3, NA)
 if_else(x &amp;lt; 0, &amp;quot;negative&amp;quot;, &amp;quot;positive&amp;quot;, missing = &amp;quot;missing&amp;quot;)
 ## [1] &amp;quot;negative&amp;quot; &amp;quot;negative&amp;quot; &amp;quot;negative&amp;quot; &amp;quot;positive&amp;quot; &amp;quot;positive&amp;quot; &amp;quot;positive&amp;quot;
