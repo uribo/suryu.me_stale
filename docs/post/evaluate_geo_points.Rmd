@@ -1,0 +1,169 @@
+---
+title: "ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい"
+author: "Shinya Uryu"
+date: 2016-11-26T05:20:00
+categories: ["geo"]
+featured: "161126_lawn_include.png"
+featuredpath: "date"
+description:
+    Turf.jsのRラッパーであるlawnパッケージを使って、位置情報データを日本国内（陸地）とそうでないものに分ける話
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+位置情報を扱っていると、当然ながら日本のものと海外のものが混ざってくる。この中から日本の位置に含まれるデータを抽出しようとすると、ジオコーディングをするとか色々な方法があると思うのだけど、別な手段がないか探していた。するとこういう情報を見つけた。
+
+[ 「ポケモンGOみたいなゲーム作って〜」と言われたときのために、巨人(Google)の力をかりて、道路上にランダムにマーカーを設置する。 | #GUNMAGISGEEK](http://shimz.me/blog/google-map-api/5116)
+
+どうやらTurf.jsを利用すればできそうということがわかったので試してみる。Turf.jsのR用ラッパーはrOpenSciが作っている**`{lawn}`**が利用できる。Turf.jsは地理空間データ解析に便利なライブラリで、今回行うランダムなポイントデータの生成の他にもさまざまな機能をもっている。
+
+## データの用意: 日本列島周辺にランダムなポイントデータを配置する
+
+まずは必要なパッケージを読み込みデータを準備する。**`{lawn}`**パッケージの`lawn_random()`を使い、ランダムなポイントデータを生成するが、その際に引数*bbox*でポイントが日本の周辺に配置されるように指定する。今回は適当に千個のポイントデータを生成することにした。
+
+```{r}
+library(magrittr)
+library(lawn)
+library(purrr)
+library(dplyr)
+library(leaflet)
+```
+
+```{r}
+# bboxに指定した範囲は、Wikipediaで調べた日本の東西南北における最端の位置
+random.points <- lawn_random(n = 1000, 
+                             bbox = c(sp::char2dms(from = "123d0'17.0\"E") %>% as.numeric(), sp::char2dms(from = "20d25'31.9768\"N") %>% as.numeric(),
+                                      sp::char2dms(from = "153d58'50.0\"E") %>% as.numeric(), sp::char2dms(from = "45d03'53.5\"N") %>% as.numeric()))
+
+```
+
+生成したポイントデータの位置を確認するため`view()`を実行する。日本がマーカーで埋まるくらいのポイントデータができた。
+
+```{r}
+view(random.points)
+```
+
+`lawn_random()`で作ったデータはfeaturecollectionと呼ばれるクラスオブジェクトなので、ここから座標情報だけを抽出する。あまり格好良くないけどこんなコードを書く。
+
+```{r}
+p.lng <- random.points$features$geometry$coordinates %>% 
+  purrr::map(1) %>% 
+  unlist()
+  
+p.lat <- random.points$features$geometry$coordinates %>% 
+  purrr::map(2) %>% 
+  unlist()
+
+# 各ポイントを識別するためにidを割り当てる
+d.coords <- data_frame(
+  longitude = p.lng,
+  latitude = p.lat) %>% 
+  mutate(id = row_number()) 
+
+head(d.coords)
+```
+
+## ポイントデータのフィルタリング
+
+ここからが本題。日本列島に乗っかるポイントとそうでないものを区別する。ここでもTurf.jsの機能を利用するが、それには領域を指定するためのポリゴンが必要になるので先にそちらを用意する。今回は[Global Administrative Areas (GDAM)](http://gadm.org)が提供している境界データ(行政区域の単位に応じてレベル分けがされており、今回は日本全体の境界のないデータであるlevel 0)を利用する。GDAMでは、世界の国ごとの行政区域データを配布しており、ShapefileやのGoogleのkmzに加え、R用のデータ形式としてrdsファイルがあるのでそれをダウンロード。
+
+加えて以下のパッケージを読み込む。
+
+```{r}
+library(geojsonio)
+library(rmapshaper)
+```
+
+**`{geojsonio}`**はRオブジェクトとgeojsonファイルの相互互換を行うためのパッケージで、**`{lawn}`**でポイントデータがポリゴン内に含まれているかの判定に利用するのに一旦jsonにする必要があるので使う。**`{rmapshaper}`**はShapefileやgeojson、Topojsonを編集するためのmapshaperライブラリをR用に移植したもので、今回はポリゴンの単純化に用いる。
+
+```{r, eval = FALSE, echo = TRUE}
+sp.jpn.admin <- readr::read_rds("data/JPN_adm0.rds")
+class(sp.jpn.admin)
+```
+
+```{r, eval = FALSE, echo = TRUE}
+# 元の境界データのままでも良いが、サイズを軽くするために単純化を行う
+sp.jpn.admin %<>% ms_simplify()
+```
+
+`ms_simplify()`により単純化されたポリゴンを可視化するために一旦jsonへと変換する。
+
+```{r, eval = FALSE, echo = TRUE}
+sp.jpn.admin.json <- geojson_json(sp.jpn.admin,
+                                  lat = "lat", lon = "long",
+                                  geometry = "polygon")
+view(sp.jpn.admin.json)
+```
+
+<img src="../../img/161126_jpn_admin.png" style="display: block; margin: auto;">
+
+完全ではないが、離島についてもポリゴンが用意されていて良い感じ。
+
+これをファイルへと保存し、`readLines()`で文字列として扱えるようにする。
+
+```{r, eval = TRUE, echo = FALSE}
+# geojson_write(sp.jpn.admin,
+#               file = "../../data/gda_jpn_admin0.geojson",
+#               lat = "lat", lon = "long",
+#               geometry = "polygon",
+#               verbose = FALSE)
+
+jpn.admin.json <- readLines("../../data/gda_jpn_admin0.geojson")
+```
+
+```{r, eval = FALSE, echo = TRUE}
+geojson_write(sp.jpn.admin,
+              file = "data/gda_jpn_admin0.geojson",
+              lat = "lat", lon = "long",
+              geometry = "polygon",
+              verbose = FALSE)
+
+jpn.admin.json <- readLines("data/gda_jpn_admin0.geojson")
+```
+
+これで用意完了。試し打ちをしてみる。ポイントがポリゴン内に含まれるかどうかの判定は`lawn_inside()`を使う。
+
+
+```{r}
+point <- d.coords[1, ] %>% geojson_json(c(.$longitude, .$latitude)) %>% 
+  gsub('^\\{"type":"FeatureCollection","features":\\[',
+                "",
+                .) %>%
+       gsub("]\\}$", "", .)
+
+lawn_inside(point, jpn.admin.json[2])
+```
+
+`lawn_inside()`は第一引数に与えたポイントが第二引数のポリゴン内に含まれているかを真偽値で返す関数なので、**`{dplyr}`**のパイプ処理によるデータ操作を適用できる。
+
+```{r}
+d.coords.test <- d.coords %>% 
+  group_by(id) %>% 
+  do(geojson.str = geojson_json(c(.$longitude, .$latitude)) %>% 
+       gsub('^\\{"type":"FeatureCollection","features":\\[',
+                "",
+                .) %>%
+       gsub("]\\}$", "", .)) %>% 
+  tidyr::unnest() %>% 
+  rowwise() %>% 
+  mutate(include = lawn_inside(geojson.str, jpn.admin.json[2])) %>% 
+  ungroup() %>% 
+  left_join(d.coords, by = "id")
+```
+
+ポリゴンがしっかりしていると処理に時間がかかるが、`ms_simplify()`による単純化のせいか、だいぶ早い。
+
+実行結果を再び**`{leaflet}`**を使って確かめる。赤色のマーカーがポリゴンに含まれない、日本列島の外と判定されたもので、青色のマーカーが日本列島の陸域に含まれるデータとなる。
+
+```{r}
+leaflet() %>% addTiles() %>% 
+  setView(lng = 135.0, lat = 38.0, zoom = 3) %>% 
+  addCircleMarkers(data = d.coords.test %>% filter(include == FALSE), color = "red") %>% 
+  addCircleMarkers(data = d.coords.test %>% filter(include == TRUE), color = "blue")
+```
+
+ちょっとポイントが多すぎてわかりにくいのでズームしてみると、きちんと判定されているようである。際どい箇所もきちんと区別されているようだ。満足満足。
+
+<img src="../../img/161126_lawn_include.png" style="display: block; margin: auto;">
+
