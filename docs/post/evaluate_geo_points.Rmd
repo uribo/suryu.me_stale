@@ -47,19 +47,13 @@ view(random.points)
 `lawn_random()`で作ったデータはfeaturecollectionと呼ばれるクラスオブジェクトなので、ここから座標情報だけを抽出する。あまり格好良くないけどこんなコードを書く。
 
 ```{r}
-p.lng <- random.points$features$geometry$coordinates %>% 
-  purrr::map(1) %>% 
-  unlist()
-  
-p.lat <- random.points$features$geometry$coordinates %>% 
-  purrr::map(2) %>% 
-  unlist()
-
-# 各ポイントを識別するためにidを割り当てる
-d.coords <- data_frame(
-  longitude = p.lng,
-  latitude = p.lat) %>% 
-  mutate(id = row_number()) 
+d.coords <- random.points$features$geometry$coordinates %>% {
+  tibble::tibble(
+    longitude = map_dbl(., 1),
+    latitude = map_dbl(., 2)
+  ) %>% 
+    mutate(id = row_number())
+}
 
 head(d.coords)
 ```
