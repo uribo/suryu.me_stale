@@ -60,7 +60,7 @@
 
 
 
-<meta itemprop="keywords" content="R,data_manipulation,geo,package,utility," />
+<meta itemprop="keywords" content="R,Shiny,data_manipulation,geo,package,utility,visualization," />
 
         
 
@@ -87,22 +87,6 @@
         
             
         
-
-<script src="../../rmarkdown-libs/htmlwidgets-0.8/htmlwidgets.js"></script>
-<script src="../../rmarkdown-libs/jquery-1.12.4/jquery.min.js"></script>
-<link href="../../rmarkdown-libs/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
-<script src="../../rmarkdown-libs/leaflet-0.7.7/leaflet.js"></script>
-<link href="../../rmarkdown-libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
-<link href="../../rmarkdown-libs/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
-<script src="../../rmarkdown-libs/leaflet-label-0.2.2/leaflet.label.js"></script>
-<script src="../../rmarkdown-libs/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
-<script src="../../rmarkdown-libs/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
-<script src="../../rmarkdown-libs/leaflet-binding-1.0.2.9006/leaflet.js"></script>
-
-
-
-
-
     </head>
     <body>
 
@@ -244,6 +228,10 @@
 
                 
                     <li>
+                        <a href="../../post/r_advent_calendar_2016/"><p>【予告】Rに関する一人アドベントカレンダー2016</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/evaluate_geo_points/"><p>ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</p></a>
                     </li>
                 
@@ -253,10 +241,6 @@
                 
                     <li>
                         <a href="../../post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
                     </li>
                 
             </ul>
@@ -378,7 +362,9 @@
 
 
     <div id="content">
+        <!-- BLOGDOWN-BODY-BEFORE
 
+/BLOGDOWN-BODY-BEFORE -->
 
 <p>位置情報を扱っていると、当然ながら日本のものと海外のものが混ざってくる。この中から日本の位置に含まれるデータを抽出しようとすると、ジオコーディングをするとか色々な方法があると思うのだけど、別な手段がないか探していた。するとこういう情報を見つけた。</p>
 <p><a href="http://shimz.me/blog/google-map-api/5116">「ポケモンGOみたいなゲーム作って〜」と言われたときのために、巨人(Google)の力をかりて、道路上にランダムにマーカーを設置する。 | #GUNMAGISGEEK</a></p>
@@ -481,6 +467,24 @@ lawn_inside(point, jpn.admin.json[2])
 
 
 
+<!-- BLOGDOWN-HEAD
+
+<script src="#####../content/post/evaluate_geo_points_files/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="#####../content/post/evaluate_geo_points_files/jquery-1.12.4/jquery.min.js"></script>
+<link href="#####../content/post/evaluate_geo_points_files/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+<script src="#####../content/post/evaluate_geo_points_files/leaflet-0.7.7/leaflet.js"></script>
+<link href="#####../content/post/evaluate_geo_points_files/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<link href="#####../content/post/evaluate_geo_points_files/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+<script src="#####../content/post/evaluate_geo_points_files/leaflet-label-0.2.2/leaflet.label.js"></script>
+<script src="#####../content/post/evaluate_geo_points_files/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+<script src="#####../content/post/evaluate_geo_points_files/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+<script src="#####../content/post/evaluate_geo_points_files/leaflet-binding-1.0.2.9006/leaflet.js"></script>
+
+
+
+
+
+/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -524,6 +528,9 @@ lawn_inside(point, jpn.admin.json[2])
                 class="button big previous">clipr, datapasta: データ入力を支えるパッケージ</a></li>
     
 
+    
+        <li><a href="../../post/r_advent_calendar_2016/"
+                class="button big next">【予告】Rに関する一人アドベントカレンダー2016</a></li>
     
 </ul>
 
@@ -659,6 +666,20 @@ lawn_inside(point, jpn.admin.json[2])
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-11-29'>
+                                    November 29, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/evaluate_geo_points/">ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</a></h3>
                                 
                                     
@@ -698,20 +719,6 @@ lawn_inside(point, jpn.admin.json[2])
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-09-11'>
-                                    September 11, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -746,6 +753,15 @@ lawn_inside(point, jpn.admin.json[2])
                         <article>
                             <header>
                                 <a href="../../categories/r/">R</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/shiny/">Shiny</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -782,6 +798,15 @@ lawn_inside(point, jpn.admin.json[2])
                         <article>
                             <header>
                                 <a href="../../categories/utility/">utility</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/visualization/">visualization</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>

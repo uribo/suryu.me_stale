@@ -60,7 +60,7 @@
 
 
 
-<meta itemprop="keywords" content="R,data_manipulation,geo,package,utility," />
+<meta itemprop="keywords" content="R,Shiny,data_manipulation,geo,package,utility,visualization," />
 
         
 
@@ -87,15 +87,6 @@
         
             
         
-
-<script src="../../rmarkdown-libs/htmlwidgets-0.8/htmlwidgets.js"></script>
-<script src="../../rmarkdown-libs/d3-3.5.3/d3.js"></script>
-<script src="../../rmarkdown-libs/bubbles-binding-0.2/bubbles.js"></script>
-
-
-
-
-
     </head>
     <body>
 
@@ -237,6 +228,10 @@
 
                 
                     <li>
+                        <a href="../../post/r_advent_calendar_2016/"><p>【予告】Rに関する一人アドベントカレンダー2016</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/evaluate_geo_points/"><p>ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</p></a>
                     </li>
                 
@@ -246,10 +241,6 @@
                 
                     <li>
                         <a href="../../post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
                     </li>
                 
             </ul>
@@ -349,7 +340,9 @@
     
 
     <div id="content">
+        <!-- BLOGDOWN-BODY-BEFORE
 
+/BLOGDOWN-BODY-BEFORE -->
 
 <pre class="r"><code>library(remoji)
 library(magrittr)</code></pre>
@@ -471,7 +464,7 @@ df.wishlist.item &lt;- df.wishlist %&gt;%
   scale_fill_viridis() + 
   guides(fill = &quot;none&quot;)</code></pre>
 <div class="figure" style="text-align: center">
-<img src="figures/160621_fig1-1.png" alt="対象のほしいものリスト公開理由の内訳" width="672" />
+<img src="#####../content/post/amazon_wish_list_files/figure-html/160621_fig1-1.png" alt="対象のほしいものリスト公開理由の内訳" width="672" />
 <p class="caption">
 (#fig:160621_fig1)対象のほしいものリスト公開理由の内訳
 </p>
@@ -548,7 +541,7 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
   dplyr::mutate(id = with(., reorder(id, n, median))) %&gt;%
   ggplot(aes(id, n)) + geom_bar(stat = &quot;identity&quot;)</code></pre>
 <div class="figure" style="text-align: center">
-<img src="figures/160621_fig3-1.png" alt="ほしいものリスト内の商品数" width="672" />
+<img src="#####../content/post/amazon_wish_list_files/figure-html/160621_fig3-1.png" alt="ほしいものリスト内の商品数" width="672" />
 <p class="caption">
 (#fig:160621_fig3)ほしいものリスト内の商品数
 </p>
@@ -675,6 +668,17 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
 
 
 
+<!-- BLOGDOWN-HEAD
+
+<script src="#####../content/post/amazon_wish_list_files/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="#####../content/post/amazon_wish_list_files/d3-3.5.3/d3.js"></script>
+<script src="#####../content/post/amazon_wish_list_files/bubbles-binding-0.2/bubbles.js"></script>
+
+
+
+
+
+/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -832,6 +836,20 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-11-29'>
+                                    November 29, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/evaluate_geo_points/">ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</a></h3>
                                 
                                     
@@ -871,20 +889,6 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-09-11'>
-                                    September 11, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -919,6 +923,15 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                         <article>
                             <header>
                                 <a href="../../categories/r/">R</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/shiny/">Shiny</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -955,6 +968,15 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                         <article>
                             <header>
                                 <a href="../../categories/utility/">utility</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/visualization/">visualization</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>

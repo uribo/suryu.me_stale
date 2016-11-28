@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>suryu.me</title>
+    <link>/categories/visualization/index.xml</link>
+    <description>Recent content on suryu.me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="/categories/visualization/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>【予告】Rに関する一人アドベントカレンダー2016</title>
+      <link>/post/r_advent_calendar_2016/</link>
+      <pubDate>Tue, 29 Nov 2016 05:20:00 +0000</pubDate>
+      
+      <guid>/post/r_advent_calendar_2016/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;p&gt;明後日から12月になる。12月といえば最近はもっぱら「アドベントカレンダー」の月という認識がある。今年はRに関するアドベントカレンダーが2つQiitaに上がっていて、そっちも盛り上がりを見せている。が、俺は一人でRアドベントカレンダーをやる。&lt;em&gt;5つくらいやる&lt;/em&gt;。&lt;/p&gt;
+&lt;p&gt;と、これだけ大口を叩いておいて、ネタのストックが豊富にあるのかというとそんなことはない。頭にはいくつかあるが文章やコードになっているものは皆無だ。25日完走できる気はしない。でもやらないと0日しかないので、1日でも多く書けるようにしたい。(完走できたら寿司でも肉でもケーキでもご馳走してくれ！！！)&lt;/p&gt;
+&lt;div class=&#34;section level2&#34;&gt;
+&lt;h2&gt;やろうとしているもの&lt;/h2&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;R一般 (パッケージ、データ操作、小ネタ)&lt;/li&gt;
+&lt;li&gt;Shiny&lt;/li&gt;
+&lt;li&gt;visualization (ggplot2, plotly, …)&lt;/li&gt;
+&lt;li&gt;R + GIS&lt;/li&gt;
+&lt;li&gt;Rパッケージ開発&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section level2&#34;&gt;
+&lt;h2&gt;どこでやるか&lt;/h2&gt;
+&lt;p&gt;たぶんここ。あるいはQiita。Shinyアプリであればデモが必要なのでどっかのサーバーあるいはshinyapp.ioにするかも。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section level2&#34;&gt;
+&lt;h2&gt;進捗どうですか&lt;/h2&gt;
+&lt;p&gt;にゃおす&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

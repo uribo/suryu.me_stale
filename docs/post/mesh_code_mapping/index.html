@@ -60,7 +60,7 @@
 
 
 
-<meta itemprop="keywords" content="R,data_manipulation,geo,package,utility," />
+<meta itemprop="keywords" content="R,Shiny,data_manipulation,geo,package,utility,visualization," />
 
         
 
@@ -87,12 +87,6 @@
         
             
         
-
-
-
-
-
-
     </head>
     <body>
 
@@ -234,6 +228,10 @@
 
                 
                     <li>
+                        <a href="../../post/r_advent_calendar_2016/"><p>【予告】Rに関する一人アドベントカレンダー2016</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/evaluate_geo_points/"><p>ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</p></a>
                     </li>
                 
@@ -243,10 +241,6 @@
                 
                     <li>
                         <a href="../../post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/datacamp_tutorial/"><p>DataCampの力を借りてR学習ページを作る</p></a>
                     </li>
                 
             </ul>
@@ -346,7 +340,9 @@
     
 
     <div id="content">
+        <!-- BLOGDOWN-BODY-BEFORE
 
+/BLOGDOWN-BODY-BEFORE -->
 
 <p><a href="../geohash/">前回の記事</a>でGeohashをRから取得して可視化まで行ったが、日本には地域区画のための標準機構として「標準地域メッシュ」と呼ばれるものがある。</p>
 <p>これはGeohashのように対象の緯度経度区画を数値化したもので、第1次地域区画（4桁）、第2次地域区画（6桁）、第3次地域区画（8桁）となるにつれ細かな領域を指すようになる。特に第3次地域区画は<strong>標準地域メッシュ</strong>あるいは基準メッシュと呼ばれ、全国的規模での調査における区画を表現するために用いられている。</p>
@@ -471,7 +467,7 @@ leaflet() %&gt;%
   coord_map(projection = &quot;mercator&quot;)
 
 plot_map</code></pre>
-<p><img src="figures/160809_mesh_code_mapping-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="#####../content/post/mesh_code_mapping_files/figure-html/160809_mesh_code_mapping-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div class="section level2">
 <h2>平均値メッシュによる塗り分け</h2>
@@ -540,6 +536,14 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
 
 
 
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -697,6 +701,20 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-11-29'>
+                                    November 29, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/evaluate_geo_points/">ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</a></h3>
                                 
                                     
@@ -736,20 +754,6 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-09-11'>
-                                    September 11, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -784,6 +788,15 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                         <article>
                             <header>
                                 <a href="../../categories/r/">R</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/shiny/">Shiny</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -820,6 +833,15 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                         <article>
                             <header>
                                 <a href="../../categories/utility/">utility</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/visualization/">visualization</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
