@@ -9,6 +9,137 @@
     <atom:link href="/categories/package/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</title>
+      <link>/post/rgis_advent_calendar_day1/</link>
+      <pubDate>Thu, 01 Dec 2016 08:00:00 +0000</pubDate>
+      
+      <guid>/post/rgis_advent_calendar_day1/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;p&gt;一人R + GISアドベントカレンダーの1日目です。初日は自作パッケージの話をします。&lt;/p&gt;
+&lt;p&gt;現在、タイトルにあるように日本の行政区域地図を容易に描画するための&lt;strong&gt;&lt;code&gt;{jpndistrict}&lt;/code&gt;&lt;/strong&gt;というパッケージを&lt;a href=&#34;https://github.com/uribo/jpndistrict&#34;&gt;開発中&lt;/a&gt;です。このパッケージの基本的な使い方について紹介します。&lt;/p&gt;
+&lt;div class=&#34;section level2&#34;&gt;
+&lt;h2&gt;開発の動機&lt;/h2&gt;
+&lt;p&gt;市区町村境界ある都道府県の地図を描きたい、特定の市区町村を選んで、例えば3つの町だけの地図を描きたい。いや、3つもいらない。A町だけで良い。こんなことが、よくあります。&lt;/p&gt;
+&lt;p&gt;地図を描画するにはShapefileを用いますが、これを自作するのは困難なので、誰か（主に行政や企業）が作ったものを使うことになります。ですが次に問題となるのが、どのShapefileを使うのが良いのか、ということだったりします。色々な団体がShapefileを配布してくれるのはありがたいのですが、選択肢が多いのです。また、たくさんShapefileをダウンロードしてハードディスクの容量を圧迫するのもできれば避けたいところです。&lt;/p&gt;
+&lt;p&gt;また、こういったShapefileのほとんどは都道府県単位であるのがほとんどです。なので、最初の要望の2, 3番目を実行するには加工が必要になります。これをするにはGISの知識がやや必要で、自分のようなニワカには難しいところがあります。&lt;/p&gt;
+&lt;p&gt;… そこで&lt;strong&gt;&lt;code&gt;{jpndistrict}&lt;/code&gt;&lt;/strong&gt; ですよ！！！！&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section level2&#34;&gt;
+&lt;h2&gt;何ができるのか&lt;/h2&gt;
+&lt;p&gt;上記の問題。都道府県、市区町村の地図を描画するのに…&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;どのShapefileを使うのが良いのか混乱する&lt;/li&gt;
+&lt;li&gt;Shapefileを保存したくない&lt;/li&gt;
+&lt;li&gt;市区町村の描画を簡単に行いたい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;を解決するために&lt;strong&gt;&lt;code&gt;{jpndistrict}&lt;/code&gt;&lt;/strong&gt;は次の働きをします。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;国土数値情報からダウンロード可能な「行政区域データ &lt;a href=&#34;http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html&#34; class=&#34;uri&#34;&gt;http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html&lt;/a&gt;」を利用する&lt;/li&gt;
+&lt;li&gt;パッケージ用データとしてShapefileをRオブジェクトにしたものを用意&lt;/li&gt;
+&lt;li&gt;市区町村名、市区町村コードから特定の市区町村を抽出可能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以下にこれらを実際に試してみます。&lt;/p&gt;
+&lt;p&gt;なお、&lt;strong&gt;&lt;code&gt;{jpndistrict}&lt;/code&gt;&lt;/strong&gt;が提供する地図データは国土交通省国土政策局「国土数値情報」の提供データ (行政区域データ 平成27年4月1日時点のデータ &lt;a href=&#34;http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html&#34; class=&#34;uri&#34;&gt;http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html&lt;/a&gt;)を元に瓜生真也が編集・加工を行ったものです。そのため、このデータを利用した二次著作物を作成する際は、国土数値情報の利用約款に準拠するものとします。利用時にはこの点にご注意ください。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section level2&#34;&gt;
+&lt;h2&gt;デモ&lt;/h2&gt;
+&lt;p&gt;11月はCRANへのsubmitに制限がかかってしまったため、GitHubからインストールする必要があります。今月中にCRANへの登録を目指しています。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;githubinstall&amp;quot;)
+devtools::install_github(&amp;quot;jpndistrict&amp;quot;, ref = &amp;quot;add_light_rds&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# パッケージの読み込み
+library(jpndistrict)&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&#34;section level4&#34;&gt;
+&lt;h4&gt;行政区域データの取得&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;spdf_jpn_pref()&lt;/code&gt;… 県レベル。都道府県コードあるいは都道府県名でSpatialPolygonsDataFrameを返します。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;df.pref33 &amp;lt;- spdf_jpn_pref(code = 33)
+class(df.pref33)
+
+# [1] &amp;quot;SpatialPolygonsDataFrame&amp;quot;
+# attr(,&amp;quot;package&amp;quot;)
+
+head(df.pref33)
+
+# class       : SpatialPolygonsDataFrame 
+# features    : 6 
+# extent      : 133.7397, 134.1227, 34.55947, 34.94909  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 6 × 5
+#   pref_name city_name_ city_name city_name_full city_code
+# *     &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;          &amp;lt;chr&amp;gt;    &amp;lt;fctr&amp;gt;
+# 1    岡山県     岡山市      北区    岡山市 北区     33101
+# 2    岡山県     岡山市      中区    岡山市 中区     33102
+# 3    岡山県     岡山市      東区    岡山市 東区     33103
+# 4    岡山県     岡山市      東区    岡山市 東区     33103
+# 5    岡山県     岡山市      東区    岡山市 東区     33103
+# 6    岡山県     岡山市      東区    岡山市 東区     33103
+
+# spdf_jpn_pref(admin_name = &amp;quot;岡山県&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{jpndistrict}&lt;/code&gt;&lt;/strong&gt;では、取得した地図データを&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;ベースの図として出力する関数 (&lt;code&gt;gg_jpn_district()&lt;/code&gt;)を提供します。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spdf_jpn_pref(code = 33) %&amp;gt;% 
+  gg_jpn_district()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;../../img/161201_plot_pref33_district_true.png&#34; style=&#34;display: block; margin: auto;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;spdf_jpn_pref()&lt;/code&gt;の引数として&lt;em&gt;district&lt;/em&gt;を用意しています。これは都道府県内の市区町村境界区分を行うかのオプションで、FALSEの場合、境界区分のない都道府県データを返します。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spdf_jpn_pref(admin_name = &amp;quot;岡山県&amp;quot;, district = FALSE) %&amp;gt;% 
+  gg_jpn_district()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;../../img/161201_plot_pref33_district_false.png&#34; style=&#34;display: block; margin: auto;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;spdf_jpn_cities()&lt;/code&gt;… 都道府県に含まれる特定の市区町村データを取得します。ここでは市区町村名や市区町村コードの指定が可能です。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spdf_jpn_cities(jis_code_pref = 33, jis_code_city = c(&amp;quot;33101&amp;quot;, &amp;quot;33212&amp;quot;))
+
+# class       : SpatialPolygonsDataFrame 
+# features    : 10 
+# extent      : 133.7397, 134.2735, 34.58832, 34.94909  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 10 × 5
+#    pref_name city_name_ city_name city_name_full city_code
+# *      &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;          &amp;lt;chr&amp;gt;    &amp;lt;fctr&amp;gt;
+# 1     岡山県     岡山市      北区    岡山市 北区     33101
+# 2     岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+# 3     岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+# 4     岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+# 5     岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+# 6     岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+# 7     岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+# 8     岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+# 9     岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+# 10    岡山県       &amp;lt;NA&amp;gt;  瀬戸内市       瀬戸内市     33212
+
+spdf_jpn_cities(jis_code_pref = 14, admin_name = &amp;quot;海老名市&amp;quot;)
+# class       : SpatialPolygonsDataFrame 
+# features    : 1 
+# extent      : 139.3692, 139.4366, 35.39991, 35.47739  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 1 × 5
+#   pref_name city_name_ city_name city_name_full city_code
+# *     &amp;lt;chr&amp;gt;      &amp;lt;chr&amp;gt;     &amp;lt;chr&amp;gt;          &amp;lt;chr&amp;gt;    &amp;lt;fctr&amp;gt;
+# 1  神奈川県       &amp;lt;NA&amp;gt;  海老名市       海老名市     14215&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;spdf_jpn_cities(jis_code_pref = 33, admin_name = &amp;quot;岡山市&amp;quot;) %&amp;gt;% 
+  gg_jpn_district()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;../../img/161201_plot_pref33_city.png&#34; style=&#34;display: block; margin: auto;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我ながら、便利だなと思います。何か問題や使い方で不明な点があればGitHubやTwitterでおしらせください。&lt;/p&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+    <item>
       <title>clipr, datapasta: データ入力を支えるパッケージ</title>
       <link>/post/input_helper_addins/</link>
       <pubDate>Thu, 24 Nov 2016 06:30:00 +0000</pubDate>

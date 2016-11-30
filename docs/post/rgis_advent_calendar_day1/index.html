@@ -1,0 +1,878 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        
+            
+                <title>jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</title>
+            
+        
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="generator" content="Hugo 0.17" />
+        
+
+
+        
+            <meta name="author" content="Shinya Uryu">
+        
+        
+            <meta name="description" content="日本の行政区域地図を容易に描画するためパッケージを作っています。基本関数の使い方を説明します。">
+        
+
+        
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="jpndistrict: 日本の行政区域地図を容易に描画するパッケージ"/>
+<meta name="twitter:description" content="日本の行政区域地図を容易に描画するためパッケージを作っています。基本関数の使い方を説明します。"/>
+<meta name="twitter:site" content="@u_ribo"/>
+
+
+        <meta name="twitter:image" content="https://suryu.me/img/banner.png"/>
+        <meta property="og:title" content="jpndistrict: 日本の行政区域地図を容易に描画するパッケージ" />
+<meta property="og:description" content="日本の行政区域地図を容易に描画するためパッケージを作っています。基本関数の使い方を説明します。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/rgis_advent_calendar_day1/" />
+
+
+<meta property="og:updated_time" content="2016-12-01T08:00:00&#43;00:00"/>
+
+
+
+
+
+
+
+
+
+
+        
+<meta itemprop="name" content="jpndistrict: 日本の行政区域地図を容易に描画するパッケージ">
+<meta itemprop="description" content="日本の行政区域地図を容易に描画するためパッケージを作っています。基本関数の使い方を説明します。">
+
+
+<meta itemprop="dateModified" content="2016-12-01T08:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2024">
+
+
+
+<meta itemprop="keywords" content="R,Shiny,advent_calendar,data_manipulation,geo,oss,package,plotly,poem,utility,visualization," />
+
+        
+
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <link rel="stylesheet" href="../../css/main.min.css" />
+                
+            
+        
+
+        
+        
+        
+            
+        
+
+
+
+
+
+
+    </head>
+    <body>
+
+        
+        <div id="wrapper">
+
+    
+    
+<header id="header">
+    
+        <h2><a href="../../">Wonderful R World</i></a></h2>
+    
+
+    <nav class="links">
+        <ul>
+            
+                <li>
+                    <a href="../../post">
+                        
+                            <i class="fa fa-newspaper-o">&nbsp;</i>Blog
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../categories">
+                        
+                            <i class="fa fa-list-alt">&nbsp;</i>Categories
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../project">
+                        
+                            <i class="fa fa-diamond">&nbsp;</i>Project
+                    </a>
+                </li>
+            
+                <li>
+                    <a href="../../about">
+                        
+                            <i class="fa fa-user">&nbsp;</i>About
+                    </a>
+                </li>
+            
+        </ul>
+    </nav>
+    <nav class="main">
+        <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
+            
+            <li class="search">
+                <a class="fa-search" href="#search">Search</a>
+                <form id="search" method="get" action="//google.com/search">
+                    <input type="text" name="q" placeholder="Search" />
+                    <input type="hidden" name="q" value="site:/">
+                </form>
+            </li>
+            <li class="menu">
+                <a class="fa-bars" href="#menu">Menu</a>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+
+<section id="menu">
+
+    
+        <section>
+            <form class="search" method="get" action="//google.com/search">
+                <input type="text" name="q" placeholder="Search" />
+                <input type="hidden" name="q" value="site:/">
+            </form>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                
+                    <li>
+                        <a href="../../post">
+                            <h3>
+                                
+                                    <i class="fa fa-newspaper-o">&nbsp;</i>
+                                
+                                Blog
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../categories">
+                            <h3>
+                                
+                                    <i class="fa fa-list-alt">&nbsp;</i>
+                                
+                                Categories
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../project">
+                            <h3>
+                                
+                                    <i class="fa fa-diamond">&nbsp;</i>
+                                
+                                Project
+                            </h3>
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="../../about">
+                            <h3>
+                                
+                                    <i class="fa fa-user">&nbsp;</i>
+                                
+                                About
+                            </h3>
+                        </a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        <section>
+            <ul class="links">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    <li>
+                        <a href="../../post/rgis_advent_calendar_day1/"><p>jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/visualization_advent_calendar_day1/"><p>plotly流行れ</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/r_advent_calendar_day1/"><p>Rで3億円宣言</p></a>
+                    </li>
+                
+                    <li>
+                        <a href="../../post/r_advent_calendar_2016/"><p>【予告】Rに関する一人アドベントカレンダー2016</p></a>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+        
+</section>
+
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=%2fpost%2frgis_advent_calendar_day1%2f&text=jpndistrict%3a%20%e6%97%a5%e6%9c%ac%e3%81%ae%e8%a1%8c%e6%94%bf%e5%8c%ba%e5%9f%9f%e5%9c%b0%e5%9b%b3%e3%82%92%e5%ae%b9%e6%98%93%e3%81%ab%e6%8f%8f%e7%94%bb%e3%81%99%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=%2fpost%2frgis_advent_calendar_day1%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2frgis_advent_calendar_day1%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=%2fpost%2frgis_advent_calendar_day1%2f&title=jpndistrict%3a%20%e6%97%a5%e6%9c%ac%e3%81%ae%e8%a1%8c%e6%94%bf%e5%8c%ba%e5%9f%9f%e5%9c%b0%e5%9b%b3%e3%82%92%e5%ae%b9%e6%98%93%e3%81%ab%e6%8f%8f%e7%94%bb%e3%81%99%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2frgis_advent_calendar_day1%2f&title=jpndistrict%3a%20%e6%97%a5%e6%9c%ac%e3%81%ae%e8%a1%8c%e6%94%bf%e5%8c%ba%e5%9f%9f%e5%9c%b0%e5%9b%b3%e3%82%92%e5%ae%b9%e6%98%93%e3%81%ab%e6%8f%8f%e7%94%bb%e3%81%99%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2frgis_advent_calendar_day1%2f&title=jpndistrict%3a%20%e6%97%a5%e6%9c%ac%e3%81%ae%e8%a1%8c%e6%94%bf%e5%8c%ba%e5%9f%9f%e5%9c%b0%e5%9b%b3%e3%82%92%e5%ae%b9%e6%98%93%e3%81%ab%e6%8f%8f%e7%94%bb%e3%81%99%e3%82%8b%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2frgis_advent_calendar_day1%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+    
+    <div id="main">
+        
+        
+        <article class="post">
+    <header>
+    <div class="title">
+        
+            <h1><a href="../../post/rgis_advent_calendar_day1/">jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</a></h1>
+            
+        
+        
+            <p>日本の行政区域地図を容易に描画するためパッケージを作っています。基本関数の使い方を説明します。</p>
+        
+    </div>
+    <div class="meta">
+        
+            
+        
+
+        <time class="published"
+            datetime='2016-12-01'>
+            December 1, 2016</time>
+        <span class="author">Shinya Uryu</span>
+        
+            <p>5 minute read</p>
+        
+        
+    </div>
+</header>
+
+
+
+    
+
+    <div id="content">
+
+
+<p>一人R + GISアドベントカレンダーの1日目です。初日は自作パッケージの話をします。</p>
+<p>現在、タイトルにあるように日本の行政区域地図を容易に描画するための<strong><code>{jpndistrict}</code></strong>というパッケージを<a href="https://github.com/uribo/jpndistrict">開発中</a>です。このパッケージの基本的な使い方について紹介します。</p>
+<div class="section level2">
+<h2>開発の動機</h2>
+<p>市区町村境界ある都道府県の地図を描きたい、特定の市区町村を選んで、例えば3つの町だけの地図を描きたい。いや、3つもいらない。A町だけで良い。こんなことが、よくあります。</p>
+<p>地図を描画するにはShapefileを用いますが、これを自作するのは困難なので、誰か（主に行政や企業）が作ったものを使うことになります。ですが次に問題となるのが、どのShapefileを使うのが良いのか、ということだったりします。色々な団体がShapefileを配布してくれるのはありがたいのですが、選択肢が多いのです。また、たくさんShapefileをダウンロードしてハードディスクの容量を圧迫するのもできれば避けたいところです。</p>
+<p>また、こういったShapefileのほとんどは都道府県単位であるのがほとんどです。なので、最初の要望の2, 3番目を実行するには加工が必要になります。これをするにはGISの知識がやや必要で、自分のようなニワカには難しいところがあります。</p>
+<p>… そこで<strong><code>{jpndistrict}</code></strong> ですよ！！！！</p>
+</div>
+<div class="section level2">
+<h2>何ができるのか</h2>
+<p>上記の問題。都道府県、市区町村の地図を描画するのに…</p>
+<ul>
+<li>どのShapefileを使うのが良いのか混乱する</li>
+<li>Shapefileを保存したくない</li>
+<li>市区町村の描画を簡単に行いたい</li>
+</ul>
+<p>を解決するために<strong><code>{jpndistrict}</code></strong>は次の働きをします。</p>
+<ul>
+<li>国土数値情報からダウンロード可能な「行政区域データ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html</a>」を利用する</li>
+<li>パッケージ用データとしてShapefileをRオブジェクトにしたものを用意</li>
+<li>市区町村名、市区町村コードから特定の市区町村を抽出可能</li>
+</ul>
+<p>以下にこれらを実際に試してみます。</p>
+<p>なお、<strong><code>{jpndistrict}</code></strong>が提供する地図データは国土交通省国土政策局「国土数値情報」の提供データ (行政区域データ 平成27年4月1日時点のデータ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html</a>)を元に瓜生真也が編集・加工を行ったものです。そのため、このデータを利用した二次著作物を作成する際は、国土数値情報の利用約款に準拠するものとします。利用時にはこの点にご注意ください。</p>
+</div>
+<div class="section level2">
+<h2>デモ</h2>
+<p>11月はCRANへのsubmitに制限がかかってしまったため、GitHubからインストールする必要があります。今月中にCRANへの登録を目指しています。</p>
+<pre class="r"><code>install.packages(&quot;githubinstall&quot;)
+devtools::install_github(&quot;jpndistrict&quot;, ref = &quot;add_light_rds&quot;)</code></pre>
+<pre class="r"><code># パッケージの読み込み
+library(jpndistrict)</code></pre>
+<div class="section level4">
+<h4>行政区域データの取得</h4>
+<p><code>spdf_jpn_pref()</code>… 県レベル。都道府県コードあるいは都道府県名でSpatialPolygonsDataFrameを返します。</p>
+<pre class="r"><code>df.pref33 &lt;- spdf_jpn_pref(code = 33)
+class(df.pref33)
+
+# [1] &quot;SpatialPolygonsDataFrame&quot;
+# attr(,&quot;package&quot;)
+
+head(df.pref33)
+
+# class       : SpatialPolygonsDataFrame 
+# features    : 6 
+# extent      : 133.7397, 134.1227, 34.55947, 34.94909  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 6 × 5
+#   pref_name city_name_ city_name city_name_full city_code
+# *     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;    &lt;fctr&gt;
+# 1    岡山県     岡山市      北区    岡山市 北区     33101
+# 2    岡山県     岡山市      中区    岡山市 中区     33102
+# 3    岡山県     岡山市      東区    岡山市 東区     33103
+# 4    岡山県     岡山市      東区    岡山市 東区     33103
+# 5    岡山県     岡山市      東区    岡山市 東区     33103
+# 6    岡山県     岡山市      東区    岡山市 東区     33103
+
+# spdf_jpn_pref(admin_name = &quot;岡山県&quot;)</code></pre>
+<p><strong><code>{jpndistrict}</code></strong>では、取得した地図データを<strong><code>{ggplot2}</code></strong>ベースの図として出力する関数 (<code>gg_jpn_district()</code>)を提供します。</p>
+<pre class="r"><code>spdf_jpn_pref(code = 33) %&gt;% 
+  gg_jpn_district()</code></pre>
+<p><img src="../../img/161201_plot_pref33_district_true.png" style="display: block; margin: auto;"></p>
+<p><code>spdf_jpn_pref()</code>の引数として<em>district</em>を用意しています。これは都道府県内の市区町村境界区分を行うかのオプションで、FALSEの場合、境界区分のない都道府県データを返します。</p>
+<pre class="r"><code>spdf_jpn_pref(admin_name = &quot;岡山県&quot;, district = FALSE) %&gt;% 
+  gg_jpn_district()</code></pre>
+<p><img src="../../img/161201_plot_pref33_district_false.png" style="display: block; margin: auto;"></p>
+<p><code>spdf_jpn_cities()</code>… 都道府県に含まれる特定の市区町村データを取得します。ここでは市区町村名や市区町村コードの指定が可能です。</p>
+<pre class="r"><code>spdf_jpn_cities(jis_code_pref = 33, jis_code_city = c(&quot;33101&quot;, &quot;33212&quot;))
+
+# class       : SpatialPolygonsDataFrame 
+# features    : 10 
+# extent      : 133.7397, 134.2735, 34.58832, 34.94909  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 10 × 5
+#    pref_name city_name_ city_name city_name_full city_code
+# *      &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;    &lt;fctr&gt;
+# 1     岡山県     岡山市      北区    岡山市 北区     33101
+# 2     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 3     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 4     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 5     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 6     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 7     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 8     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 9     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 10    岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+
+spdf_jpn_cities(jis_code_pref = 14, admin_name = &quot;海老名市&quot;)
+# class       : SpatialPolygonsDataFrame 
+# features    : 1 
+# extent      : 139.3692, 139.4366, 35.39991, 35.47739  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 1 × 5
+#   pref_name city_name_ city_name city_name_full city_code
+# *     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;    &lt;fctr&gt;
+# 1  神奈川県       &lt;NA&gt;  海老名市       海老名市     14215</code></pre>
+<pre class="r"><code>spdf_jpn_cities(jis_code_pref = 33, admin_name = &quot;岡山市&quot;) %&gt;% 
+  gg_jpn_district()</code></pre>
+<p><img src="../../img/161201_plot_pref33_city.png" style="display: block; margin: auto;"></p>
+<p>我ながら、便利だなと思います。何か問題や使い方で不明な点があればGitHubやTwitterでおしらせください。</p>
+<p>Enjoy!</p>
+</div>
+</div>
+
+
+
+
+    </div>
+
+    <footer>
+        <ul class="stats">
+    
+        
+
+        
+        
+            <li>
+                
+                
+                    
+
+                    
+
+                    
+                        <i class="fa fa-list-alt">&nbsp;</i>
+                    
+
+                    
+                        Categories
+                    
+                
+            </li>
+        
+    
+
+    
+    
+        <li><a href='../../categoriesr'>R</a></li>
+    
+        <li><a href='../../categoriespackage'>package</a></li>
+    
+        <li><a href='../../categoriesoss'>oss</a></li>
+    
+</ul>
+
+    </footer>
+</article>
+<ul class="actions pagination">
+    
+        <li><a href="../../post/visualization_advent_calendar_day1/"
+                class="button big previous">plotly流行れ</a></li>
+    
+
+    
+</ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/rgis_advent_calendar_day1\/';
+    var disqus_title = 'jpndistrict: 日本の行政区域地図を容易に描画するパッケージ';
+    var disqus_url = '\/post\/rgis_advent_calendar_day1\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+    </div>
+    
+<section id="sidebar">
+
+    
+        <section id="intro">
+            
+            
+                
+                    <a href="../../" class="logo"><img src="../../img/main/logo.jpg" alt="me" /></a>
+                
+            
+            
+                <header>
+                    <h2>Sincere Pumpkin Patch</h2>
+                    <p></p>
+                </header>
+            
+            <ul class="icons">
+                
+                
+                    
+<li><a href="//github.com/uribo" target="_blank" title="GitHub" class="fa fa-github"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//foursquare.com/u_ribo" target="_blank" title="Foursquare" class="fa fa-foursquare"></a></li>
+
+
+
+
+
+
+
+
+
+<li><a href="//flickr.com/photos/_suika" target="_blank" title="Flickr" class="fa fa-flickr"></a></li>
+
+
+
+<li><a href="//instagram.com/u_ribo" target="_blank" title="Instagram" class="fa fa-instagram"></a></li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<li><a href="//facebook.com/ur1bo" target="_blank" title="Facebook" class="fa fa-facebook"></a></li>
+
+
+
+<li><a href="//twitter.com/u_ribo" target="_blank" title="Twitter" class="fa fa-twitter"></a></li>
+
+
+
+<li><a href="mailto:suika1127@gmail.com" title="Email" class="fa fa-envelope"></a></li>
+
+
+                
+            </ul>
+        </section>
+
+    
+        <section id="recent-posts">
+            <ul class="posts">
+                <header>
+                    <h3>Recent Posts</h3>
+                </header>
+                
+                    
+                
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/rgis_advent_calendar_day1/">jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-01'>
+                                    December 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/visualization_advent_calendar_day1/">plotly流行れ</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-01'>
+                                    December 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/r_advent_calendar_day1/">Rで3億円宣言</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-01'>
+                                    December 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <h3><a href="../../post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-11-29'>
+                                    November 29, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+
+                
+                    <li>
+                        <ul class="actions">
+                            <li><a href=
+                            
+                                /post/
+                            
+                            class="button">View more posts</a></li>
+                        </ul>
+                    </li>
+                
+            </ul>
+        </section>
+
+    
+    
+    
+    
+        <section id="categories">
+            <ul class="posts">
+                <header>
+                    <h3><a href="../../categories/">Categories</a></h3>
+                </header>
+
+                
+                    
+                
+
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/r/">R</a>
+                                <span style="float:right;">5</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/advent_calendar/">advent_calendar</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/package/">package</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/visualization/">visualization</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/shiny/">Shiny</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/data_manipulation/">data_manipulation</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/geo/">geo</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/oss/">oss</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/plotly/">plotly</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/poem/">poem</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/utility/">utility</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+            </ul>
+        </section>
+    
+
+    
+        
+        <section class="blurb">
+            <h2>About</h2>
+            <p>Howdy, I&#39;m Shinya. Engineer, Data Science Enthusiast and Ecologist. This blog is my knowledge work for R that data science language. Most of my work is in the open source R code, which you can find and install on my GitHub https://github.com/uribo .</p>
+
+            <ul class="actions">
+                <li><a href="../../about/" class="button">Learn More</a></li>
+            </ul>
+        </section>
+        
+
+    
+        <section id="footer">
+            <ul class="icons">
+                
+                
+            </ul>
+
+            <p class="copyright">&copy; suryu.me. The contents on this site are licensed under a <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">Creative Commons Attribution-NonCommercial 4.0 International License</a>.<br>Design: <a href="http://html5up.net" target="_blank">HTML5 UP</a>. Ported by <a href="//github.com/jpescador" target="_blank">Julio Pescador</a>. Powered by <a href="//gohugo.io" target="_blank">Hugo</a></p>
+        </section>
+
+</section>
+
+            </div>
+        <a id="back-to-top" href="#" class="fa fa-arrow-up fa-border fa-2x"></a>
+        
+
+        
+        
+            
+        
+
+        
+        
+
+        
+            
+                
+                    <script src="../../js/main.min.js"></script>
+                
+            
+        
+
+            
+            <script>hljs.initHighlightingOnLoad();</script>
+            
+    </body>
+</html>
+
