@@ -1,0 +1,132 @@
+---
+title: "jpndistrict: 日本の行政区域地図を容易に描画するパッケージ"
+author: "Shinya Uryu"
+date: 2016-12-01T08:00:00
+categories: ["R", "package", "oss"]
+description:
+    日本の行政区域地図を容易に描画するためパッケージを作っています。基本関数の使い方を説明します。
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>一人R + GISアドベントカレンダーの1日目です。初日は自作パッケージの話をします。</p>
+<p>現在、タイトルにあるように日本の行政区域地図を容易に描画するための<strong><code>{jpndistrict}</code></strong>というパッケージを<a href="https://github.com/uribo/jpndistrict">開発中</a>です。このパッケージの基本的な使い方について紹介します。</p>
+<div class="section level2">
+<h2>開発の動機</h2>
+<p>市区町村境界ある都道府県の地図を描きたい、特定の市区町村を選んで、例えば3つの町だけの地図を描きたい。いや、3つもいらない。A町だけで良い。こんなことが、よくあります。</p>
+<p>地図を描画するにはShapefileを用いますが、これを自作するのは困難なので、誰か（主に行政や企業）が作ったものを使うことになります。ですが次に問題となるのが、どのShapefileを使うのが良いのか、ということだったりします。色々な団体がShapefileを配布してくれるのはありがたいのですが、選択肢が多いのです。また、たくさんShapefileをダウンロードしてハードディスクの容量を圧迫するのもできれば避けたいところです。</p>
+<p>また、こういったShapefileのほとんどは都道府県単位であるのがほとんどです。なので、最初の要望の2, 3番目を実行するには加工が必要になります。これをするにはGISの知識がやや必要で、自分のようなニワカには難しいところがあります。</p>
+<p>… そこで<strong><code>{jpndistrict}</code></strong> ですよ！！！！</p>
+</div>
+<div class="section level2">
+<h2>何ができるのか</h2>
+<p>上記の問題。都道府県、市区町村の地図を描画するのに…</p>
+<ul>
+<li>どのShapefileを使うのが良いのか混乱する</li>
+<li>Shapefileを保存したくない</li>
+<li>市区町村の描画を簡単に行いたい</li>
+</ul>
+<p>を解決するために<strong><code>{jpndistrict}</code></strong>は次の働きをします。</p>
+<ul>
+<li>国土数値情報からダウンロード可能な「行政区域データ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html</a>」を利用する</li>
+<li>パッケージ用データとしてShapefileをRオブジェクトにしたものを用意</li>
+<li>市区町村名、市区町村コードから特定の市区町村を抽出可能</li>
+</ul>
+<p>以下にこれらを実際に試してみます。</p>
+<p>なお、<strong><code>{jpndistrict}</code></strong>が提供する地図データは国土交通省国土政策局「国土数値情報」の提供データ (行政区域データ 平成27年4月1日時点のデータ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html</a>)を元に瓜生真也が編集・加工を行ったものです。そのため、このデータを利用した二次著作物を作成する際は、国土数値情報の利用約款に準拠するものとします。利用時にはこの点にご注意ください。</p>
+</div>
+<div class="section level2">
+<h2>デモ</h2>
+<p>11月はCRANへのsubmitに制限がかかってしまったため、GitHubからインストールする必要があります。今月中にCRANへの登録を目指しています。</p>
+<pre class="r"><code>install.packages(&quot;githubinstall&quot;)
+devtools::install_github(&quot;jpndistrict&quot;, ref = &quot;add_light_rds&quot;)</code></pre>
+<pre class="r"><code># パッケージの読み込み
+library(jpndistrict)</code></pre>
+<div class="section level4">
+<h4>行政区域データの取得</h4>
+<p><code>spdf_jpn_pref()</code>… 県レベル。都道府県コードあるいは都道府県名でSpatialPolygonsDataFrameを返します。</p>
+<pre class="r"><code>df.pref33 &lt;- spdf_jpn_pref(code = 33)
+class(df.pref33)
+
+# [1] &quot;SpatialPolygonsDataFrame&quot;
+# attr(,&quot;package&quot;)
+
+head(df.pref33)
+
+# class       : SpatialPolygonsDataFrame 
+# features    : 6 
+# extent      : 133.7397, 134.1227, 34.55947, 34.94909  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 6 × 5
+#   pref_name city_name_ city_name city_name_full city_code
+# *     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;    &lt;fctr&gt;
+# 1    岡山県     岡山市      北区    岡山市 北区     33101
+# 2    岡山県     岡山市      中区    岡山市 中区     33102
+# 3    岡山県     岡山市      東区    岡山市 東区     33103
+# 4    岡山県     岡山市      東区    岡山市 東区     33103
+# 5    岡山県     岡山市      東区    岡山市 東区     33103
+# 6    岡山県     岡山市      東区    岡山市 東区     33103
+
+# spdf_jpn_pref(admin_name = &quot;岡山県&quot;)</code></pre>
+<p><strong><code>{jpndistrict}</code></strong>では、取得した地図データを<strong><code>{ggplot2}</code></strong>ベースの図として出力する関数 (<code>gg_jpn_district()</code>)を提供します。</p>
+<pre class="r"><code>spdf_jpn_pref(code = 33) %&gt;% 
+  gg_jpn_district()</code></pre>
+<p><img src="../../img/161201_plot_pref33_district_true.png" style="display: block; margin: auto;"></p>
+<p><code>spdf_jpn_pref()</code>の引数として<em>district</em>を用意しています。これは都道府県内の市区町村境界区分を行うかのオプションで、FALSEの場合、境界区分のない都道府県データを返します。</p>
+<pre class="r"><code>spdf_jpn_pref(admin_name = &quot;岡山県&quot;, district = FALSE) %&gt;% 
+  gg_jpn_district()</code></pre>
+<p><img src="../../img/161201_plot_pref33_district_false.png" style="display: block; margin: auto;"></p>
+<p><code>spdf_jpn_cities()</code>… 都道府県に含まれる特定の市区町村データを取得します。ここでは市区町村名や市区町村コードの指定が可能です。</p>
+<pre class="r"><code>spdf_jpn_cities(jis_code_pref = 33, jis_code_city = c(&quot;33101&quot;, &quot;33212&quot;))
+
+# class       : SpatialPolygonsDataFrame 
+# features    : 10 
+# extent      : 133.7397, 134.2735, 34.58832, 34.94909  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 10 × 5
+#    pref_name city_name_ city_name city_name_full city_code
+# *      &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;    &lt;fctr&gt;
+# 1     岡山県     岡山市      北区    岡山市 北区     33101
+# 2     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 3     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 4     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 5     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 6     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 7     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 8     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 9     岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+# 10    岡山県       &lt;NA&gt;  瀬戸内市       瀬戸内市     33212
+
+spdf_jpn_cities(jis_code_pref = 14, admin_name = &quot;海老名市&quot;)
+# class       : SpatialPolygonsDataFrame 
+# features    : 1 
+# extent      : 139.3692, 139.4366, 35.39991, 35.47739  (xmin, xmax, ymin, ymax)
+# coord. ref. : +proj=longlat +ellps=GRS80 +no_defs 
+# variables   : 5
+# # A tibble: 1 × 5
+#   pref_name city_name_ city_name city_name_full city_code
+# *     &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;    &lt;fctr&gt;
+# 1  神奈川県       &lt;NA&gt;  海老名市       海老名市     14215</code></pre>
+<pre class="r"><code>spdf_jpn_cities(jis_code_pref = 33, admin_name = &quot;岡山市&quot;) %&gt;% 
+  gg_jpn_district()</code></pre>
+<p><img src="../../img/161201_plot_pref33_city.png" style="display: block; margin: auto;"></p>
+<p>我ながら、便利だなと思います。何か問題や使い方で不明な点があればGitHubやTwitterでおしらせください。</p>
+<p>Enjoy!</p>
+</div>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->
