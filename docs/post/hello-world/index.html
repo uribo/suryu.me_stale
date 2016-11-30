@@ -62,7 +62,7 @@
 
 
 
-<meta itemprop="keywords" content="R,Shiny,data_manipulation,geo,package,utility,visualization," />
+<meta itemprop="keywords" content="R,Shiny,advent_calendar,data_manipulation,geo,package,poem,utility,visualization," />
 
         
 
@@ -89,6 +89,22 @@
         
             
         
+
+<script src="../../rmarkdown-libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="../../rmarkdown-libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="../../rmarkdown-libs/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/leaflet-0.7.7/leaflet.js"></script>
+<link href="../../rmarkdown-libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<link href="../../rmarkdown-libs/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/leaflet-label-0.2.2/leaflet.label.js"></script>
+<script src="../../rmarkdown-libs/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+<script src="../../rmarkdown-libs/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+<script src="../../rmarkdown-libs/leaflet-binding-1.0.2.9006/leaflet.js"></script>
+
+
+
+
+
     </head>
     <body>
 
@@ -230,6 +246,10 @@
 
                 
                     <li>
+                        <a href="../../post/r_advent_calendar_day1/"><p>Rで3億円宣言</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/r_advent_calendar_2016/"><p>【予告】Rに関する一人アドベントカレンダー2016</p></a>
                     </li>
                 
@@ -239,10 +259,6 @@
                 
                     <li>
                         <a href="../../post/input_helper_addins/"><p>clipr, datapasta: データ入力を支えるパッケージ</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
                     </li>
                 
             </ul>
@@ -362,9 +378,7 @@
 
 
     <div id="content">
-        <!-- BLOGDOWN-BODY-BEFORE
 
-/BLOGDOWN-BODY-BEFORE -->
 
 <pre class="r"><code>library(remoji)</code></pre>
 <p>これまで「はてなブログ」でちまちまと駄文を<a href="http://uribo.hatenablog.com">書き連ねていた</a>わけだけど、ふと思い立ってこちらに引っ越すことにした。このサイトはR Markdownの<a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html">ウェブサイト構築機能</a>を使って作られている。その特徴としてページを作成する際のもとになっているのはR Markdownファイルとなっている。</p>
@@ -420,24 +434,6 @@ hc</code></pre>
 
 
 
-<!-- BLOGDOWN-HEAD
-
-<script src="#####../content/post/hello-world_files/htmlwidgets-0.8/htmlwidgets.js"></script>
-<script src="#####../content/post/hello-world_files/jquery-1.12.4/jquery.min.js"></script>
-<link href="#####../content/post/hello-world_files/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
-<script src="#####../content/post/hello-world_files/leaflet-0.7.7/leaflet.js"></script>
-<link href="#####../content/post/hello-world_files/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
-<link href="#####../content/post/hello-world_files/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
-<script src="#####../content/post/hello-world_files/leaflet-label-0.2.2/leaflet.label.js"></script>
-<script src="#####../content/post/hello-world_files/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
-<script src="#####../content/post/hello-world_files/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
-<script src="#####../content/post/hello-world_files/leaflet-binding-1.0.2.9006/leaflet.js"></script>
-
-
-
-
-
-/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -616,6 +612,20 @@ hc</code></pre>
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/r_advent_calendar_day1/">Rで3億円宣言</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-01'>
+                                    December 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h3>
                                 
                                     
@@ -655,20 +665,6 @@ hc</code></pre>
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-11-23'>
-                                    November 23, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -703,7 +699,7 @@ hc</code></pre>
                         <article>
                             <header>
                                 <a href="../../categories/r/">R</a>
-                                <span style="float:right;">2</span>
+                                <span style="float:right;">3</span>
                             </header>
                         </article>
                     </li>
@@ -712,6 +708,15 @@ hc</code></pre>
                         <article>
                             <header>
                                 <a href="../../categories/shiny/">Shiny</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/advent_calendar/">advent_calendar</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -739,6 +744,15 @@ hc</code></pre>
                         <article>
                             <header>
                                 <a href="../../categories/package/">package</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/poem/">poem</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>

@@ -60,7 +60,7 @@
 
 
 
-<meta itemprop="keywords" content="R,Shiny,data_manipulation,geo,package,utility,visualization," />
+<meta itemprop="keywords" content="R,Shiny,advent_calendar,data_manipulation,geo,package,poem,utility,visualization," />
 
         
 
@@ -87,6 +87,15 @@
         
             
         
+
+<script src="../../rmarkdown-libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="../../rmarkdown-libs/d3-3.5.3/d3.js"></script>
+<script src="../../rmarkdown-libs/bubbles-binding-0.2/bubbles.js"></script>
+
+
+
+
+
     </head>
     <body>
 
@@ -228,6 +237,10 @@
 
                 
                     <li>
+                        <a href="../../post/r_advent_calendar_day1/"><p>Rで3億円宣言</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/r_advent_calendar_2016/"><p>【予告】Rに関する一人アドベントカレンダー2016</p></a>
                     </li>
                 
@@ -237,10 +250,6 @@
                 
                     <li>
                         <a href="../../post/input_helper_addins/"><p>clipr, datapasta: データ入力を支えるパッケージ</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
                     </li>
                 
             </ul>
@@ -340,9 +349,7 @@
     
 
     <div id="content">
-        <!-- BLOGDOWN-BODY-BEFORE
 
-/BLOGDOWN-BODY-BEFORE -->
 
 <pre class="r"><code>library(remoji)
 library(magrittr)</code></pre>
@@ -464,7 +471,7 @@ df.wishlist.item &lt;- df.wishlist %&gt;%
   scale_fill_viridis() + 
   guides(fill = &quot;none&quot;)</code></pre>
 <div class="figure" style="text-align: center">
-<img src="#####../content/post/amazon_wish_list_files/figure-html/160621_fig1-1.png" alt="対象のほしいものリスト公開理由の内訳" width="672" />
+<img src="figures/160621_fig1-1.png" alt="対象のほしいものリスト公開理由の内訳" width="672" />
 <p class="caption">
 (#fig:160621_fig1)対象のほしいものリスト公開理由の内訳
 </p>
@@ -541,7 +548,7 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
   dplyr::mutate(id = with(., reorder(id, n, median))) %&gt;%
   ggplot(aes(id, n)) + geom_bar(stat = &quot;identity&quot;)</code></pre>
 <div class="figure" style="text-align: center">
-<img src="#####../content/post/amazon_wish_list_files/figure-html/160621_fig3-1.png" alt="ほしいものリスト内の商品数" width="672" />
+<img src="figures/160621_fig3-1.png" alt="ほしいものリスト内の商品数" width="672" />
 <p class="caption">
 (#fig:160621_fig3)ほしいものリスト内の商品数
 </p>
@@ -668,17 +675,6 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
 
 
 
-<!-- BLOGDOWN-HEAD
-
-<script src="#####../content/post/amazon_wish_list_files/htmlwidgets-0.8/htmlwidgets.js"></script>
-<script src="#####../content/post/amazon_wish_list_files/d3-3.5.3/d3.js"></script>
-<script src="#####../content/post/amazon_wish_list_files/bubbles-binding-0.2/bubbles.js"></script>
-
-
-
-
-
-/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -836,6 +832,20 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/r_advent_calendar_day1/">Rで3億円宣言</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-01'>
+                                    December 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h3>
                                 
                                     
@@ -875,20 +885,6 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-11-23'>
-                                    November 23, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -923,7 +919,7 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                         <article>
                             <header>
                                 <a href="../../categories/r/">R</a>
-                                <span style="float:right;">2</span>
+                                <span style="float:right;">3</span>
                             </header>
                         </article>
                     </li>
@@ -932,6 +928,15 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                         <article>
                             <header>
                                 <a href="../../categories/shiny/">Shiny</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/advent_calendar/">advent_calendar</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -959,6 +964,15 @@ df.omit.outlier &lt;- df.wishlist.item %&gt;% dplyr::filter(price %nin% outlier.
                         <article>
                             <header>
                                 <a href="../../categories/package/">package</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/poem/">poem</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>

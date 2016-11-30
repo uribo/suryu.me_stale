@@ -1,17 +1,11 @@
-
-
-
-    
-
-
-
-
 <!DOCTYPE HTML>
 
 <html>
     <head>
         
-            <title> - suryu.me</title>
+            
+                <title>suryu.me</title>
+            
         
 
         <meta charset="utf-8" />
@@ -29,13 +23,13 @@
 
         
         <meta name="twitter:image" content="https://suryu.me/img/banner.png"/>
-        <meta property="og:title" content="" />
+        <meta property="og:title" content="suryu.me" />
 <meta property="og:description" content="Tips for R and Python" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
 
 
-
+<meta property="og:updated_time" content="2016-12-01T00:00:00&#43;00:00"/>
 
 
 
@@ -46,7 +40,7 @@
 
 
         
-<meta itemprop="name" content="">
+<meta itemprop="name" content="suryu.me">
 <meta itemprop="description" content="Tips for R and Python">
 
 
@@ -75,6 +69,12 @@
         
             
         
+
+
+
+
+
+
     </head>
     <body>
 
@@ -82,9 +82,10 @@
         <div id="wrapper">
 
     
+    
 <header id="header">
     
-        <h2><a href="./">Wonderful R World</i></a></h2>
+        <h1><a href="./">Wonderful R World</i></a></h1>
     
 
     <nav class="links">
@@ -122,6 +123,10 @@
     </nav>
     <nav class="main">
         <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
             
             <li class="search">
                 <a class="fa-search" href="#search">Search</a>
@@ -211,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/r_advent_calendar_day1/"><p>Rで3億円宣言</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/r_advent_calendar_2016/"><p>【予告】Rに関する一人アドベントカレンダー2016</p></a>
                     </li>
                 
@@ -220,10 +229,6 @@
                 
                     <li>
                         <a href="./post/input_helper_addins/"><p>clipr, datapasta: データ入力を支えるパッケージ</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
                     </li>
                 
             </ul>
@@ -236,19 +241,14 @@
     
     <div id="main">
         
-        
-            
-        
-
-        
             <article class="post">
     <header>
     <div class="title">
         
-            <h2><a href="./post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h2>
+            <h2><a href="./post/r_advent_calendar_day1/">Rで3億円宣言</a></h2>
         
         
-            <p>一人アドベントカレンダーを5つ、完走したい。</p>
+            <p>初日なのでエモい話。死ぬまでRで飯を食えたらいいねって今は思う</p>
         
     </div>
     <div class="meta">
@@ -257,46 +257,76 @@
         
 
         <time class="published"
-            datetime='2016-11-29'>
-            November 29, 2016</time>
+            datetime='2016-12-01'>
+            December 1, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>1 minute read</p>
+            <p>5 minute read</p>
         
         
     </div>
 </header>
 
-    
-    
-
-    
-        
-        
-
-
 
 
     
-    
-        
-    
+
+    <div id="content">
 
 
-        
+<p>初日なのでエモい話をしたいと思います。Rのコードは出てきません。完全にポエムです。明日から一人Rアドベントカレンダーの本番だと思ってもらっても構いません。</p>
+<p>…</p>
+<p>私は今年3月から大学院をリタイアし、ｼｬｶｲｼﾞﾝとして働き出しました。</p>
+<p>その間で私が稼いできたお金のほとんどは、自分自身のRを使った技術により稼いだものだと思っています。というのも、私のｷﾞｮｰﾑ内容のほとんどはRを使った仕事だからです。なので、給与はRで稼いだお金とほぼ等しいものとして考えます。</p>
+<p>タイトルにある「Rで3億円宣言」というのは、<strong>うまくいけば生涯で稼ぐであろう3億円を、Rによって稼いでやろう、Rの仕事を死ぬまで続けよう、R使いが増えるための環境構築や知見共有を行おう、という宣言</strong>です（ただし<a href="https://github.com/tidyverse/tidyverse/blob/master/vignettes/manifesto.Rmd">某マニフェスト</a>のように、変わることもある、とここに書いておきます）。3億円まではまだまだ遠いけど、3億円に向けて今年大きな一歩を踏み出しました。月に向かうような話かもしれませんが、確実に歩み始めたのです。</p>
+<div id="3" class="section level2">
+<h2>マニフェスト実現のための3ヵ条</h2>
+<p>マニフェストを実現するために、何をするべきでしょうか。雑に考えてみました。</p>
+<div id="r" class="section level3">
+<h3>1 Rを使える環境で働く</h3>
+<p>これは大事なことです。入社した会社は、Rを使える私を歓迎してくれました。Twitterでも同様の意見を得ましたが、ｼｬｶｲというのは結果が出せれば手段は問わない傾向にあるようです。Rを使ってデータベース操作、集計、データ分析に加え、そのほかｷﾞｮｰﾑを実行することに対して、何の問題もありませんでした。またShinyによるウェブアプリケーション開発も容認してくれ、私のRに関する技術や知識はより実用的で幅広いものとなりました。できればこのような良い環境を維持したいと思います。</p>
+</div>
+<div id="r" class="section level3">
+<h3>2 Rについての情報を収集する・発信する</h3>
+<p>ニンジャにカラテが必要なように、Rユーザーも日々訓練が必要です。特にHadley Wickhamをはじめとしたタツジン級の開発者がRに関わるようになり、パッケージを含めた環境変化のスピードが速い近年では、すぐに技術は古くなってしまう気がしています。</p>
+<p>小さな変更はすぐに追えますが、大きな変更や新しい技術を取得するのは難しいです。なので小さくコツコツ覚えていくのが良いでしょう。そのためには毎日Rと向き合い、情報を収集するのがてっとり早いと思います。また、情報は頭の中では成熟しませんので、コードを書くことが大事です。せっかく書いたのであれば、ブログやQiitaに記事を公開すると良いでしょう。副業が舞い込んでくるかもしれません（私自身はネットでの活動をきっかけにマイナビでの記事や本を書くことになりました）。</p>
+<p>先日のJapan.Rでも、情報を発信する（生きている宣言をする）ことの大切さが語られました。私の場合、今年はブログを書く機会が去年までと比べて減ってしまったのですが、毎日Rには触れていましたし、GitHubでストーキングも続けていました。<strong>死んでいるように見えても、先端技術について把握している自信があります</strong>。</p>
+</div>
+<div id="r" class="section level3">
+<h3>3 Rを好きであり続ける</h3>
+<p>もっとも大事な項目かもしれません。実を言うとRをここまで好きになったのはここ数年の出来事です。大学生時代は、植物を追いかけ、森に入っていたので、Rはここまで熱中できるものではありませんでした。将来についてもわかりません。上記2つの項目が実現できなくなって、Rに対する興味が薄れてしまうことも考えられます。ただ、未来は不透明なので、そうなったら綺麗にRのことは忘れたいと思います。Rに飽きたということは多分、次に興味をもてる何かを見つけたということなのですから。</p>
+<p>…</p>
+</div>
+</div>
+<div id="r" class="section level2">
+<h2>一人Rアドベントカレンダーについて</h2>
+<p>今年、Rに触れ合う機会が豊富にあったにも関わらず、インターネットを介したアウトプットの少なさを反省して、<strong>働き始めてから得たRやShinyの技術の整理として、Rに関するアドベントカレンダーを書くことにしました</strong>。内容を考えていると、それが一つ二つでなく、多数あることに気がついたので、一人アドベントカレンダーをやろうと思いました。さらに、私の書きたい内容は次の5つに区分できることがわかったので、5種類の一人Rアドベントカレンダーを書きます。</p>
+<ol style="list-style-type: decimal">
+<li><strong>一人Rアドベントカレンダー</strong>… Rに関する全般的な話題、パッケージの紹介などを予定</li>
+<li><strong>一人Shinyアドベントカレンダー</strong>… RのウェブアプリケーションフレームワークであるShinyに関するtipsや基本的な解説記事を予定</li>
+<li><strong>一人Rパッケージ開発アドベントカレンダー</strong>… Rのパッケージに関する体験や話題を取り上げます</li>
+<li><strong>一人visualizationアドベントカレンダー</strong>… <strong><code>{ggplot2}</code></strong>や<strong><code>{plotly}</code></strong>といった可視化用パッケージに関する内容</li>
+<li><strong>一人R + GISアドベントカレンダー</strong>… ガチGISではなく、ゆるふわな感じでお送りします</li>
+</ol>
+<p>正直毎日5つ書ける気はしないし、感想することを誰も期待していないでしょう。でもこれを書くのは自分のためです。他にも進捗を出すべき事案があるので、そちらを優先します。ほどほどにできたらなと思います。</p>
+<p>余談ですが、この記事は<a href="http://n3331.com">両側を中央線が走る、線路の真ん中に位置するカフェ</a>で、R界の神に近づきつつある、awesome ユタニーこと <a href="https://twitter.com/yutannihilation">yutannihilation</a> を前にして書かれました。私のポエットなマニフェストとともに、進捗に付き合ってくれた彼に感謝の気持ちをここに表し、3億円を稼いだあかつきには寿司を献上することを誓います。</p>
+</div>
+<div id="r3" class="section level2">
+<h2>Rで3億円宣言</h2>
+<ul>
+<li>Rを使った仕事で稼ぐ</li>
+<li>Rを使った仕事を継続させる</li>
+<li>Rで稼ぐための環境を作っていく</li>
+</ul>
+<p>2016年12月1日</p>
+</div>
 
-        <a href="./post/r_advent_calendar_2016/" class="image featured">
-            <img src="./img/2016/11/161129_advent_calendar_timeviz.png" alt="" />
-        </a>
-    
 
 
-    <p>明後日から12月になる。12月といえば最近はもっぱら「アドベントカレンダー」の月という認識がある。今年はRに関するアドベントカレンダーが2つ</p>
+
+    </div>
 
     <footer>
-        <ul class="actions">
-            <li><a href="./post/r_advent_calendar_2016/" class="button big">Continue Reading</a></li>
-        </ul>
         <ul class="stats">
     
         
@@ -326,305 +356,102 @@
     
         <li><a href='./categoriesr'>R</a></li>
     
-        <li><a href='./categoriesshiny'>Shiny</a></li>
+        <li><a href='./categoriespoem'>poem</a></li>
     
-        <li><a href='./categoriesvisualization'>visualization</a></li>
-    
-</ul>
-
-    </footer>
-</article>
-
-        
-            <article class="post">
-    <header>
-    <div class="title">
-        
-            <h2><a href="./post/evaluate_geo_points/">ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</a></h2>
-        
-        
-            <p>Turf.jsのRラッパーであるlawnパッケージを使って、位置情報データを日本国内（陸地）とそうでないものに分ける話</p>
-        
-    </div>
-    <div class="meta">
-        
-            
-        
-
-        <time class="published"
-            datetime='2016-11-26'>
-            November 26, 2016</time>
-        <span class="author">Shinya Uryu</span>
-        
-            <p>4 minute read</p>
-        
-        
-    </div>
-</header>
-
-    
-    
-
-    
-        
-        
-
-
-
-
-    
-    
-        
-    
-
-
-        
-
-        <a href="./post/evaluate_geo_points/" class="image featured">
-            <img src="./img/2016/11/161126_lawn_include.png" alt="" />
-        </a>
-    
-
-
-    <p>位置情報を扱っていると、当然ながら日本のものと海外のものが混ざってくる。この中から日本の位置に含まれるデータを抽出しようとすると、ジオコーデ</p>
-
-    <footer>
-        <ul class="actions">
-            <li><a href="./post/evaluate_geo_points/" class="button big">Continue Reading</a></li>
-        </ul>
-        <ul class="stats">
-    
-        
-
-        
-        
-            <li>
-                
-                
-                    
-
-                    
-
-                    
-                        <i class="fa fa-list-alt">&nbsp;</i>
-                    
-
-                    
-                        Category
-                    
-                
-            </li>
-        
-    
-
-    
-    
-        <li><a href='./categoriesgeo'>geo</a></li>
+        <li><a href='./categoriesadvent_calendar'>advent_calendar</a></li>
     
 </ul>
 
     </footer>
 </article>
-
-        
-            <article class="post">
-    <header>
-    <div class="title">
-        
-            <h2><a href="./post/input_helper_addins/">clipr, datapasta: データ入力を支えるパッケージ</a></h2>
-        
-        
-            <p>ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。</p>
-        
-    </div>
-    <div class="meta">
-        
-            
-        
-
-        <time class="published"
-            datetime='2016-11-24'>
-            November 24, 2016</time>
-        <span class="author">Shinya Uryu</span>
-        
-            <p>3 minute read</p>
-        
-        
-    </div>
-</header>
-
-    
-
-    <p>ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり{rvest}なりでスクレイピングすれば良</p>
-
-    <footer>
-        <ul class="actions">
-            <li><a href="./post/input_helper_addins/" class="button big">Continue Reading</a></li>
-        </ul>
-        <ul class="stats">
-    
-        
-
-        
-        
-            <li>
-                
-                
-                    
-
-                    
-
-                    
-                        <i class="fa fa-list-alt">&nbsp;</i>
-                    
-
-                    
-                        Categories
-                    
-                
-            </li>
-        
-    
-
-    
-    
-        <li><a href='./categoriesutility'>utility</a></li>
-    
-        <li><a href='./categoriespackage'>package</a></li>
-    
-</ul>
-
-    </footer>
-</article>
-
-        
-            <article class="post">
-    <header>
-    <div class="title">
-        
-            <h2><a href="./post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h2>
-        
-        
-            <p>dplyrパッケージの現行バージョン (0.5.0)ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分けについてメモしておく。</p>
-        
-    </div>
-    <div class="meta">
-        
-            
-        
-
-        <time class="published"
-            datetime='2016-11-23'>
-            November 23, 2016</time>
-        <span class="author">Shinya Uryu</span>
-        
-            <p>4 minute read</p>
-        
-        
-    </div>
-</header>
-
-    
-
-    <p>library(dplyr) {dplyr}パッケージの現行バージョン (0.5.0) ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分</p>
-
-    <footer>
-        <ul class="actions">
-            <li><a href="./post/dplyr_recode/" class="button big">Continue Reading</a></li>
-        </ul>
-        <ul class="stats">
-    
-        
-
-        
-        
-            <li>
-                
-                
-                    
-
-                    
-
-                    
-                        <i class="fa fa-list-alt">&nbsp;</i>
-                    
-
-                    
-                        Category
-                    
-                
-            </li>
-        
-    
-
-    
-    
-        <li><a href='./categoriesdata_manipulation'>data_manipulation</a></li>
-    
-</ul>
-
-    </footer>
-</article>
-
-        
-            <article class="post">
-    <header>
-    <div class="title">
-        
-            <h2><a href="./post/datacamp_tutorial/">DataCampの力を借りてR学習ページを作る</a></h2>
-        
-        
-            <p>DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。</p>
-        
-    </div>
-    <div class="meta">
-        
-            
-        
-
-        <time class="published"
-            datetime='2016-09-11'>
-            September 11, 2016</time>
-        <span class="author">Shinya Uryu</span>
-        
-            <p>3 minute read</p>
-        
-        
-    </div>
-</header>
-
-    
-
-    <p>R言語を取り扱うオンライン学習系サービスの中でも、DataCampは他のオンライン学習系サービスと比べて少し頭が抜けている感じがある。それは</p>
-
-    <footer>
-        <ul class="actions">
-            <li><a href="./post/datacamp_tutorial/" class="button big">Continue Reading</a></li>
-        </ul>
-        <ul class="stats">
-    
-
-    
-    
-</ul>
-
-    </footer>
-</article>
-
-        
-
-        
 <ul class="actions pagination">
     
-        <li><a href="#" class="disabled button big previous">Previous Page</a></li>
+        <li><a href="./post/r_advent_calendar_2016/"
+                class="button big previous">【予告】Rに関する一人アドベントカレンダー2016</a></li>
     
 
-    
-        <li><a href="./page/2/"
-                class="button big next">Next Page</a></li>
     
 </ul>
 
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/r_advent_calendar_day1\/';
+    var disqus_title = 'Rで3億円宣言';
+    var disqus_url = '\/post\/r_advent_calendar_day1\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
+
+
+            <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=%2fpost%2fr_advent_calendar_day1%2f&text=R%e3%81%a73%e5%84%84%e5%86%86%e5%ae%a3%e8%a8%80&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=%2fpost%2fr_advent_calendar_day1%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fr_advent_calendar_day1%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=%2fpost%2fr_advent_calendar_day1%2f&title=R%e3%81%a73%e5%84%84%e5%86%86%e5%ae%a3%e8%a8%80" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fr_advent_calendar_day1%2f&title=R%e3%81%a73%e5%84%84%e5%86%86%e5%ae%a3%e8%a8%80" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fr_advent_calendar_day1%2f&title=R%e3%81%a73%e5%84%84%e5%86%86%e5%ae%a3%e8%a8%80" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fr_advent_calendar_day1%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
+        
     </div>
     
 <section id="sidebar">
@@ -737,6 +564,20 @@
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/r_advent_calendar_day1/">Rで3億円宣言</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-01'>
+                                    December 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h3>
                                 
                                     
@@ -776,20 +617,6 @@
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-11-23'>
-                                    November 23, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -824,7 +651,7 @@
                         <article>
                             <header>
                                 <a href="./categories/r/">R</a>
-                                <span style="float:right;">2</span>
+                                <span style="float:right;">3</span>
                             </header>
                         </article>
                     </li>
@@ -833,6 +660,15 @@
                         <article>
                             <header>
                                 <a href="./categories/shiny/">Shiny</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="./categories/advent_calendar/">advent_calendar</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -860,6 +696,15 @@
                         <article>
                             <header>
                                 <a href="./categories/package/">package</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="./categories/poem/">poem</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>

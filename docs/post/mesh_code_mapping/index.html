@@ -60,7 +60,7 @@
 
 
 
-<meta itemprop="keywords" content="R,Shiny,data_manipulation,geo,package,utility,visualization," />
+<meta itemprop="keywords" content="R,Shiny,advent_calendar,data_manipulation,geo,package,poem,utility,visualization," />
 
         
 
@@ -87,6 +87,12 @@
         
             
         
+
+
+
+
+
+
     </head>
     <body>
 
@@ -228,6 +234,10 @@
 
                 
                     <li>
+                        <a href="../../post/r_advent_calendar_day1/"><p>Rで3億円宣言</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/r_advent_calendar_2016/"><p>【予告】Rに関する一人アドベントカレンダー2016</p></a>
                     </li>
                 
@@ -237,10 +247,6 @@
                 
                     <li>
                         <a href="../../post/input_helper_addins/"><p>clipr, datapasta: データ入力を支えるパッケージ</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/dplyr_recode/"><p>dplyrのベクトル要素変換用関数3種</p></a>
                     </li>
                 
             </ul>
@@ -340,9 +346,7 @@
     
 
     <div id="content">
-        <!-- BLOGDOWN-BODY-BEFORE
 
-/BLOGDOWN-BODY-BEFORE -->
 
 <p><a href="../geohash/">前回の記事</a>でGeohashをRから取得して可視化まで行ったが、日本には地域区画のための標準機構として「標準地域メッシュ」と呼ばれるものがある。</p>
 <p>これはGeohashのように対象の緯度経度区画を数値化したもので、第1次地域区画（4桁）、第2次地域区画（6桁）、第3次地域区画（8桁）となるにつれ細かな領域を指すようになる。特に第3次地域区画は<strong>標準地域メッシュ</strong>あるいは基準メッシュと呼ばれ、全国的規模での調査における区画を表現するために用いられている。</p>
@@ -467,7 +471,7 @@ leaflet() %&gt;%
   coord_map(projection = &quot;mercator&quot;)
 
 plot_map</code></pre>
-<p><img src="#####../content/post/mesh_code_mapping_files/figure-html/160809_mesh_code_mapping-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figures/160809_mesh_code_mapping-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div class="section level2">
 <h2>平均値メッシュによる塗り分け</h2>
@@ -536,14 +540,6 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
 
 
 
-<!-- BLOGDOWN-HEAD
-
-
-
-
-
-
-/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -701,6 +697,20 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/r_advent_calendar_day1/">Rで3億円宣言</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-01'>
+                                    December 1, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h3>
                                 
                                     
@@ -740,20 +750,6 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                         </article>
                     </li>
                 
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/dplyr_recode/">dplyrのベクトル要素変換用関数3種</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-11-23'>
-                                    November 23, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
 
                 
                     <li>
@@ -788,7 +784,7 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                         <article>
                             <header>
                                 <a href="../../categories/r/">R</a>
-                                <span style="float:right;">2</span>
+                                <span style="float:right;">3</span>
                             </header>
                         </article>
                     </li>
@@ -797,6 +793,15 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                         <article>
                             <header>
                                 <a href="../../categories/shiny/">Shiny</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/advent_calendar/">advent_calendar</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
@@ -824,6 +829,15 @@ gg_animate(p, &quot;160809_mesh_code_mapping_okayama_pref_precipitation.gif&quot
                         <article>
                             <header>
                                 <a href="../../categories/package/">package</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="../../categories/poem/">poem</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
