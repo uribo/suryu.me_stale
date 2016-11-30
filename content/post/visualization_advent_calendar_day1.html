@@ -1,0 +1,56 @@
+---
+title: "plotly流行れ"
+author: "Shinya Uryu"
+date: 2016-12-01T01:00:00
+categories: ["R", "visualization", "plotly", "advent_calendar"]
+description:
+    plotlyについてとても簡単に紹介
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>plotly <a href="https://plot.ly/" class="uri">https://plot.ly/</a> をご存知でしょうか。plotlyはカナダのモントリオールにある企業なのですが、活動の一つに、データの可視化のためのJavaSctiptライブラリである Plotly.js の開発があります。Plotly.jsはオープンソースで提供されており、このPlotly.jsのラッパーがR, Python, Matlabといった環境のために用意されています。</p>
+<div id="plotly" class="section level2">
+<h2>plotlyでできること</h2>
+<p>plotlyでどのようなグラフが作成できるかは、<a href="https://plot.ly/r/">本家</a>を見てもらえば、たくさんの種類があることがわかると思います。<strong><code>{plotly}</code></strong>の文法は<strong><code>{ggplot2}</code></strong>と似ている点がありますが、これはこれで独特な書き方をします。plotlyで作図可能なグラフの種類を簡単に取り上げてみます。</p>
+<p><strong>これらのグラフをRで作成する方法や、plotlyを使った細かな機能・技術に関しては、このアドカレの中で紹介予定です。</strong></p>
+<ul>
+<li>基本
+<ul>
+<li>散布図、バブルチャート</li>
+<li>折れ線グラフ、時系列グラフ</li>
+<li>棒グラフ、円グラフ</li>
+<li>ヒストグラム</li>
+<li>箱ひげ図</li>
+<li>ヒートマップ</li>
+<li>ネットワーク図</li>
+<li>等高線図</li>
+</ul></li>
+<li>応用
+<ul>
+<li>地図</li>
+<li>立体図</li>
+<li>ダッシュボード</li>
+<li>ガントチャート</li>
+<li>…</li>
+</ul></li>
+</ul>
+</div>
+<div id="plotly" class="section level2">
+<h2>plotlyを選ぶ理由</h2>
+<p>plotlyはまだ開発途中のライブラリです。ですがその将来は明るく、現段階でも十分な実用性を備えていると思います。というのも、Rを使ったデータ分析環境を提供する<a href="https://exploratory.io">exploratory</a>でもグラフ作成の機能にplotlyが採用されているからです。また、<strong>Shinyのようなサーバーが必要なインタクティブグラフと比べて、plotlyは静的なウェブページにもインタラクティブな操作を追加できます</strong>。グラフを作っておいて、利用者の側で見たいデータのみを表示させたり、逆に不要なデータを削除することができます。これは同様の画像描画ライブラリのhighchartsでも実現可能なのですが、<strong>Rとの親和性やライセンスの面からもplotlyに軍配が上がる</strong>のではないでしょうか。というわけで、plotlyがもっと流行ると良いなと思うのでした。</p>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->

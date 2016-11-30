@@ -9,6 +9,61 @@
     <atom:link href="/categories/visualization/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>plotly流行れ</title>
+      <link>/post/visualization_advent_calendar_day1/</link>
+      <pubDate>Thu, 01 Dec 2016 01:00:00 +0000</pubDate>
+      
+      <guid>/post/visualization_advent_calendar_day1/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;p&gt;plotly &lt;a href=&#34;https://plot.ly/&#34; class=&#34;uri&#34;&gt;https://plot.ly/&lt;/a&gt; をご存知でしょうか。plotlyはカナダのモントリオールにある企業なのですが、活動の一つに、データの可視化のためのJavaSctiptライブラリである Plotly.js の開発があります。Plotly.jsはオープンソースで提供されており、このPlotly.jsのラッパーがR, Python, Matlabといった環境のために用意されています。&lt;/p&gt;
+&lt;div id=&#34;plotly&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;plotlyでできること&lt;/h2&gt;
+&lt;p&gt;plotlyでどのようなグラフが作成できるかは、&lt;a href=&#34;https://plot.ly/r/&#34;&gt;本家&lt;/a&gt;を見てもらえば、たくさんの種類があることがわかると思います。&lt;strong&gt;&lt;code&gt;{plotly}&lt;/code&gt;&lt;/strong&gt;の文法は&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;と似ている点がありますが、これはこれで独特な書き方をします。plotlyで作図可能なグラフの種類を簡単に取り上げてみます。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;これらのグラフをRで作成する方法や、plotlyを使った細かな機能・技術に関しては、このアドカレの中で紹介予定です。&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基本
+&lt;ul&gt;
+&lt;li&gt;散布図、バブルチャート&lt;/li&gt;
+&lt;li&gt;折れ線グラフ、時系列グラフ&lt;/li&gt;
+&lt;li&gt;棒グラフ、円グラフ&lt;/li&gt;
+&lt;li&gt;ヒストグラム&lt;/li&gt;
+&lt;li&gt;箱ひげ図&lt;/li&gt;
+&lt;li&gt;ヒートマップ&lt;/li&gt;
+&lt;li&gt;ネットワーク図&lt;/li&gt;
+&lt;li&gt;等高線図&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;応用
+&lt;ul&gt;
+&lt;li&gt;地図&lt;/li&gt;
+&lt;li&gt;立体図&lt;/li&gt;
+&lt;li&gt;ダッシュボード&lt;/li&gt;
+&lt;li&gt;ガントチャート&lt;/li&gt;
+&lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div id=&#34;plotly&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;plotlyを選ぶ理由&lt;/h2&gt;
+&lt;p&gt;plotlyはまだ開発途中のライブラリです。ですがその将来は明るく、現段階でも十分な実用性を備えていると思います。というのも、Rを使ったデータ分析環境を提供する&lt;a href=&#34;https://exploratory.io&#34;&gt;exploratory&lt;/a&gt;でもグラフ作成の機能にplotlyが採用されているからです。また、&lt;strong&gt;Shinyのようなサーバーが必要なインタクティブグラフと比べて、plotlyは静的なウェブページにもインタラクティブな操作を追加できます&lt;/strong&gt;。グラフを作っておいて、利用者の側で見たいデータのみを表示させたり、逆に不要なデータを削除することができます。これは同様の画像描画ライブラリのhighchartsでも実現可能なのですが、&lt;strong&gt;Rとの親和性やライセンスの面からもplotlyに軍配が上がる&lt;/strong&gt;のではないでしょうか。というわけで、plotlyがもっと流行ると良いなと思うのでした。&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+    <item>
       <title>【予告】Rに関する一人アドベントカレンダー2016</title>
       <link>/post/r_advent_calendar_2016/</link>
       <pubDate>Tue, 29 Nov 2016 05:20:00 +0000</pubDate>
