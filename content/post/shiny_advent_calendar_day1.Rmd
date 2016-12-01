@@ -1,0 +1,49 @@
+---
+title: "一人Shinyアドベントカレンダー概要"
+author: "Shinya Uryu"
+date: 2016-12-01T21:00:00
+categories: ["R", "shiny"]
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+## Shinyとは
+
+Shiny <https://shiny.rstudio.com>とは、RStudioを中心にオープンソースで開発が行われているRのウェブアプリケーションフレームワークです。RubyでいうところのRuby on Rails、Pythonでいうところのdjangoのような立ち位置です。Shinyは、Rの高機能な集計処理やグラフ描画システムをウェブで動作させるための最適なツールとなります。ウェブアプリケーションなのですが、特徴として、HTMLやCSS、JavaScriptに関する知識は必要とせず、Rの関数としてアプリケーションを構築できるという点があります。
+
+Shinyの公式ページに豊富なデモアプリケーションがありますので、実際にどのようなものができるのかを知りたい方はまずそちらを見ると良いでしょう。
+
+## 一人Shinyアドベントカレンダー日程
+
+25日間でShinyについての知識を深め、Shinyアプリケーションを構築できるようになることを目指します。
+
+以下の日程は変更することがあります。
+
+1. 一人Shinyアドベントカレンダー概要
+2. はじめてのShiny
+3. Shinyを構成する要素: input, output
+4. Shinyを構成する要素: server, ui
+5. Shinyを構成する要素: render
+6. Shinyを構成する要素: wigets
+7. reactiveを理解する
+8. observeを理解する
+9. htmlwidgets: 概要
+10. htmlwidgets: DT
+11. htmlwidgets: leaflet
+12. データのインポート、ダウンロード
+13. URLをパラメータに含める
+14. bookmark
+15. shinydashboard
+16. module
+17. Shiny Server
+18. Shiny Serverでアプリを公開する: nginxの設定
+19. Shiny Gadgets
+20. プログレスバーを作る
+21. Shiny 拡張パッケージ
+22. Shiny + CSS + JS
+23. Shinyあるある問題
+24. データベースとの連携
+25. ????
+
+各記事は**`{bookdown}`**を使った[こちらのページ](https://uribo.github.io/25days-shiny/)で公開することを予定しています。
