@@ -6,8 +6,70 @@
     <description>Recent content in Post-rsses on suryu.me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Thu, 01 Dec 2016 08:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 01 Dec 2016 21:00:00 +0000</lastBuildDate>
     <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>一人Shinyアドベントカレンダー概要</title>
+      <link>/post/shiny_advent_calendar_day1/</link>
+      <pubDate>Thu, 01 Dec 2016 21:00:00 +0000</pubDate>
+      
+      <guid>/post/shiny_advent_calendar_day1/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;div id=&#34;shiny&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Shinyとは&lt;/h2&gt;
+&lt;p&gt;Shiny &lt;a href=&#34;https://shiny.rstudio.com&#34; class=&#34;uri&#34;&gt;https://shiny.rstudio.com&lt;/a&gt;とは、RStudioを中心にオープンソースで開発が行われているRのウェブアプリケーションフレームワークです。RubyでいうところのRuby on Rails、Pythonでいうところのdjangoのような立ち位置です。Shinyは、Rの高機能な集計処理やグラフ描画システムをウェブで動作させるための最適なツールとなります。ウェブアプリケーションなのですが、特徴として、HTMLやCSS、JavaScriptに関する知識は必要とせず、Rの関数としてアプリケーションを構築できるという点があります。&lt;/p&gt;
+&lt;p&gt;Shinyの公式ページに豊富なデモアプリケーションがありますので、実際にどのようなものができるのかを知りたい方はまずそちらを見ると良いでしょう。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;shiny&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;一人Shinyアドベントカレンダー日程&lt;/h2&gt;
+&lt;p&gt;25日間でShinyについての知識を深め、Shinyアプリケーションを構築できるようになることを目指します。&lt;/p&gt;
+&lt;p&gt;以下の日程は変更することがあります。&lt;/p&gt;
+&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
+&lt;li&gt;一人Shinyアドベントカレンダー概要&lt;/li&gt;
+&lt;li&gt;はじめてのShiny&lt;/li&gt;
+&lt;li&gt;Shinyを構成する要素: input, output&lt;/li&gt;
+&lt;li&gt;Shinyを構成する要素: server, ui&lt;/li&gt;
+&lt;li&gt;Shinyを構成する要素: render&lt;/li&gt;
+&lt;li&gt;Shinyを構成する要素: wigets&lt;/li&gt;
+&lt;li&gt;reactiveを理解する&lt;/li&gt;
+&lt;li&gt;observeを理解する&lt;/li&gt;
+&lt;li&gt;htmlwidgets: 概要&lt;/li&gt;
+&lt;li&gt;htmlwidgets: DT&lt;/li&gt;
+&lt;li&gt;htmlwidgets: leaflet&lt;/li&gt;
+&lt;li&gt;データのインポート、ダウンロード&lt;/li&gt;
+&lt;li&gt;URLをパラメータに含める&lt;/li&gt;
+&lt;li&gt;bookmark&lt;/li&gt;
+&lt;li&gt;shinydashboard&lt;/li&gt;
+&lt;li&gt;module&lt;/li&gt;
+&lt;li&gt;Shiny Server&lt;/li&gt;
+&lt;li&gt;Shiny Serverでアプリを公開する: nginxの設定&lt;/li&gt;
+&lt;li&gt;Shiny Gadgets&lt;/li&gt;
+&lt;li&gt;プログレスバーを作る&lt;/li&gt;
+&lt;li&gt;Shiny 拡張パッケージ&lt;/li&gt;
+&lt;li&gt;Shiny + CSS + JS&lt;/li&gt;
+&lt;li&gt;Shinyあるある問題&lt;/li&gt;
+&lt;li&gt;データベースとの連携&lt;/li&gt;
+&lt;li&gt;????&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;各記事は&lt;strong&gt;&lt;code&gt;{bookdown}&lt;/code&gt;&lt;/strong&gt;を使った&lt;a href=&#34;https://uribo.github.io/25days-shiny/&#34;&gt;こちらのページ&lt;/a&gt;で公開することを予定しています。&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
     
     <item>
       <title>jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</title>
@@ -1805,91 +1867,6 @@ df.omit.outlier &amp;lt;- df.wishlist.item %&amp;gt;% dplyr::filter(price %nin% 
 &lt;script src=&#34;#####../content/post/amazon_wish_list_files/htmlwidgets-0.8/htmlwidgets.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;#####../content/post/amazon_wish_list_files/d3-3.5.3/d3.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;#####../content/post/amazon_wish_list_files/bubbles-binding-0.2/bubbles.js&#34;&gt;&lt;/script&gt;
-
-
-
-
-
-/BLOGDOWN-HEAD --&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Hello World</title>
-      <link>/post/hello-world/</link>
-      <pubDate>Fri, 10 Jun 2016 06:30:00 +0000</pubDate>
-      
-      <guid>/post/hello-world/</guid>
-      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
-
-/BLOGDOWN-BODY-BEFORE --&gt;
-
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(remoji)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;これまで「はてなブログ」でちまちまと駄文を&lt;a href=&#34;http://uribo.hatenablog.com&#34;&gt;書き連ねていた&lt;/a&gt;わけだけど、ふと思い立ってこちらに引っ越すことにした。このサイトはR Markdownの&lt;a href=&#34;http://rmarkdown.rstudio.com/rmarkdown_websites.html&#34;&gt;ウェブサイト構築機能&lt;/a&gt;を使って作られている。その特徴としてページを作成する際のもとになっているのはR Markdownファイルとなっている。&lt;/p&gt;
-&lt;p&gt;何ヶ月か前からブログを移行する気持ちがあって着々と準備を進めていたのだけど公開までに時間がかかった。というのも、他の進捗がイマイチだったこともあってなんだか遊びっぽいことに注力してしまうのはアレな感じがあったからだ。といいつつ結局進捗よりもこちらが先になってしまった。それは反省。&lt;/p&gt;
-&lt;div id=&#34;r-markdown-websites&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;✏️ はてなブログからR Markdown Websitesへ&lt;/h2&gt;
-&lt;p&gt;引越しの理由について書いておきたい。はてなブログの良さはあるのだけど、次にあげるような理由があったので引っ越し先を検討していた。要約すると&lt;span class=&#34;hlt_bf&#34;&gt;「Rは最高！」というのを伝えるのに最適な環境を用意したかった&lt;/span&gt;のだ。&lt;/p&gt;
-&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
-&lt;li&gt;Rmdからmarkdownを生成してコピー＆ペーストでページを作成するのが面倒。（はてなAPIを使ってラッパーパッケージでも作れば良かったのかもしれないが）&lt;/li&gt;
-&lt;li&gt;htmlwidgetsを埋め込めない（はてなブログでは画像で対応していた）&lt;/li&gt;
-&lt;li&gt;公開する資料やコードが増えてきた&lt;/li&gt;
-&lt;li&gt;海外Rブロガーを見ていると独自ドメインでやっている人をちょいちょい見かけるのでそういう人たちへの憧れ&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;私自身が、Rを好きになってRに慣れていけた理由として、Rでもこんなことができる！という驚きによるものだったので、このウェブサイトによってRの魅力を伝えやすくなっているのではないかと期待する。&lt;/p&gt;
-&lt;p&gt;きっちりとしたブログサービスのはてなブログから移行した代わりに失ったものもいろいろあると思うが、まあ自由にやっていけるのは気楽な気がしているので今は良い。&lt;/p&gt;
-&lt;div id=&#34;r-markdown-websites&#34; class=&#34;section level3&#34;&gt;
-&lt;h3&gt;👍 R Markdown Websitesの良いところ&lt;/h3&gt;
-&lt;p&gt;R Markdown Websitesを使えば、Rmdを元にウェブサイトの構築が簡単に行える。それはそれで別に記事を書きたいので簡単に述べておくと、サイトの構造を&lt;code&gt;_site.yml&lt;/code&gt;および&lt;code&gt;_navbar.yml&lt;/code&gt;に書いておき、Rmd形式でページを書いた後に次のコードを実行するだけでhtmlファイルが生成される。R Markdownを使ったウェブサイト構築の特徴ともいえるのだが、このサイトでもページとしてのURLに階層性はほとんどなく、ほぼすべてのページがトップディレクトリ直下に置かれている。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# ディレクトリ全体のRmdファイルを対象にレンダー
-rmarkdown::render_site()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;もちろん、個々のRmdをレンダーしても良くって、その際はいつものRStudioのKnitボタンを押せば良い。&lt;/p&gt;
-&lt;p&gt;個人的には下記のようにhtmlwidgetsをそのまま表示できるのがとても嬉しい 😄。 &lt;strong&gt;&lt;code&gt;{leaflet}&lt;/code&gt;&lt;/strong&gt;や &lt;strong&gt;&lt;code&gt;{highcharter}&lt;/code&gt;&lt;/strong&gt;だって表示させることができる。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(leaflet)
-leaflet(width = 600, height = 400) %&amp;gt;% addTiles() %&amp;gt;% 
-  setView(lng = 135.0, lat = 38.0, zoom = 3)&lt;/code&gt;&lt;/pre&gt;
-&lt;div id=&#34;htmlwidget-1eafd2efdc6cb805adc5&#34; style=&#34;width:600px;height:400px;&#34; class=&#34;leaflet html-widget&#34;&gt;&lt;/div&gt;
-&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-1eafd2efdc6cb805adc5&#34;&gt;{&#34;x&#34;:{&#34;options&#34;:{&#34;crs&#34;:{&#34;crsClass&#34;:&#34;L.CRS.EPSG3857&#34;,&#34;code&#34;:null,&#34;proj4def&#34;:null,&#34;projectedBounds&#34;:null,&#34;options&#34;:{}}},&#34;calls&#34;:[{&#34;method&#34;:&#34;addTiles&#34;,&#34;args&#34;:[&#34;http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&#34;,null,null,{&#34;minZoom&#34;:0,&#34;maxZoom&#34;:18,&#34;maxNativeZoom&#34;:null,&#34;tileSize&#34;:256,&#34;subdomains&#34;:&#34;abc&#34;,&#34;errorTileUrl&#34;:&#34;&#34;,&#34;tms&#34;:false,&#34;continuousWorld&#34;:false,&#34;noWrap&#34;:false,&#34;zoomOffset&#34;:0,&#34;zoomReverse&#34;:false,&#34;opacity&#34;:1,&#34;zIndex&#34;:null,&#34;unloadInvisibleTiles&#34;:null,&#34;updateWhenIdle&#34;:null,&#34;detectRetina&#34;:false,&#34;reuseTiles&#34;:false,&#34;attribution&#34;:&#34;&amp;copy; &lt;a href=\&#34;http://openstreetmap.org\&#34;&gt;OpenStreetMap\u003c/a&gt; contributors, &lt;a href=\&#34;http://creativecommons.org/licenses/by-sa/2.0/\&#34;&gt;CC-BY-SA\u003c/a&gt;&#34;}]}],&#34;setView&#34;:[[38,135],3,[]]},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(highcharter)
-data(&amp;quot;favorite_bars&amp;quot;)
-data(&amp;quot;favorite_pies&amp;quot;)
-
-hc &amp;lt;- highchart() %&amp;gt;% 
-  hc_chart(type = &amp;quot;column&amp;quot;, inverted = TRUE) %&amp;gt;% 
-  hc_title(text = &amp;quot;A highcharter chart&amp;quot;) %&amp;gt;% 
-  hc_xAxis(categories = 2012:2016) %&amp;gt;% 
-  hc_yAxis(opposite = TRUE, showFirstLabel = FALSE,
-           showLastLabel = FALSE) %&amp;gt;% 
-  hc_add_series(data = c(3900,  4200,  5700,  8500, 11900),
-                name = &amp;quot;Downloads&amp;quot;,
-                inverted = FALSE) %&amp;gt;% 
-  hc_legend(layout = &amp;quot;vertical&amp;quot;)
-
-hc&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section level2&#34;&gt;
-&lt;h2&gt;🏡 一人暮らしの方&lt;/h2&gt;
-&lt;p&gt;そして、ついでというか無関係な話題になるけど、現実世界の自分も住まいを変えた。今はトーキョーで大学生時代以来の一人暮らしをしている。というかその前段階として働くようになった。&lt;/p&gt;
-&lt;p&gt;５月の頭に引越しをしたので、一人暮らしを始めて一ヶ月が経った。最初は冷蔵庫も洗濯機も物干し竿もなくてアレだったけど、今は随分と生活に必要なものが揃ってきた。 部屋にはパソコンと椅子、本くらいしか持ってくるものがなくて、ベッドやらは新調した。少しずつものを増やして&lt;del&gt;いきたい&lt;/del&gt;毎週のようにAmazonから何かが届いていたが、だいぶ落ち着いてきた気がする。&lt;/p&gt;
-&lt;p&gt;６月に入り、2016年も折り返し地点に来ようとしている。進捗は…なわけだけど、ここで気持ちを整理した（気がする）。最近は特にアウトプットの機会が減ってきているような気がしているので、進捗を含めて努力していきたい。&lt;/p&gt;
-&lt;p&gt;Enjoy :)&lt;/p&gt;
-&lt;/div&gt;
-
-
-
-&lt;!-- BLOGDOWN-HEAD
-
-&lt;script src=&#34;#####../content/post/hello-world_files/htmlwidgets-0.8/htmlwidgets.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;#####../content/post/hello-world_files/jquery-1.12.4/jquery.min.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;#####../content/post/hello-world_files/leaflet-0.7.7/leaflet.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;#####../content/post/hello-world_files/leaflet-0.7.7/leaflet.js&#34;&gt;&lt;/script&gt;
-&lt;link href=&#34;#####../content/post/hello-world_files/leafletfix-1.0.0/leafletfix.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;link href=&#34;#####../content/post/hello-world_files/leaflet-label-0.2.2/leaflet.label.css&#34; rel=&#34;stylesheet&#34; /&gt;
-&lt;script src=&#34;#####../content/post/hello-world_files/leaflet-label-0.2.2/leaflet.label.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;#####../content/post/hello-world_files/Proj4Leaflet-0.7.2/proj4-compressed.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;#####../content/post/hello-world_files/Proj4Leaflet-0.7.2/proj4leaflet.js&#34;&gt;&lt;/script&gt;
-&lt;script src=&#34;#####../content/post/hello-world_files/leaflet-binding-1.0.2.9006/leaflet.js&#34;&gt;&lt;/script&gt;
 
 
 

@@ -9,34 +9,52 @@
     <atom:link href="/categories/shiny/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>【予告】Rに関する一人アドベントカレンダー2016</title>
-      <link>/post/r_advent_calendar_2016/</link>
-      <pubDate>Tue, 29 Nov 2016 05:20:00 +0000</pubDate>
+      <title>一人Shinyアドベントカレンダー概要</title>
+      <link>/post/shiny_advent_calendar_day1/</link>
+      <pubDate>Thu, 01 Dec 2016 21:00:00 +0000</pubDate>
       
-      <guid>/post/r_advent_calendar_2016/</guid>
+      <guid>/post/shiny_advent_calendar_day1/</guid>
       <description>&lt;!-- BLOGDOWN-BODY-BEFORE
 
 /BLOGDOWN-BODY-BEFORE --&gt;
 
-&lt;p&gt;明後日から12月になる。12月といえば最近はもっぱら「アドベントカレンダー」の月という認識がある。今年はRに関するアドベントカレンダーが2つQiitaに上がっていて、そっちも盛り上がりを見せている。が、俺は一人でRアドベントカレンダーをやる。&lt;em&gt;5つくらいやる&lt;/em&gt;。&lt;/p&gt;
-&lt;p&gt;と、これだけ大口を叩いておいて、ネタのストックが豊富にあるのかというとそんなことはない。頭にはいくつかあるが文章やコードになっているものは皆無だ。25日完走できる気はしない。でもやらないと0日しかないので、1日でも多く書けるようにしたい。(完走できたら寿司でも肉でもケーキでもご馳走してくれ！！！)&lt;/p&gt;
-&lt;div class=&#34;section level2&#34;&gt;
-&lt;h2&gt;やろうとしているもの&lt;/h2&gt;
+&lt;div id=&#34;shiny&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Shinyとは&lt;/h2&gt;
+&lt;p&gt;Shiny &lt;a href=&#34;https://shiny.rstudio.com&#34; class=&#34;uri&#34;&gt;https://shiny.rstudio.com&lt;/a&gt;とは、RStudioを中心にオープンソースで開発が行われているRのウェブアプリケーションフレームワークです。RubyでいうところのRuby on Rails、Pythonでいうところのdjangoのような立ち位置です。Shinyは、Rの高機能な集計処理やグラフ描画システムをウェブで動作させるための最適なツールとなります。ウェブアプリケーションなのですが、特徴として、HTMLやCSS、JavaScriptに関する知識は必要とせず、Rの関数としてアプリケーションを構築できるという点があります。&lt;/p&gt;
+&lt;p&gt;Shinyの公式ページに豊富なデモアプリケーションがありますので、実際にどのようなものができるのかを知りたい方はまずそちらを見ると良いでしょう。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;shiny&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;一人Shinyアドベントカレンダー日程&lt;/h2&gt;
+&lt;p&gt;25日間でShinyについての知識を深め、Shinyアプリケーションを構築できるようになることを目指します。&lt;/p&gt;
+&lt;p&gt;以下の日程は変更することがあります。&lt;/p&gt;
 &lt;ol style=&#34;list-style-type: decimal&#34;&gt;
-&lt;li&gt;R一般 (パッケージ、データ操作、小ネタ)&lt;/li&gt;
-&lt;li&gt;Shiny&lt;/li&gt;
-&lt;li&gt;visualization (ggplot2, plotly, …)&lt;/li&gt;
-&lt;li&gt;R + GIS&lt;/li&gt;
-&lt;li&gt;Rパッケージ開発&lt;/li&gt;
+&lt;li&gt;一人Shinyアドベントカレンダー概要&lt;/li&gt;
+&lt;li&gt;はじめてのShiny&lt;/li&gt;
+&lt;li&gt;Shinyを構成する要素: input, output&lt;/li&gt;
+&lt;li&gt;Shinyを構成する要素: server, ui&lt;/li&gt;
+&lt;li&gt;Shinyを構成する要素: render&lt;/li&gt;
+&lt;li&gt;Shinyを構成する要素: wigets&lt;/li&gt;
+&lt;li&gt;reactiveを理解する&lt;/li&gt;
+&lt;li&gt;observeを理解する&lt;/li&gt;
+&lt;li&gt;htmlwidgets: 概要&lt;/li&gt;
+&lt;li&gt;htmlwidgets: DT&lt;/li&gt;
+&lt;li&gt;htmlwidgets: leaflet&lt;/li&gt;
+&lt;li&gt;データのインポート、ダウンロード&lt;/li&gt;
+&lt;li&gt;URLをパラメータに含める&lt;/li&gt;
+&lt;li&gt;bookmark&lt;/li&gt;
+&lt;li&gt;shinydashboard&lt;/li&gt;
+&lt;li&gt;module&lt;/li&gt;
+&lt;li&gt;Shiny Server&lt;/li&gt;
+&lt;li&gt;Shiny Serverでアプリを公開する: nginxの設定&lt;/li&gt;
+&lt;li&gt;Shiny Gadgets&lt;/li&gt;
+&lt;li&gt;プログレスバーを作る&lt;/li&gt;
+&lt;li&gt;Shiny 拡張パッケージ&lt;/li&gt;
+&lt;li&gt;Shiny + CSS + JS&lt;/li&gt;
+&lt;li&gt;Shinyあるある問題&lt;/li&gt;
+&lt;li&gt;データベースとの連携&lt;/li&gt;
+&lt;li&gt;????&lt;/li&gt;
 &lt;/ol&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section level2&#34;&gt;
-&lt;h2&gt;どこでやるか&lt;/h2&gt;
-&lt;p&gt;たぶんここ。あるいはQiita。Shinyアプリであればデモが必要なのでどっかのサーバーあるいはshinyapp.ioにするかも。&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section level2&#34;&gt;
-&lt;h2&gt;進捗どうですか&lt;/h2&gt;
-&lt;p&gt;にゃおす&lt;/p&gt;
+&lt;p&gt;各記事は&lt;strong&gt;&lt;code&gt;{bookdown}&lt;/code&gt;&lt;/strong&gt;を使った&lt;a href=&#34;https://uribo.github.io/25days-shiny/&#34;&gt;こちらのページ&lt;/a&gt;で公開することを予定しています。&lt;/p&gt;
 &lt;/div&gt;
 
 
