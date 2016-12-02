@@ -1,0 +1,58 @@
+---
+title: "Rで方位記号を描く (ggsn版)"
+author: "Shinya Uryu"
+date: 2016-12-03T07:00:00
+categories: ["R", "geo", "visualization"]
+featured: "161203-pref1map-symbol.png"
+featuredpath: "date"
+description:
+    ggsnパッケージを利用した、ggplot2ベースの地図に方位記号と縮尺を加える方法です
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>読んでいるブログの中でこんな記事を見ました。</p>
+<p><a href="http://garageit.blog.so-net.ne.jp/2016-12-01">Rで方位記号を描く</a></p>
+<p>この記事では<strong><code>{prettymapr}</code></strong>というパッケージが使われているのですが、ちょうど最近 <strong><code>{ggsn}</code></strong>というパッケージを発見し、このパッケージでも 方位記号が書けるので紹介したいと思います。</p>
+<div id="ggsn-ggplo2ggmap" class="section level2">
+<h2>ggsn: ggplo2、ggmapベースの図に方位記号・縮尺を追加する</h2>
+<p><a href="https://suryu.me/post/rgis_advent_calendar_day1/">先日も紹介した</a>行政区域境界を含めた国内の地図を描画する<strong><code>{jpndistrict}</code></strong>を使った例を示します。</p>
+<pre class="r"><code># 北海道のデータを取得します
+d1 &lt;- spdf_jpn_pref(1, district = FALSE)
+
+# 一旦地図を作成します。
+p &lt;- gg_jpn_district(d1, ghost = FALSE)</code></pre>
+<p>方位記号を追加する関数は<code>north()</code>および<code>north2()</code>です。出力位置の細かな調整を行いたい祭は<code>north2()</code>の方が簡単な気がします。</p>
+<pre class="r"><code>north2(p, x = 0.65, y = 0.9, scale = 0.12, symbol = 3)</code></pre>
+<p>このとき方位記号の種類を引数<em>symbol</em>で変更できます。これらの方位記号はQGISで使われているものなのだとか。</p>
+<p>では次に縮尺を追加します。<code>scalebar()</code>を加えます。</p>
+<pre class="r"><code># 神奈川県の行政区域データを取得します
+d14 &lt;- spdf_jpn_pref(14)
+d14.fortify &lt;- fortify(d14)
+
+ggplot() + 
+  geom_polygon(data = d14.fortify, 
+               aes(x = long, y = lat, group = group), fill = &#39;#d0d0d0&#39;) + 
+  geom_map(data = d14, map = d14.fortify, 
+           aes(group = group, map_id = id),
+           color = &quot;black&quot;, fill = &quot;white&quot;) +
+  ggthemes::theme_map() + 
+  coord_equal() + 
+  scalebar(data = d14.fortify, dist = 5, dd2km = TRUE, model = &quot;WGS84&quot;, location = &quot;bottomleft&quot;)</code></pre>
+<p><img src="#####../content/post/rgis_advent_calendar_day2_files/figure-html/161203-pref14map-scalebar-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>というわけで<strong><code>{ggplot2}</code></strong>ベースの地図で方位記号を加えたい・出力位置の調整をしたいときに便利そうです。（コードの説明がきちんとできていない…）</p>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->

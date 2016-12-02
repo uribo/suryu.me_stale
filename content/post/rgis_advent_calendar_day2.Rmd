@@ -1,0 +1,66 @@
+---
+title: "Rで方位記号を描く (ggsn版)"
+author: "Shinya Uryu"
+date: 2016-12-03T07:00:00
+categories: ["R", "geo", "visualization"]
+featured: "161203-pref1map-symbol.png"
+featuredpath: "date"
+description:
+    ggsnパッケージを利用した、ggplot2ベースの地図に方位記号と縮尺を加える方法です
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+読んでいるブログの中でこんな記事を見ました。
+
+[Rで方位記号を描く](http://garageit.blog.so-net.ne.jp/2016-12-01)
+
+この記事では**`{prettymapr}`**というパッケージが使われているのですが、ちょうど最近 **`{ggsn}`**というパッケージを発見し、このパッケージでも
+方位記号が書けるので紹介したいと思います。
+
+## ggsn: ggplo2、ggmapベースの図に方位記号・縮尺を追加する
+
+[先日も紹介した](https://suryu.me/post/rgis_advent_calendar_day1/)行政区域境界を含めた国内の地図を描画する**`{jpndistrict}`**を使った例を示します。
+
+```{r, include=FALSE}
+library(ggsn)
+library(jpndistrict)
+```
+
+```{r, eval = FALSE, echo = TRUE}
+# 北海道のデータを取得します
+d1 <- spdf_jpn_pref(1, district = FALSE)
+
+# 一旦地図を作成します。
+p <- gg_jpn_district(d1, ghost = FALSE)
+```
+
+方位記号を追加する関数は`north()`および`north2()`です。出力位置の細かな調整を行いたい祭は`north2()`の方が簡単な気がします。
+
+```{r 161203-pref1map-symbol, eval = FALSE, echo = TRUE}
+north2(p, x = 0.65, y = 0.9, scale = 0.12, symbol = 3)
+```
+
+このとき方位記号の種類を引数*symbol*で変更できます。これらの方位記号はQGISで使われているものなのだとか。
+
+では次に縮尺を追加します。`scalebar()`を加えます。
+
+```{r 161203-pref14map-scalebar, eval = TRUE, echo = TRUE}
+# 神奈川県の行政区域データを取得します
+d14 <- spdf_jpn_pref(14)
+d14.fortify <- fortify(d14)
+
+ggplot() + 
+  geom_polygon(data = d14.fortify, 
+               aes(x = long, y = lat, group = group), fill = '#d0d0d0') + 
+  geom_map(data = d14, map = d14.fortify, 
+           aes(group = group, map_id = id),
+           color = "black", fill = "white") +
+  ggthemes::theme_map() + 
+  coord_equal() + 
+  scalebar(data = d14.fortify, dist = 5, dd2km = TRUE, model = "WGS84", location = "bottomleft")
+```
+
+というわけで**`{ggplot2}`**ベースの地図で方位記号を加えたい・出力位置の調整をしたいときに便利そうです。（コードの説明がきちんとできていない...）
+
