@@ -29,7 +29,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-12-01T21:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-03T07:00:00&#43;00:00"/>
 
 
 
@@ -216,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/rgis_advent_calendar_day2/"><p>Rで方位記号を描く (ggsn版)</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/shiny_advent_calendar_day1/"><p>一人Shinyアドベントカレンダー概要</p></a>
                     </li>
                 
@@ -225,10 +229,6 @@
                 
                     <li>
                         <a href="./post/visualization_advent_calendar_day1/"><p>plotly流行れ</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/r_advent_calendar_day1/"><p>Rで3億円宣言</p></a>
                     </li>
                 
             </ul>
@@ -245,8 +245,10 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/shiny_advent_calendar_day1/">一人Shinyアドベントカレンダー概要</a></h2>
+            <h2><a href="./post/rgis_advent_calendar_day2/">Rで方位記号を描く (ggsn版)</a></h2>
         
+        
+            <p>ggsnパッケージを利用した、ggplot2ベースの地図に方位記号と縮尺を加える方法です</p>
         
     </div>
     <div class="meta">
@@ -255,8 +257,8 @@
         
 
         <time class="published"
-            datetime='2016-12-01'>
-            December 1, 2016</time>
+            datetime='2016-12-03'>
+            December 3, 2016</time>
         <span class="author">Shinya Uryu</span>
         
             <p>2 minute read</p>
@@ -268,47 +270,62 @@
 
 
     
+    
+
+    
+        
+        
+
+
+
+
+    
+    
+        
+    
+
+
+        
+
+        <a href="./post/rgis_advent_calendar_day2/" class="image featured">
+            <img src="./img/2016/12/161203-pref1map-symbol.png" alt="" />
+        </a>
+    
+
 
     <div id="content">
 
 
-<div id="shiny" class="section level2">
-<h2>Shinyとは</h2>
-<p>Shiny <a href="https://shiny.rstudio.com" class="uri">https://shiny.rstudio.com</a>とは、RStudioを中心にオープンソースで開発が行われているRのウェブアプリケーションフレームワークです。RubyでいうところのRuby on Rails、Pythonでいうところのdjangoのような立ち位置です。Shinyは、Rの高機能な集計処理やグラフ描画システムをウェブで動作させるための最適なツールとなります。ウェブアプリケーションなのですが、特徴として、HTMLやCSS、JavaScriptに関する知識は必要とせず、Rの関数としてアプリケーションを構築できるという点があります。</p>
-<p>Shinyの公式ページに豊富なデモアプリケーションがありますので、実際にどのようなものができるのかを知りたい方はまずそちらを見ると良いでしょう。</p>
-</div>
-<div id="shiny" class="section level2">
-<h2>一人Shinyアドベントカレンダー日程</h2>
-<p>25日間でShinyについての知識を深め、Shinyアプリケーションを構築できるようになることを目指します。</p>
-<p>以下の日程は変更することがあります。</p>
-<ol style="list-style-type: decimal">
-<li>一人Shinyアドベントカレンダー概要</li>
-<li>はじめてのShiny</li>
-<li>Shinyを構成する要素: input, output</li>
-<li>Shinyを構成する要素: server, ui</li>
-<li>Shinyを構成する要素: render</li>
-<li>Shinyを構成する要素: wigets</li>
-<li>reactiveを理解する</li>
-<li>observeを理解する</li>
-<li>htmlwidgets: 概要</li>
-<li>htmlwidgets: DT</li>
-<li>htmlwidgets: leaflet</li>
-<li>データのインポート、ダウンロード</li>
-<li>URLをパラメータに含める</li>
-<li>bookmark</li>
-<li>shinydashboard</li>
-<li>module</li>
-<li>Shiny Server</li>
-<li>Shiny Serverでアプリを公開する: nginxの設定</li>
-<li>Shiny Gadgets</li>
-<li>プログレスバーを作る</li>
-<li>Shiny 拡張パッケージ</li>
-<li>Shiny + CSS + JS</li>
-<li>Shinyあるある問題</li>
-<li>データベースとの連携</li>
-<li>????</li>
-</ol>
-<p>各記事は<strong><code>{bookdown}</code></strong>を使った<a href="https://uribo.github.io/25days-shiny/">こちらのページ</a>で公開することを予定しています。</p>
+<p>読んでいるブログの中でこんな記事を見ました。</p>
+<p><a href="http://garageit.blog.so-net.ne.jp/2016-12-01">Rで方位記号を描く</a></p>
+<p>この記事では<strong><code>{prettymapr}</code></strong>というパッケージが使われているのですが、ちょうど最近 <strong><code>{ggsn}</code></strong>というパッケージを発見し、このパッケージでも 方位記号が書けるので紹介したいと思います。</p>
+<div id="ggsn-ggplo2ggmap" class="section level2">
+<h2>ggsn: ggplo2、ggmapベースの図に方位記号・縮尺を追加する</h2>
+<p><a href="https://suryu.me/post/rgis_advent_calendar_day1/">先日も紹介した</a>行政区域境界を含めた国内の地図を描画する<strong><code>{jpndistrict}</code></strong>を使った例を示します。</p>
+<pre class="r"><code># 北海道のデータを取得します
+d1 &lt;- spdf_jpn_pref(1, district = FALSE)
+
+# 一旦地図を作成します。
+p &lt;- gg_jpn_district(d1, ghost = FALSE)</code></pre>
+<p>方位記号を追加する関数は<code>north()</code>および<code>north2()</code>です。出力位置の細かな調整を行いたい祭は<code>north2()</code>の方が簡単な気がします。</p>
+<pre class="r"><code>north2(p, x = 0.65, y = 0.9, scale = 0.12, symbol = 3)</code></pre>
+<p>このとき方位記号の種類を引数<em>symbol</em>で変更できます。これらの方位記号はQGISで使われているものなのだとか。</p>
+<p>では次に縮尺を追加します。<code>scalebar()</code>を加えます。</p>
+<pre class="r"><code># 神奈川県の行政区域データを取得します
+d14 &lt;- spdf_jpn_pref(14)
+d14.fortify &lt;- fortify(d14)
+
+ggplot() + 
+  geom_polygon(data = d14.fortify, 
+               aes(x = long, y = lat, group = group), fill = &#39;#d0d0d0&#39;) + 
+  geom_map(data = d14, map = d14.fortify, 
+           aes(group = group, map_id = id),
+           color = &quot;black&quot;, fill = &quot;white&quot;) +
+  ggthemes::theme_map() + 
+  coord_equal() + 
+  scalebar(data = d14.fortify, dist = 5, dd2km = TRUE, model = &quot;WGS84&quot;, location = &quot;bottomleft&quot;)</code></pre>
+<p><img src="../../img/161203-pref14map-scalebar.png" style="display: block; margin: auto;"></p>
+<p>というわけで<strong><code>{ggplot2}</code></strong>ベースの地図で方位記号を加えたい・出力位置の調整をしたいときに便利そうです。（コードの説明がきちんとできていない…）</p>
 </div>
 
 
@@ -346,7 +363,9 @@
     
         <li><a href='./categoriesr'>R</a></li>
     
-        <li><a href='./categoriesshiny'>shiny</a></li>
+        <li><a href='./categoriesgeo'>geo</a></li>
+    
+        <li><a href='./categoriesvisualization'>visualization</a></li>
     
 </ul>
 
@@ -354,8 +373,8 @@
 </article>
 <ul class="actions pagination">
     
-        <li><a href="./post/rgis_advent_calendar_day1/"
-                class="button big previous">jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</a></li>
+        <li><a href="./post/shiny_advent_calendar_day1/"
+                class="button big previous">一人Shinyアドベントカレンダー概要</a></li>
     
 
     
@@ -368,9 +387,9 @@
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/shiny_advent_calendar_day1\/';
-    var disqus_title = '一人Shinyアドベントカレンダー概要';
-    var disqus_url = '\/post\/shiny_advent_calendar_day1\/';
+    var disqus_identifier = '\/post\/rgis_advent_calendar_day2\/';
+    var disqus_title = 'Rで方位記号を描く (ggsn版)';
+    var disqus_url = '\/post\/rgis_advent_calendar_day2\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -394,43 +413,43 @@
             
 
 
-<li><a href="//twitter.com/share?url=%2fpost%2fshiny_advent_calendar_day1%2f&text=%e4%b8%80%e4%ba%baShiny%e3%82%a2%e3%83%89%e3%83%99%e3%83%b3%e3%83%88%e3%82%ab%e3%83%ac%e3%83%b3%e3%83%80%e3%83%bc%e6%a6%82%e8%a6%81&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=%2fpost%2frgis_advent_calendar_day2%2f&text=R%e3%81%a7%e6%96%b9%e4%bd%8d%e8%a8%98%e5%8f%b7%e3%82%92%e6%8f%8f%e3%81%8f%20%28ggsn%e7%89%88%29&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=%2fpost%2fshiny_advent_calendar_day1%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=%2fpost%2frgis_advent_calendar_day2%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fshiny_advent_calendar_day1%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2frgis_advent_calendar_day2%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=%2fpost%2fshiny_advent_calendar_day1%2f&title=%e4%b8%80%e4%ba%baShiny%e3%82%a2%e3%83%89%e3%83%99%e3%83%b3%e3%83%88%e3%82%ab%e3%83%ac%e3%83%b3%e3%83%80%e3%83%bc%e6%a6%82%e8%a6%81" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=%2fpost%2frgis_advent_calendar_day2%2f&title=R%e3%81%a7%e6%96%b9%e4%bd%8d%e8%a8%98%e5%8f%b7%e3%82%92%e6%8f%8f%e3%81%8f%20%28ggsn%e7%89%88%29" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fshiny_advent_calendar_day1%2f&title=%e4%b8%80%e4%ba%baShiny%e3%82%a2%e3%83%89%e3%83%99%e3%83%b3%e3%83%88%e3%82%ab%e3%83%ac%e3%83%b3%e3%83%80%e3%83%bc%e6%a6%82%e8%a6%81" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2frgis_advent_calendar_day2%2f&title=R%e3%81%a7%e6%96%b9%e4%bd%8d%e8%a8%98%e5%8f%b7%e3%82%92%e6%8f%8f%e3%81%8f%20%28ggsn%e7%89%88%29" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fshiny_advent_calendar_day1%2f&title=%e4%b8%80%e4%ba%baShiny%e3%82%a2%e3%83%89%e3%83%99%e3%83%b3%e3%83%88%e3%82%ab%e3%83%ac%e3%83%b3%e3%83%80%e3%83%bc%e6%a6%82%e8%a6%81" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2frgis_advent_calendar_day2%2f&title=R%e3%81%a7%e6%96%b9%e4%bd%8d%e8%a8%98%e5%8f%b7%e3%82%92%e6%8f%8f%e3%81%8f%20%28ggsn%e7%89%88%29" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fshiny_advent_calendar_day1%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2frgis_advent_calendar_day2%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -552,6 +571,20 @@
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/rgis_advent_calendar_day2/">Rで方位記号を描く (ggsn版)</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-03'>
+                                    December 3, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/shiny_advent_calendar_day1/">一人Shinyアドベントカレンダー概要</a></h3>
                                 
                                     
@@ -581,20 +614,6 @@
                         <article>
                             <header>
                                 <h3><a href="./post/visualization_advent_calendar_day1/">plotly流行れ</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-01'>
-                                    December 1, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/r_advent_calendar_day1/">Rで3億円宣言</a></h3>
                                 
                                     
                                 
@@ -639,7 +658,16 @@
                         <article>
                             <header>
                                 <a href="./categories/r/">R</a>
-                                <span style="float:right;">6</span>
+                                <span style="float:right;">7</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="./categories/visualization/">visualization</a>
+                                <span style="float:right;">3</span>
                             </header>
                         </article>
                     </li>
@@ -656,7 +684,7 @@
                     <li>
                         <article>
                             <header>
-                                <a href="./categories/package/">package</a>
+                                <a href="./categories/geo/">geo</a>
                                 <span style="float:right;">2</span>
                             </header>
                         </article>
@@ -665,7 +693,7 @@
                     <li>
                         <article>
                             <header>
-                                <a href="./categories/visualization/">visualization</a>
+                                <a href="./categories/package/">package</a>
                                 <span style="float:right;">2</span>
                             </header>
                         </article>
@@ -684,15 +712,6 @@
                         <article>
                             <header>
                                 <a href="./categories/data_manipulation/">data_manipulation</a>
-                                <span style="float:right;">1</span>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <a href="./categories/geo/">geo</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>

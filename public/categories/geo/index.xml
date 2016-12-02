@@ -9,6 +9,61 @@
     <atom:link href="/categories/geo/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Rで方位記号を描く (ggsn版)</title>
+      <link>/post/rgis_advent_calendar_day2/</link>
+      <pubDate>Sat, 03 Dec 2016 07:00:00 +0000</pubDate>
+      
+      <guid>/post/rgis_advent_calendar_day2/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;p&gt;読んでいるブログの中でこんな記事を見ました。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;http://garageit.blog.so-net.ne.jp/2016-12-01&#34;&gt;Rで方位記号を描く&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;この記事では&lt;strong&gt;&lt;code&gt;{prettymapr}&lt;/code&gt;&lt;/strong&gt;というパッケージが使われているのですが、ちょうど最近 &lt;strong&gt;&lt;code&gt;{ggsn}&lt;/code&gt;&lt;/strong&gt;というパッケージを発見し、このパッケージでも 方位記号が書けるので紹介したいと思います。&lt;/p&gt;
+&lt;div id=&#34;ggsn-ggplo2ggmap&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;ggsn: ggplo2、ggmapベースの図に方位記号・縮尺を追加する&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://suryu.me/post/rgis_advent_calendar_day1/&#34;&gt;先日も紹介した&lt;/a&gt;行政区域境界を含めた国内の地図を描画する&lt;strong&gt;&lt;code&gt;{jpndistrict}&lt;/code&gt;&lt;/strong&gt;を使った例を示します。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# 北海道のデータを取得します
+d1 &amp;lt;- spdf_jpn_pref(1, district = FALSE)
+
+# 一旦地図を作成します。
+p &amp;lt;- gg_jpn_district(d1, ghost = FALSE)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;方位記号を追加する関数は&lt;code&gt;north()&lt;/code&gt;および&lt;code&gt;north2()&lt;/code&gt;です。出力位置の細かな調整を行いたい祭は&lt;code&gt;north2()&lt;/code&gt;の方が簡単な気がします。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;north2(p, x = 0.65, y = 0.9, scale = 0.12, symbol = 3)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;このとき方位記号の種類を引数&lt;em&gt;symbol&lt;/em&gt;で変更できます。これらの方位記号はQGISで使われているものなのだとか。&lt;/p&gt;
+&lt;p&gt;では次に縮尺を追加します。&lt;code&gt;scalebar()&lt;/code&gt;を加えます。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# 神奈川県の行政区域データを取得します
+d14 &amp;lt;- spdf_jpn_pref(14)
+d14.fortify &amp;lt;- fortify(d14)
+
+ggplot() + 
+  geom_polygon(data = d14.fortify, 
+               aes(x = long, y = lat, group = group), fill = &amp;#39;#d0d0d0&amp;#39;) + 
+  geom_map(data = d14, map = d14.fortify, 
+           aes(group = group, map_id = id),
+           color = &amp;quot;black&amp;quot;, fill = &amp;quot;white&amp;quot;) +
+  ggthemes::theme_map() + 
+  coord_equal() + 
+  scalebar(data = d14.fortify, dist = 5, dd2km = TRUE, model = &amp;quot;WGS84&amp;quot;, location = &amp;quot;bottomleft&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&#34;../../img/161203-pref14map-scalebar.png&#34; style=&#34;display: block; margin: auto;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;というわけで&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;ベースの地図で方位記号を加えたい・出力位置の調整をしたいときに便利そうです。（コードの説明がきちんとできていない…）&lt;/p&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+    <item>
       <title>ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</title>
       <link>/post/evaluate_geo_points/</link>
       <pubDate>Sat, 26 Nov 2016 05:20:00 +0000</pubDate>
