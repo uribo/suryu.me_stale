@@ -1,0 +1,94 @@
+---
+title: "extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)"
+author: "Shinya Uryu"
+date: 2016-12-04T09:00:00
+categories: ["R", "ggplot2", "visualization"]
+featured: "161204-extrafont-1.png"
+featuredpath: "date"
+description:
+    ggplot2でタイトルや軸名に日本語を扱いたい場合にextrafontを使うのがモダンっぽいという話。
+---
+
+一人visualizationの2日目（2つめの記事です。アドベントカレンダーとはなんだったのか...）。
+
+**`{ggplot2}`**でタイトルや軸名に日本語を扱いたい場合、いくつか方法があると思うのですが、私は普段次のコードを実行していました。
+
+```{r}
+library(magrittr)
+library(ggplot2)
+```
+
+```{r example, eval = FALSE, echo = TRUE}
+quartzFonts(YuGo = quartzFont(rep("YuGo-Medium", 4)))
+theme_set(theme_classic(base_size = 12, base_family = "YuGo"))
+
+iris %>% ggplot(aes(Sepal.Length, Petal.Width)) +
+  geom_point() +
+  xlab("萼片長")
+```
+
+基本的にはこれで日本語を組み込んだggplot2の図が描けるのですが、最近これだと**`{bookdown}`**によるPDF生成時にうまく表示されないという問題に直面しました。どうしたものかと悩んだ時に出てきたのが**`{extrafont}`**で、これを使うと無事に問題が解決したのでメモを残しておきます。ちなみにタイトルにあるように**`{ggplot2}`**のバージョンは現行の2.2.0です。
+
+## extrafontを使用する準備
+
+まずパッケージがないと始まらないのでインストールします。**`{extrafont}`**をインストールすると、フォント管理用に**`{extrafontdb}`**というパッケージもインストールされます。
+
+```{r install, eval = FALSE, echo = TRUE}
+install.packages("extrafont")
+```
+
+パッケージを読み込みます。**`{extrafont}`**を初めて使う際やフォントを追加した場合には`font_import()`を実行してフォントを登録します。
+
+```{r}
+library(extrafont)
+
+# font_import()
+```
+
+**`{extrafont}`**はRで標準的に利用可能なPostScriptのフォントに対してTrueTypeフォントを利用可能にするパッケージで、これを使うことで多様なフォントをグラフに埋め込むことができます。
+
+`fonts()`を実行して登録済み（利用可能な）フォント名を確認してみましょう。
+
+```{r}
+myfonts <- fonts()
+myfonts %>% length()
+myfonts %>% sample(5)
+```
+
+グラフの各要素に対し、フォントを設定するには次のような使い分けを行います
+
+- *family*引数に使いたいフォント名を与える。
+    - **`{ggplot2}`**の`geom_*()`で*family*引数があればこっちで指定
+- タイトルや軸のラベルには`theme(... = element_text(base_family = ))`で指定しておく
+
+```{r 161204-extrafont, eval = FALSE, echo = TRUE}
+library(ggplot2)
+loadfonts(quiet = TRUE)
+
+library(ggrepel)
+mtcars$label <- rownames(mtcars)
+mtcars$label[1:15] <- ""
+
+p <- ggplot(mtcars,
+  aes(wt, mpg, label = label, colour = factor(cyl))) +
+  geom_point()
+
+p +  
+  geom_text(aes(wt, mpg, colour = factor(cyl)),
+              label = "\uf1b9",
+              family = "FontAwesome",
+              size = 4) +
+  geom_text_repel(data = mtcars, aes(wt, mpg, label = label, family = "xkcd")) +
+  xlab("重量") +
+  ylab("マイル / ガロン") +
+  theme(text = element_text(size = 16, family = "IPAexMincho"))
+```
+
+これで冒頭の矛盾系AAのような図を作れます。**`{bookdown}`**に埋め込む図もこれでOK
+
+**Windows?知らん `skip_on_os("windows)"`**（環境がないので試せていない）。
+
+## 参考
+
+- [Rでpdfに好きな日本語フォントを使用する - Qiita](http://qiita.com/miiton@github/items/1e50ab643653b7a58954)
+- [ggplot2でFont Awesomeのアイコンを使ってプロット](http://notchained.hatenablog.com/entry/2015/06/02/235436)
