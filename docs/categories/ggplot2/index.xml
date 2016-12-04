@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>suryu.me</title>
+    <link>/categories/ggplot2/index.xml</link>
+    <description>Recent content on suryu.me</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja-JP</language>
+    <atom:link href="/categories/ggplot2/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</title>
+      <link>/post/visualization_advent_calendar_day2/</link>
+      <pubDate>Sun, 04 Dec 2016 09:00:00 +0000</pubDate>
+      
+      <guid>/post/visualization_advent_calendar_day2/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;p&gt;一人visualizationの2日目（2つめの記事です。アドベントカレンダーとはなんだったのか…）。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;でタイトルや軸名に日本語を扱いたい場合、いくつか方法があると思うのですが、私は普段次のコードを実行していました。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(magrittr)
+library(ggplot2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;quartzFonts(YuGo = quartzFont(rep(&amp;quot;YuGo-Medium&amp;quot;, 4)))
+theme_set(theme_classic(base_size = 12, base_family = &amp;quot;YuGo&amp;quot;))
+
+iris %&amp;gt;% ggplot(aes(Sepal.Length, Petal.Width)) +
+  geom_point() +
+  xlab(&amp;quot;萼片長&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;基本的にはこれで日本語を組み込んだggplot2の図が描けるのですが、最近これだと&lt;strong&gt;&lt;code&gt;{bookdown}&lt;/code&gt;&lt;/strong&gt;によるPDF生成時にうまく表示されないという問題に直面しました。どうしたものかと悩んだ時に出てきたのが&lt;strong&gt;&lt;code&gt;{extrafont}&lt;/code&gt;&lt;/strong&gt;で、これを使うと無事に問題が解決したのでメモを残しておきます。ちなみにタイトルにあるように&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;のバージョンは現行の2.2.0です。&lt;/p&gt;
+&lt;div id=&#34;extrafont&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;extrafontを使用する準備&lt;/h2&gt;
+&lt;p&gt;まずパッケージがないと始まらないのでインストールします。&lt;strong&gt;&lt;code&gt;{extrafont}&lt;/code&gt;&lt;/strong&gt;をインストールすると、フォント管理用に&lt;strong&gt;&lt;code&gt;{extrafontdb}&lt;/code&gt;&lt;/strong&gt;というパッケージもインストールされます。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;extrafont&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;パッケージを読み込みます。&lt;strong&gt;&lt;code&gt;{extrafont}&lt;/code&gt;&lt;/strong&gt;を初めて使う際やフォントを追加した場合には&lt;code&gt;font_import()&lt;/code&gt;を実行してフォントを登録します。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(extrafont)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Registering fonts with R&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# font_import()&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{extrafont}&lt;/code&gt;&lt;/strong&gt;はRで標準的に利用可能なPostScriptのフォントに対してTrueTypeフォントを利用可能にするパッケージで、これを使うことで多様なフォントをグラフに埋め込むことができます。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;fonts()&lt;/code&gt;を実行して登録済み（利用可能な）フォント名を確認してみましょう。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;myfonts &amp;lt;- fonts()
+myfonts %&amp;gt;% length()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] 104&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;myfonts %&amp;gt;% sample(5)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Tw Cen MT&amp;quot;         &amp;quot;DejaVu Sans Light&amp;quot; &amp;quot;Tahoma&amp;quot;           
+## [4] &amp;quot;Verdana&amp;quot;           &amp;quot;SimHei&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;グラフの各要素に対し、フォントを設定するには次のような使い分けを行います&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;em&gt;family&lt;/em&gt;引数に使いたいフォント名を与える。
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;の&lt;code&gt;geom_*()&lt;/code&gt;で&lt;em&gt;family&lt;/em&gt;引数があればこっちで指定&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;li&gt;タイトルや軸のラベルには&lt;code&gt;theme(... = element_text(base_family = ))&lt;/code&gt;で指定しておく&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
+loadfonts(quiet = TRUE)
+
+library(ggrepel)
+mtcars$label &amp;lt;- rownames(mtcars)
+mtcars$label[1:15] &amp;lt;- &amp;quot;&amp;quot;
+
+p &amp;lt;- ggplot(mtcars,
+  aes(wt, mpg, label = label, colour = factor(cyl))) +
+  geom_point()
+
+p +  
+  geom_text(aes(wt, mpg, colour = factor(cyl)),
+              label = &amp;quot;\uf1b9&amp;quot;,
+              family = &amp;quot;FontAwesome&amp;quot;,
+              size = 4) +
+  geom_text_repel(data = mtcars, aes(wt, mpg, label = label, family = &amp;quot;xkcd&amp;quot;)) +
+  xlab(&amp;quot;重量&amp;quot;) +
+  ylab(&amp;quot;マイル / ガロン&amp;quot;) +
+  theme(text = element_text(size = 16, family = &amp;quot;IPAexMincho&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;これで冒頭の矛盾系AAのような図を作れます。&lt;strong&gt;&lt;code&gt;{bookdown}&lt;/code&gt;&lt;/strong&gt;に埋め込む図もこれでOK&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Windows?知らん &lt;code&gt;skip_on_os(&amp;quot;windows)&amp;quot;&lt;/code&gt;&lt;/strong&gt;（環境がないので試せていない）。&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class=&#34;section level2&#34;&gt;
+&lt;h2&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://qiita.com/miiton@github/items/1e50ab643653b7a58954&#34;&gt;Rでpdfに好きな日本語フォントを使用する - Qiita&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://notchained.hatenablog.com/entry/2015/06/02/235436&#34;&gt;ggplot2でFont Awesomeのアイコンを使ってプロット&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
