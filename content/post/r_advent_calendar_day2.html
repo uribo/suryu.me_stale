@@ -1,0 +1,56 @@
+---
+title: "configパッケージで楽々環境変数の管理"
+author: "Shinya Uryu"
+date: 2016-12-05T22:30:00
+categories: ["R"]
+description:
+    環境変数を使い回すためのconfigパッケージの紹介です
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>みなさん、Rの環境変数についてどのように管理されていますか？<code>.Rprofile</code>ですか？それも良い方法です。ただ、Rprojectによるプロジェクト単位での分析作業がメインとなっている昨今では、プロジェクトごとに環境変数を設定したり、プロジェクトで頻繁に利用する値を環境変数としたい場合などがあると思います。そのような時に、今回紹介する<strong><code>{config}</code></strong>が役立ちます。</p>
+<p><strong><code>{config}</code></strong>を一言で説明すると、<strong>作業スペース規模で利用可能な環境変数の呼び出し</strong>です。作業スペースというのは、Rでは<code>getwd()</code>で得られるディレクトリであり、<code>.Rproj</code>ファイルのあるディレクトリです。</p>
+<p><strong><code>{config}</code></strong>を利用するには<code>config.yml</code>というYAMLファイルを用意する必要があります。この<code>config.yml</code>に環境変数を記述することで、<strong><code>{config}</code></strong>が環境変数を呼び出せる状態になります。また<strong><code>{config}</code></strong>が優れている点は、環境に応じて呼び出す環境変数の値を変更できるという点です。例えば、通常の利用と開発用に同じ名称の変数をそれぞれ用意していたとします。今回はdefault、devの2つの環境を想定したファイルを用意しました。</p>
+<pre class="yaml"><code>default: 
+    var: hoge
+
+dev:
+    var: piyo</code></pre>
+<p><code>config.yml</code>のあるディレクトリで<code>config::get()</code>を実行すると<code>config.yml</code>にある設定がRオブジェクトとして読み込まれます。この時、読み込まれるのはdefaultに指定した変数です。</p>
+<pre class="r"><code># config.ymlに書かれた項目をconfigというオブジェクトに保存します
+(config &lt;- config::get())
+# $var
+# [1] &quot;hoge&quot;
+# 
+# attr(,&quot;config&quot;)
+# [1] &quot;default&quot;
+# attr(,&quot;file&quot;)
+# [1] &quot;/Users/uri/git/25days-shiny/config.yml&quot;</code></pre>
+<p>特定の変数を取り出したい時には次のように変数名を参照・指定して実行します。</p>
+<pre class="r"><code>config$var
+# [1] &quot;hoge&quot;
+
+config::get(&quot;var&quot;)
+# [1] &quot;hoge&quot;</code></pre>
+<p>defaultではなく、devの環境変数を扱いたい場合にはどうすれば良いでしょうか。これは<code>Sys.setenv(R_CONFIG_ACTIVE = )</code>で対象の環境設定の名称を指定して実行することで変更されます。すなわち、defaultの環境設定からdevに切り替えるには次のコードを実行します。</p>
+<pre class="r"><code>Sys.setenv(R_CONFIG_ACTIVE = &quot;dev&quot;)
+config::get(&quot;var&quot;)
+# [1] &quot;piyo&quot;</code></pre>
+<p>また作業ディレクトリとは異なるディレクトリにある<code>config.yml</code>を参照したい時には<code>config::get(file = )</code>でパスを指定します。</p>
+<p><strong><code>{config}</code></strong>は、データベースのパスワードやAPIのトークン、パッケージ開発時など、さまざまな場面で役立つ便利なパッケージですので、ぜひ導入されるこをお薦めします。</p>
+<p>Enjoy!</p>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->

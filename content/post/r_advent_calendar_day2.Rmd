@@ -1,0 +1,66 @@
+---
+title: "configパッケージで楽々環境変数の管理"
+author: "Shinya Uryu"
+date: 2016-12-05T22:30:00
+categories: ["R"]
+description:
+    環境変数を使い回すためのconfigパッケージの紹介です
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+みなさん、Rの環境変数についてどのように管理されていますか？`.Rprofile`ですか？それも良い方法です。ただ、Rprojectによるプロジェクト単位での分析作業がメインとなっている昨今では、プロジェクトごとに環境変数を設定したり、プロジェクトで頻繁に利用する値を環境変数としたい場合などがあると思います。そのような時に、今回紹介する**`{config}`**が役立ちます。
+
+**`{config}`**を一言で説明すると、**作業スペース規模で利用可能な環境変数の呼び出し**です。作業スペースというのは、Rでは`getwd()`で得られるディレクトリであり、`.Rproj`ファイルのあるディレクトリです。
+
+**`{config}`**を利用するには`config.yml`というYAMLファイルを用意する必要があります。この`config.yml`に環境変数を記述することで、**`{config}`**が環境変数を呼び出せる状態になります。また**`{config}`**が優れている点は、環境に応じて呼び出す環境変数の値を変更できるという点です。例えば、通常の利用と開発用に同じ名称の変数をそれぞれ用意していたとします。今回はdefault、devの2つの環境を想定したファイルを用意しました。
+
+```{yaml}
+default: 
+    var: hoge
+
+dev:
+    var: piyo
+```
+
+
+`config.yml`のあるディレクトリで`config::get()`を実行すると`config.yml`にある設定がRオブジェクトとして読み込まれます。この時、読み込まれるのはdefaultに指定した変数です。
+
+```{r, eval = FALSE, echo = TRUE}
+# config.ymlに書かれた項目をconfigというオブジェクトに保存します
+(config <- config::get())
+# $var
+# [1] "hoge"
+# 
+# attr(,"config")
+# [1] "default"
+# attr(,"file")
+# [1] "/Users/uri/git/25days-shiny/config.yml"
+```
+
+特定の変数を取り出したい時には次のように変数名を参照・指定して実行します。
+
+```{r, eval = FALSE, echo = TRUE}
+config$var
+# [1] "hoge"
+
+config::get("var")
+# [1] "hoge"
+```
+
+defaultではなく、devの環境変数を扱いたい場合にはどうすれば良いでしょうか。これは`Sys.setenv(R_CONFIG_ACTIVE = )`で対象の環境設定の名称を指定して実行することで変更されます。すなわち、defaultの環境設定からdevに切り替えるには次のコードを実行します。
+
+```{r, eval = FALSE, echo = TRUE}
+Sys.setenv(R_CONFIG_ACTIVE = "dev")
+config::get("var")
+# [1] "piyo"
+```
+
+また作業ディレクトリとは異なるディレクトリにある`config.yml`を参照したい時には`config::get(file = )`でパスを指定します。
+
+**`{config}`**は、データベースのパスワードやAPIのトークン、パッケージ開発時など、さまざまな場面で役立つ便利なパッケージですので、ぜひ導入されるこをお薦めします。
+
+Enjoy!
+
+
