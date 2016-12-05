@@ -9,6 +9,61 @@
     <atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>configパッケージで楽々環境変数の管理</title>
+      <link>/post/r_advent_calendar_day2/</link>
+      <pubDate>Mon, 05 Dec 2016 22:30:00 +0000</pubDate>
+      
+      <guid>/post/r_advent_calendar_day2/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;p&gt;みなさん、Rの環境変数についてどのように管理されていますか？&lt;code&gt;.Rprofile&lt;/code&gt;ですか？それも良い方法です。ただ、Rprojectによるプロジェクト単位での分析作業がメインとなっている昨今では、プロジェクトごとに環境変数を設定したり、プロジェクトで頻繁に利用する値を環境変数としたい場合などがあると思います。そのような時に、今回紹介する&lt;strong&gt;&lt;code&gt;{config}&lt;/code&gt;&lt;/strong&gt;が役立ちます。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{config}&lt;/code&gt;&lt;/strong&gt;を一言で説明すると、&lt;strong&gt;作業スペース規模で利用可能な環境変数の呼び出し&lt;/strong&gt;です。作業スペースというのは、Rでは&lt;code&gt;getwd()&lt;/code&gt;で得られるディレクトリであり、&lt;code&gt;.Rproj&lt;/code&gt;ファイルのあるディレクトリです。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{config}&lt;/code&gt;&lt;/strong&gt;を利用するには&lt;code&gt;config.yml&lt;/code&gt;というYAMLファイルを用意する必要があります。この&lt;code&gt;config.yml&lt;/code&gt;に環境変数を記述することで、&lt;strong&gt;&lt;code&gt;{config}&lt;/code&gt;&lt;/strong&gt;が環境変数を呼び出せる状態になります。また&lt;strong&gt;&lt;code&gt;{config}&lt;/code&gt;&lt;/strong&gt;が優れている点は、環境に応じて呼び出す環境変数の値を変更できるという点です。例えば、通常の利用と開発用に同じ名称の変数をそれぞれ用意していたとします。今回はdefault、devの2つの環境を想定したファイルを用意しました。&lt;/p&gt;
+&lt;pre class=&#34;yaml&#34;&gt;&lt;code&gt;default: 
+    var: hoge
+
+dev:
+    var: piyo&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;code&gt;config.yml&lt;/code&gt;のあるディレクトリで&lt;code&gt;config::get()&lt;/code&gt;を実行すると&lt;code&gt;config.yml&lt;/code&gt;にある設定がRオブジェクトとして読み込まれます。この時、読み込まれるのはdefaultに指定した変数です。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# config.ymlに書かれた項目をconfigというオブジェクトに保存します
+(config &amp;lt;- config::get())
+# $var
+# [1] &amp;quot;hoge&amp;quot;
+# 
+# attr(,&amp;quot;config&amp;quot;)
+# [1] &amp;quot;default&amp;quot;
+# attr(,&amp;quot;file&amp;quot;)
+# [1] &amp;quot;/Users/uri/git/25days-shiny/config.yml&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;特定の変数を取り出したい時には次のように変数名を参照・指定して実行します。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;config$var
+# [1] &amp;quot;hoge&amp;quot;
+
+config::get(&amp;quot;var&amp;quot;)
+# [1] &amp;quot;hoge&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;defaultではなく、devの環境変数を扱いたい場合にはどうすれば良いでしょうか。これは&lt;code&gt;Sys.setenv(R_CONFIG_ACTIVE = )&lt;/code&gt;で対象の環境設定の名称を指定して実行することで変更されます。すなわち、defaultの環境設定からdevに切り替えるには次のコードを実行します。&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;Sys.setenv(R_CONFIG_ACTIVE = &amp;quot;dev&amp;quot;)
+config::get(&amp;quot;var&amp;quot;)
+# [1] &amp;quot;piyo&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;また作業ディレクトリとは異なるディレクトリにある&lt;code&gt;config.yml&lt;/code&gt;を参照したい時には&lt;code&gt;config::get(file = )&lt;/code&gt;でパスを指定します。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;{config}&lt;/code&gt;&lt;/strong&gt;は、データベースのパスワードやAPIのトークン、パッケージ開発時など、さまざまな場面で役立つ便利なパッケージですので、ぜひ導入されるこをお薦めします。&lt;/p&gt;
+&lt;p&gt;Enjoy!&lt;/p&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+    <item>
       <title>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</title>
       <link>/post/visualization_advent_calendar_day2/</link>
       <pubDate>Sun, 04 Dec 2016 09:00:00 +0000</pubDate>
@@ -43,8 +98,7 @@ iris %&amp;gt;% ggplot(aes(Sepal.Length, Petal.Width)) +
 myfonts %&amp;gt;% length()&lt;/code&gt;&lt;/pre&gt;
 &lt;pre&gt;&lt;code&gt;## [1] 104&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&#34;r&#34;&gt;&lt;code&gt;myfonts %&amp;gt;% sample(5)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Tw Cen MT&amp;quot;         &amp;quot;DejaVu Sans Light&amp;quot; &amp;quot;Tahoma&amp;quot;           
-## [4] &amp;quot;Verdana&amp;quot;           &amp;quot;SimHei&amp;quot;&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Tw Cen MT&amp;quot;   &amp;quot;MS PGothic&amp;quot;  &amp;quot;Consolas&amp;quot;    &amp;quot;Batang&amp;quot;      &amp;quot;DejaVu Sans&amp;quot;&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;グラフの各要素に対し、フォントを設定するには次のような使い分けを行います&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;em&gt;family&lt;/em&gt;引数に使いたいフォント名を与える。
@@ -81,6 +135,7 @@ p +
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://qiita.com/miiton@github/items/1e50ab643653b7a58954&#34;&gt;Rでpdfに好きな日本語フォントを使用する - Qiita&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://notchained.hatenablog.com/entry/2015/06/02/235436&#34;&gt;ggplot2でFont Awesomeのアイコンを使ってプロット&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://kenpg2.seesaa.net/article/414814562.html&#34;&gt;R + extrafont パッケージで数式を PDF に埋め込む : 研究に使うポスグレ&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/div&gt;
 

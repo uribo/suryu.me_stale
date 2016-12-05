@@ -92,3 +92,4 @@ p +
 
 - [Rでpdfに好きな日本語フォントを使用する - Qiita](http://qiita.com/miiton@github/items/1e50ab643653b7a58954)
 - [ggplot2でFont Awesomeのアイコンを使ってプロット](http://notchained.hatenablog.com/entry/2015/06/02/235436)
+* [R + extrafont パッケージで数式を PDF に埋め込む : 研究に使うポスグレ](http://kenpg2.seesaa.net/article/414814562.html)

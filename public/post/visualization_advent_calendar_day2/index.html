@@ -56,7 +56,7 @@
 
 
 <meta itemprop="dateModified" content="2016-12-04T09:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1046">
+<meta itemprop="wordCount" content="1072">
 
 
 
@@ -234,6 +234,10 @@
 
                 
                     <li>
+                        <a href="../../post/r_advent_calendar_day2/"><p>configパッケージで楽々環境変数の管理</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/visualization_advent_calendar_day2/"><p>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</p></a>
                     </li>
                 
@@ -243,10 +247,6 @@
                 
                     <li>
                         <a href="../../post/shiny_advent_calendar_day1/"><p>一人Shinyアドベントカレンダー概要</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/rgis_advent_calendar_day1/"><p>jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</p></a>
                     </li>
                 
             </ul>
@@ -395,8 +395,7 @@ iris %&gt;% ggplot(aes(Sepal.Length, Petal.Width)) +
 myfonts %&gt;% length()</code></pre>
 <pre><code>## [1] 104</code></pre>
 <pre class="r"><code>myfonts %&gt;% sample(5)</code></pre>
-<pre><code>## [1] &quot;Tw Cen MT&quot;         &quot;DejaVu Sans Light&quot; &quot;Tahoma&quot;           
-## [4] &quot;Verdana&quot;           &quot;SimHei&quot;</code></pre>
+<pre><code>## [1] &quot;Tw Cen MT&quot;   &quot;MS PGothic&quot;  &quot;Consolas&quot;    &quot;Batang&quot;      &quot;DejaVu Sans&quot;</code></pre>
 <p>グラフの各要素に対し、フォントを設定するには次のような使い分けを行います</p>
 <ul>
 <li><em>family</em>引数に使いたいフォント名を与える。
@@ -433,6 +432,7 @@ p +
 <ul>
 <li><a href="http://qiita.com/miiton@github/items/1e50ab643653b7a58954">Rでpdfに好きな日本語フォントを使用する - Qiita</a></li>
 <li><a href="http://notchained.hatenablog.com/entry/2015/06/02/235436">ggplot2でFont Awesomeのアイコンを使ってプロット</a></li>
+<li><a href="http://kenpg2.seesaa.net/article/414814562.html">R + extrafont パッケージで数式を PDF に埋め込む : 研究に使うポスグレ</a></li>
 </ul>
 </div>
 
@@ -485,6 +485,9 @@ p +
                 class="button big previous">Rで方位記号を描く (ggsn版)</a></li>
     
 
+    
+        <li><a href="../../post/r_advent_calendar_day2/"
+                class="button big next">configパッケージで楽々環境変数の管理</a></li>
     
 </ul>
 
@@ -620,6 +623,20 @@ p +
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/r_advent_calendar_day2/">configパッケージで楽々環境変数の管理</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-05'>
+                                    December 5, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/visualization_advent_calendar_day2/">extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</a></h3>
                                 
                                     
@@ -649,20 +666,6 @@ p +
                         <article>
                             <header>
                                 <h3><a href="../../post/shiny_advent_calendar_day1/">一人Shinyアドベントカレンダー概要</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-01'>
-                                    December 1, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/rgis_advent_calendar_day1/">jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</a></h3>
                                 
                                     
                                 
@@ -707,7 +710,7 @@ p +
                         <article>
                             <header>
                                 <a href="../../categories/r/">R</a>
-                                <span style="float:right;">8</span>
+                                <span style="float:right;">9</span>
                             </header>
                         </article>
                     </li>

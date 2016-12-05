@@ -4,7 +4,7 @@
     <head>
         
             
-                <title>【予告】Rに関する一人アドベントカレンダー2016</title>
+                <title>configパッケージで楽々環境変数の管理</title>
             
         
 
@@ -18,7 +18,7 @@
             <meta name="author" content="Shinya Uryu">
         
         
-            <meta name="description" content="一人アドベントカレンダーを5つ、完走したい。">
+            <meta name="description" content="環境変数を使い回すためのconfigパッケージの紹介です">
         
 
         
@@ -27,19 +27,19 @@
 
 
 
-<meta name="twitter:title" content="【予告】Rに関する一人アドベントカレンダー2016"/>
-<meta name="twitter:description" content="一人アドベントカレンダーを5つ、完走したい。"/>
+<meta name="twitter:title" content="configパッケージで楽々環境変数の管理"/>
+<meta name="twitter:description" content="環境変数を使い回すためのconfigパッケージの紹介です"/>
 <meta name="twitter:site" content="@u_ribo"/>
 
 
         <meta name="twitter:image" content="https://suryu.me/img/banner.png"/>
-        <meta property="og:title" content="【予告】Rに関する一人アドベントカレンダー2016" />
-<meta property="og:description" content="一人アドベントカレンダーを5つ、完走したい。" />
+        <meta property="og:title" content="configパッケージで楽々環境変数の管理" />
+<meta property="og:description" content="環境変数を使い回すためのconfigパッケージの紹介です" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="/post/r_advent_calendar_2016/" />
+<meta property="og:url" content="/post/r_advent_calendar_day2/" />
 
 
-<meta property="og:updated_time" content="2016-11-29T05:20:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-05T22:30:00&#43;00:00"/>
 
 
 
@@ -51,12 +51,12 @@
 
 
         
-<meta itemprop="name" content="【予告】Rに関する一人アドベントカレンダー2016">
-<meta itemprop="description" content="一人アドベントカレンダーを5つ、完走したい。">
+<meta itemprop="name" content="configパッケージで楽々環境変数の管理">
+<meta itemprop="description" content="環境変数を使い回すためのconfigパッケージの紹介です">
 
 
-<meta itemprop="dateModified" content="2016-11-29T05:20:00&#43;00:00" />
-<meta itemprop="wordCount" content="348">
+<meta itemprop="dateModified" content="2016-12-05T22:30:00&#43;00:00" />
+<meta itemprop="wordCount" content="916">
 
 
 
@@ -265,43 +265,43 @@
             
 
 
-<li><a href="//twitter.com/share?url=%2fpost%2fr_advent_calendar_2016%2f&text=%e3%80%90%e4%ba%88%e5%91%8a%e3%80%91R%e3%81%ab%e9%96%a2%e3%81%99%e3%82%8b%e4%b8%80%e4%ba%ba%e3%82%a2%e3%83%89%e3%83%99%e3%83%b3%e3%83%88%e3%82%ab%e3%83%ac%e3%83%b3%e3%83%80%e3%83%bc2016&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=%2fpost%2fr_advent_calendar_day2%2f&text=config%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%a7%e6%a5%bd%e3%80%85%e7%92%b0%e5%a2%83%e5%a4%89%e6%95%b0%e3%81%ae%e7%ae%a1%e7%90%86&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=%2fpost%2fr_advent_calendar_2016%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=%2fpost%2fr_advent_calendar_day2%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fr_advent_calendar_2016%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fr_advent_calendar_day2%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=%2fpost%2fr_advent_calendar_2016%2f&title=%e3%80%90%e4%ba%88%e5%91%8a%e3%80%91R%e3%81%ab%e9%96%a2%e3%81%99%e3%82%8b%e4%b8%80%e4%ba%ba%e3%82%a2%e3%83%89%e3%83%99%e3%83%b3%e3%83%88%e3%82%ab%e3%83%ac%e3%83%b3%e3%83%80%e3%83%bc2016" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=%2fpost%2fr_advent_calendar_day2%2f&title=config%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%a7%e6%a5%bd%e3%80%85%e7%92%b0%e5%a2%83%e5%a4%89%e6%95%b0%e3%81%ae%e7%ae%a1%e7%90%86" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fr_advent_calendar_2016%2f&title=%e3%80%90%e4%ba%88%e5%91%8a%e3%80%91R%e3%81%ab%e9%96%a2%e3%81%99%e3%82%8b%e4%b8%80%e4%ba%ba%e3%82%a2%e3%83%89%e3%83%99%e3%83%b3%e3%83%88%e3%82%ab%e3%83%ac%e3%83%b3%e3%83%80%e3%83%bc2016" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fr_advent_calendar_day2%2f&title=config%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%a7%e6%a5%bd%e3%80%85%e7%92%b0%e5%a2%83%e5%a4%89%e6%95%b0%e3%81%ae%e7%ae%a1%e7%90%86" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fr_advent_calendar_2016%2f&title=%e3%80%90%e4%ba%88%e5%91%8a%e3%80%91R%e3%81%ab%e9%96%a2%e3%81%99%e3%82%8b%e4%b8%80%e4%ba%ba%e3%82%a2%e3%83%89%e3%83%99%e3%83%b3%e3%83%88%e3%82%ab%e3%83%ac%e3%83%b3%e3%83%80%e3%83%bc2016" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fr_advent_calendar_day2%2f&title=config%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%a7%e6%a5%bd%e3%80%85%e7%92%b0%e5%a2%83%e5%a4%89%e6%95%b0%e3%81%ae%e7%ae%a1%e7%90%86" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fr_advent_calendar_2016%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fr_advent_calendar_day2%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -318,11 +318,11 @@
     <header>
     <div class="title">
         
-            <h1><a href="../../post/r_advent_calendar_2016/">【予告】Rに関する一人アドベントカレンダー2016</a></h1>
+            <h1><a href="../../post/r_advent_calendar_day2/">configパッケージで楽々環境変数の管理</a></h1>
             
         
         
-            <p>一人アドベントカレンダーを5つ、完走したい。</p>
+            <p>環境変数を使い回すためのconfigパッケージの紹介です</p>
         
     </div>
     <div class="meta">
@@ -331,11 +331,11 @@
         
 
         <time class="published"
-            datetime='2016-11-29'>
-            November 29, 2016</time>
+            datetime='2016-12-05'>
+            December 5, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>1 minute read</p>
+            <p>2 minute read</p>
         
         
     </div>
@@ -344,52 +344,41 @@
 
 
     
-    
-
-    
-        
-        
-
-
-
-
-    
-    
-        
-    
-
-
-        
-
-        <a href="../../post/r_advent_calendar_2016/" class="image featured">
-            <img src="../../img/2016/11/161129_advent_calendar_timeviz.png" alt="" />
-        </a>
-    
-
 
     <div id="content">
 
 
-<p>明後日から12月になる。12月といえば最近はもっぱら「アドベントカレンダー」の月という認識がある。今年はRに関するアドベントカレンダーが2つQiitaに上がっていて、そっちも盛り上がりを見せている。が、俺は一人でRアドベントカレンダーをやる。<em>5つくらいやる</em>。</p>
-<p>と、これだけ大口を叩いておいて、ネタのストックが豊富にあるのかというとそんなことはない。頭にはいくつかあるが文章やコードになっているものは皆無だ。25日完走できる気はしない。でもやらないと0日しかないので、1日でも多く書けるようにしたい。(完走できたら寿司でも肉でもケーキでもご馳走してくれ！！！)</p>
-<div class="section level2">
-<h2>やろうとしているもの</h2>
-<ol style="list-style-type: decimal">
-<li>R一般 (パッケージ、データ操作、小ネタ)</li>
-<li>Shiny</li>
-<li>visualization (ggplot2, plotly, …)</li>
-<li>R + GIS</li>
-<li>Rパッケージ開発</li>
-</ol>
-</div>
-<div class="section level2">
-<h2>どこでやるか</h2>
-<p>たぶんここ。あるいはQiita。Shinyアプリであればデモが必要なのでどっかのサーバーあるいはshinyapp.ioにするかも。</p>
-</div>
-<div class="section level2">
-<h2>進捗どうですか</h2>
-<p>にゃおす</p>
-</div>
+<p>みなさん、Rの環境変数についてどのように管理されていますか？<code>.Rprofile</code>ですか？それも良い方法です。ただ、Rprojectによるプロジェクト単位での分析作業がメインとなっている昨今では、プロジェクトごとに環境変数を設定したり、プロジェクトで頻繁に利用する値を環境変数としたい場合などがあると思います。そのような時に、今回紹介する<strong><code>{config}</code></strong>が役立ちます。</p>
+<p><strong><code>{config}</code></strong>を一言で説明すると、<strong>作業スペース規模で利用可能な環境変数の呼び出し</strong>です。作業スペースというのは、Rでは<code>getwd()</code>で得られるディレクトリであり、<code>.Rproj</code>ファイルのあるディレクトリです。</p>
+<p><strong><code>{config}</code></strong>を利用するには<code>config.yml</code>というYAMLファイルを用意する必要があります。この<code>config.yml</code>に環境変数を記述することで、<strong><code>{config}</code></strong>が環境変数を呼び出せる状態になります。また<strong><code>{config}</code></strong>が優れている点は、環境に応じて呼び出す環境変数の値を変更できるという点です。例えば、通常の利用と開発用に同じ名称の変数をそれぞれ用意していたとします。今回はdefault、devの2つの環境を想定したファイルを用意しました。</p>
+<pre class="yaml"><code>default: 
+    var: hoge
+
+dev:
+    var: piyo</code></pre>
+<p><code>config.yml</code>のあるディレクトリで<code>config::get()</code>を実行すると<code>config.yml</code>にある設定がRオブジェクトとして読み込まれます。この時、読み込まれるのはdefaultに指定した変数です。</p>
+<pre class="r"><code># config.ymlに書かれた項目をconfigというオブジェクトに保存します
+(config &lt;- config::get())
+# $var
+# [1] &quot;hoge&quot;
+# 
+# attr(,&quot;config&quot;)
+# [1] &quot;default&quot;
+# attr(,&quot;file&quot;)
+# [1] &quot;/Users/uri/git/25days-shiny/config.yml&quot;</code></pre>
+<p>特定の変数を取り出したい時には次のように変数名を参照・指定して実行します。</p>
+<pre class="r"><code>config$var
+# [1] &quot;hoge&quot;
+
+config::get(&quot;var&quot;)
+# [1] &quot;hoge&quot;</code></pre>
+<p>defaultではなく、devの環境変数を扱いたい場合にはどうすれば良いでしょうか。これは<code>Sys.setenv(R_CONFIG_ACTIVE = )</code>で対象の環境設定の名称を指定して実行することで変更されます。すなわち、defaultの環境設定からdevに切り替えるには次のコードを実行します。</p>
+<pre class="r"><code>Sys.setenv(R_CONFIG_ACTIVE = &quot;dev&quot;)
+config::get(&quot;var&quot;)
+# [1] &quot;piyo&quot;</code></pre>
+<p>また作業ディレクトリとは異なるディレクトリにある<code>config.yml</code>を参照したい時には<code>config::get(file = )</code>でパスを指定します。</p>
+<p><strong><code>{config}</code></strong>は、データベースのパスワードやAPIのトークン、パッケージ開発時など、さまざまな場面で役立つ便利なパッケージですので、ぜひ導入されるこをお薦めします。</p>
+<p>Enjoy!</p>
 
 
 
@@ -415,7 +404,7 @@
                     
 
                     
-                        Categories
+                        Category
                     
                 
             </li>
@@ -426,23 +415,16 @@
     
         <li><a href='../../categoriesr'>R</a></li>
     
-        <li><a href='../../categoriesshiny'>Shiny</a></li>
-    
-        <li><a href='../../categoriesvisualization'>visualization</a></li>
-    
 </ul>
 
     </footer>
 </article>
 <ul class="actions pagination">
     
-        <li><a href="../../post/evaluate_geo_points/"
-                class="button big previous">ランダムな位置情報データから日本の陸地に含まれるものだけを抽出したい</a></li>
+        <li><a href="../../post/visualization_advent_calendar_day2/"
+                class="button big previous">extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</a></li>
     
 
-    
-        <li><a href="../../post/r_advent_calendar_day1/"
-                class="button big next">Rで3億円宣言</a></li>
     
 </ul>
 
@@ -453,9 +435,9 @@
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/r_advent_calendar_2016\/';
-    var disqus_title = '【予告】Rに関する一人アドベントカレンダー2016';
-    var disqus_url = '\/post\/r_advent_calendar_2016\/';
+    var disqus_identifier = '\/post\/r_advent_calendar_day2\/';
+    var disqus_title = 'configパッケージで楽々環境変数の管理';
+    var disqus_url = '\/post\/r_advent_calendar_day2\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

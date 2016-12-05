@@ -29,7 +29,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-12-04T09:00:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-05T22:30:00&#43;00:00"/>
 
 
 
@@ -216,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/r_advent_calendar_day2/"><p>configパッケージで楽々環境変数の管理</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/visualization_advent_calendar_day2/"><p>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</p></a>
                     </li>
                 
@@ -225,10 +229,6 @@
                 
                     <li>
                         <a href="./post/shiny_advent_calendar_day1/"><p>一人Shinyアドベントカレンダー概要</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/rgis_advent_calendar_day1/"><p>jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</p></a>
                     </li>
                 
             </ul>
@@ -245,10 +245,10 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/visualization_advent_calendar_day2/">extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</a></h2>
+            <h2><a href="./post/r_advent_calendar_day2/">configパッケージで楽々環境変数の管理</a></h2>
         
         
-            <p>ggplot2でタイトルや軸名に日本語を扱いたい場合にextrafontを使うのがモダンっぽいという話。</p>
+            <p>環境変数を使い回すためのconfigパッケージの紹介です</p>
         
     </div>
     <div class="meta">
@@ -257,11 +257,11 @@
         
 
         <time class="published"
-            datetime='2016-12-04'>
-            December 4, 2016</time>
+            datetime='2016-12-05'>
+            December 5, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>3 minute read</p>
+            <p>2 minute read</p>
         
         
     </div>
@@ -270,97 +270,41 @@
 
 
     
-    
-
-    
-        
-        
-
-
-
-
-    
-    
-        
-    
-
-
-        
-
-        <a href="./post/visualization_advent_calendar_day2/" class="image featured">
-            <img src="./img/2016/12/161204-extrafont-1.png" alt="" />
-        </a>
-    
-
 
     <div id="content">
 
 
-<p>一人visualizationの2日目（2つめの記事です。アドベントカレンダーとはなんだったのか…）。</p>
-<p><strong><code>{ggplot2}</code></strong>でタイトルや軸名に日本語を扱いたい場合、いくつか方法があると思うのですが、私は普段次のコードを実行していました。</p>
-<pre class="r"><code>library(magrittr)
-library(ggplot2)</code></pre>
-<pre class="r"><code>quartzFonts(YuGo = quartzFont(rep(&quot;YuGo-Medium&quot;, 4)))
-theme_set(theme_classic(base_size = 12, base_family = &quot;YuGo&quot;))
+<p>みなさん、Rの環境変数についてどのように管理されていますか？<code>.Rprofile</code>ですか？それも良い方法です。ただ、Rprojectによるプロジェクト単位での分析作業がメインとなっている昨今では、プロジェクトごとに環境変数を設定したり、プロジェクトで頻繁に利用する値を環境変数としたい場合などがあると思います。そのような時に、今回紹介する<strong><code>{config}</code></strong>が役立ちます。</p>
+<p><strong><code>{config}</code></strong>を一言で説明すると、<strong>作業スペース規模で利用可能な環境変数の呼び出し</strong>です。作業スペースというのは、Rでは<code>getwd()</code>で得られるディレクトリであり、<code>.Rproj</code>ファイルのあるディレクトリです。</p>
+<p><strong><code>{config}</code></strong>を利用するには<code>config.yml</code>というYAMLファイルを用意する必要があります。この<code>config.yml</code>に環境変数を記述することで、<strong><code>{config}</code></strong>が環境変数を呼び出せる状態になります。また<strong><code>{config}</code></strong>が優れている点は、環境に応じて呼び出す環境変数の値を変更できるという点です。例えば、通常の利用と開発用に同じ名称の変数をそれぞれ用意していたとします。今回はdefault、devの2つの環境を想定したファイルを用意しました。</p>
+<pre class="yaml"><code>default: 
+    var: hoge
 
-iris %&gt;% ggplot(aes(Sepal.Length, Petal.Width)) +
-  geom_point() +
-  xlab(&quot;萼片長&quot;)</code></pre>
-<p>基本的にはこれで日本語を組み込んだggplot2の図が描けるのですが、最近これだと<strong><code>{bookdown}</code></strong>によるPDF生成時にうまく表示されないという問題に直面しました。どうしたものかと悩んだ時に出てきたのが<strong><code>{extrafont}</code></strong>で、これを使うと無事に問題が解決したのでメモを残しておきます。ちなみにタイトルにあるように<strong><code>{ggplot2}</code></strong>のバージョンは現行の2.2.0です。</p>
-<div id="extrafont" class="section level2">
-<h2>extrafontを使用する準備</h2>
-<p>まずパッケージがないと始まらないのでインストールします。<strong><code>{extrafont}</code></strong>をインストールすると、フォント管理用に<strong><code>{extrafontdb}</code></strong>というパッケージもインストールされます。</p>
-<pre class="r"><code>install.packages(&quot;extrafont&quot;)</code></pre>
-<p>パッケージを読み込みます。<strong><code>{extrafont}</code></strong>を初めて使う際やフォントを追加した場合には<code>font_import()</code>を実行してフォントを登録します。</p>
-<pre class="r"><code>library(extrafont)</code></pre>
-<pre><code>## Registering fonts with R</code></pre>
-<pre class="r"><code># font_import()</code></pre>
-<p><strong><code>{extrafont}</code></strong>はRで標準的に利用可能なPostScriptのフォントに対してTrueTypeフォントを利用可能にするパッケージで、これを使うことで多様なフォントをグラフに埋め込むことができます。</p>
-<p><code>fonts()</code>を実行して登録済み（利用可能な）フォント名を確認してみましょう。</p>
-<pre class="r"><code>myfonts &lt;- fonts()
-myfonts %&gt;% length()</code></pre>
-<pre><code>## [1] 104</code></pre>
-<pre class="r"><code>myfonts %&gt;% sample(5)</code></pre>
-<pre><code>## [1] &quot;Tw Cen MT&quot;         &quot;DejaVu Sans Light&quot; &quot;Tahoma&quot;           
-## [4] &quot;Verdana&quot;           &quot;SimHei&quot;</code></pre>
-<p>グラフの各要素に対し、フォントを設定するには次のような使い分けを行います</p>
-<ul>
-<li><em>family</em>引数に使いたいフォント名を与える。
-<ul>
-<li><strong><code>{ggplot2}</code></strong>の<code>geom_*()</code>で<em>family</em>引数があればこっちで指定</li>
-</ul></li>
-<li>タイトルや軸のラベルには<code>theme(... = element_text(base_family = ))</code>で指定しておく</li>
-</ul>
-<pre class="r"><code>library(ggplot2)
-loadfonts(quiet = TRUE)
+dev:
+    var: piyo</code></pre>
+<p><code>config.yml</code>のあるディレクトリで<code>config::get()</code>を実行すると<code>config.yml</code>にある設定がRオブジェクトとして読み込まれます。この時、読み込まれるのはdefaultに指定した変数です。</p>
+<pre class="r"><code># config.ymlに書かれた項目をconfigというオブジェクトに保存します
+(config &lt;- config::get())
+# $var
+# [1] &quot;hoge&quot;
+# 
+# attr(,&quot;config&quot;)
+# [1] &quot;default&quot;
+# attr(,&quot;file&quot;)
+# [1] &quot;/Users/uri/git/25days-shiny/config.yml&quot;</code></pre>
+<p>特定の変数を取り出したい時には次のように変数名を参照・指定して実行します。</p>
+<pre class="r"><code>config$var
+# [1] &quot;hoge&quot;
 
-library(ggrepel)
-mtcars$label &lt;- rownames(mtcars)
-mtcars$label[1:15] &lt;- &quot;&quot;
-
-p &lt;- ggplot(mtcars,
-  aes(wt, mpg, label = label, colour = factor(cyl))) +
-  geom_point()
-
-p +  
-  geom_text(aes(wt, mpg, colour = factor(cyl)),
-              label = &quot;\uf1b9&quot;,
-              family = &quot;FontAwesome&quot;,
-              size = 4) +
-  geom_text_repel(data = mtcars, aes(wt, mpg, label = label, family = &quot;xkcd&quot;)) +
-  xlab(&quot;重量&quot;) +
-  ylab(&quot;マイル / ガロン&quot;) +
-  theme(text = element_text(size = 16, family = &quot;IPAexMincho&quot;))</code></pre>
-<p>これで冒頭の矛盾系AAのような図を作れます。<strong><code>{bookdown}</code></strong>に埋め込む図もこれでOK</p>
-<p><strong>Windows?知らん <code>skip_on_os(&quot;windows)&quot;</code></strong>（環境がないので試せていない）。</p>
-</div>
-<div class="section level2">
-<h2>参考</h2>
-<ul>
-<li><a href="http://qiita.com/miiton@github/items/1e50ab643653b7a58954">Rでpdfに好きな日本語フォントを使用する - Qiita</a></li>
-<li><a href="http://notchained.hatenablog.com/entry/2015/06/02/235436">ggplot2でFont Awesomeのアイコンを使ってプロット</a></li>
-</ul>
-</div>
+config::get(&quot;var&quot;)
+# [1] &quot;hoge&quot;</code></pre>
+<p>defaultではなく、devの環境変数を扱いたい場合にはどうすれば良いでしょうか。これは<code>Sys.setenv(R_CONFIG_ACTIVE = )</code>で対象の環境設定の名称を指定して実行することで変更されます。すなわち、defaultの環境設定からdevに切り替えるには次のコードを実行します。</p>
+<pre class="r"><code>Sys.setenv(R_CONFIG_ACTIVE = &quot;dev&quot;)
+config::get(&quot;var&quot;)
+# [1] &quot;piyo&quot;</code></pre>
+<p>また作業ディレクトリとは異なるディレクトリにある<code>config.yml</code>を参照したい時には<code>config::get(file = )</code>でパスを指定します。</p>
+<p><strong><code>{config}</code></strong>は、データベースのパスワードやAPIのトークン、パッケージ開発時など、さまざまな場面で役立つ便利なパッケージですので、ぜひ導入されるこをお薦めします。</p>
+<p>Enjoy!</p>
 
 
 
@@ -386,7 +330,7 @@ p +
                     
 
                     
-                        Categories
+                        Category
                     
                 
             </li>
@@ -397,18 +341,14 @@ p +
     
         <li><a href='./categoriesr'>R</a></li>
     
-        <li><a href='./categoriesggplot2'>ggplot2</a></li>
-    
-        <li><a href='./categoriesvisualization'>visualization</a></li>
-    
 </ul>
 
     </footer>
 </article>
 <ul class="actions pagination">
     
-        <li><a href="./post/rgis_advent_calendar_day2/"
-                class="button big previous">Rで方位記号を描く (ggsn版)</a></li>
+        <li><a href="./post/visualization_advent_calendar_day2/"
+                class="button big previous">extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</a></li>
     
 
     
@@ -421,9 +361,9 @@ p +
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/visualization_advent_calendar_day2\/';
-    var disqus_title = 'extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)';
-    var disqus_url = '\/post\/visualization_advent_calendar_day2\/';
+    var disqus_identifier = '\/post\/r_advent_calendar_day2\/';
+    var disqus_title = 'configパッケージで楽々環境変数の管理';
+    var disqus_url = '\/post\/r_advent_calendar_day2\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -447,43 +387,43 @@ p +
             
 
 
-<li><a href="//twitter.com/share?url=%2fpost%2fvisualization_advent_calendar_day2%2f&text=extrafont%20ggplot2%e3%81%a7%e6%97%a5%e6%9c%ac%e8%aa%9e%e3%83%a9%e3%83%99%e3%83%ab%20%28ver.%202.2.0%20%e5%90%91%e3%81%91%29&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=%2fpost%2fr_advent_calendar_day2%2f&text=config%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%a7%e6%a5%bd%e3%80%85%e7%92%b0%e5%a2%83%e5%a4%89%e6%95%b0%e3%81%ae%e7%ae%a1%e7%90%86&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=%2fpost%2fvisualization_advent_calendar_day2%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=%2fpost%2fr_advent_calendar_day2%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fvisualization_advent_calendar_day2%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=%2fpost%2fr_advent_calendar_day2%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=%2fpost%2fvisualization_advent_calendar_day2%2f&title=extrafont%20ggplot2%e3%81%a7%e6%97%a5%e6%9c%ac%e8%aa%9e%e3%83%a9%e3%83%99%e3%83%ab%20%28ver.%202.2.0%20%e5%90%91%e3%81%91%29" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=%2fpost%2fr_advent_calendar_day2%2f&title=config%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%a7%e6%a5%bd%e3%80%85%e7%92%b0%e5%a2%83%e5%a4%89%e6%95%b0%e3%81%ae%e7%ae%a1%e7%90%86" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fvisualization_advent_calendar_day2%2f&title=extrafont%20ggplot2%e3%81%a7%e6%97%a5%e6%9c%ac%e8%aa%9e%e3%83%a9%e3%83%99%e3%83%ab%20%28ver.%202.2.0%20%e5%90%91%e3%81%91%29" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=%2fpost%2fr_advent_calendar_day2%2f&title=config%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%a7%e6%a5%bd%e3%80%85%e7%92%b0%e5%a2%83%e5%a4%89%e6%95%b0%e3%81%ae%e7%ae%a1%e7%90%86" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fvisualization_advent_calendar_day2%2f&title=extrafont%20ggplot2%e3%81%a7%e6%97%a5%e6%9c%ac%e8%aa%9e%e3%83%a9%e3%83%99%e3%83%ab%20%28ver.%202.2.0%20%e5%90%91%e3%81%91%29" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=%2fpost%2fr_advent_calendar_day2%2f&title=config%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e3%81%a7%e6%a5%bd%e3%80%85%e7%92%b0%e5%a2%83%e5%a4%89%e6%95%b0%e3%81%ae%e7%ae%a1%e7%90%86" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fvisualization_advent_calendar_day2%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=%2fpost%2fr_advent_calendar_day2%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -605,6 +545,20 @@ p +
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/r_advent_calendar_day2/">configパッケージで楽々環境変数の管理</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-05'>
+                                    December 5, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/visualization_advent_calendar_day2/">extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</a></h3>
                                 
                                     
@@ -634,20 +588,6 @@ p +
                         <article>
                             <header>
                                 <h3><a href="./post/shiny_advent_calendar_day1/">一人Shinyアドベントカレンダー概要</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-01'>
-                                    December 1, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/rgis_advent_calendar_day1/">jpndistrict: 日本の行政区域地図を容易に描画するパッケージ</a></h3>
                                 
                                     
                                 
@@ -692,7 +632,7 @@ p +
                         <article>
                             <header>
                                 <a href="./categories/r/">R</a>
-                                <span style="float:right;">8</span>
+                                <span style="float:right;">9</span>
                             </header>
                         </article>
                     </li>
