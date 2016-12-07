@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>suryu.me</title>
-    <link>/categories/visualization/index.xml</link>
+    <link>https://suryu.me/categories/visualization/index.xml</link>
     <description>Recent content on suryu.me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
@@ -10,245 +10,38 @@
     
     <item>
       <title>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</title>
-      <link>/post/visualization_advent_calendar_day2/</link>
+      <link>https://suryu.me/post/visualization_advent_calendar_day2/</link>
       <pubDate>Sun, 04 Dec 2016 09:00:00 +0000</pubDate>
       
-      <guid>/post/visualization_advent_calendar_day2/</guid>
-      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
-
-/BLOGDOWN-BODY-BEFORE --&gt;
-
-&lt;p&gt;一人visualizationの2日目（2つめの記事です。アドベントカレンダーとはなんだったのか…）。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;でタイトルや軸名に日本語を扱いたい場合、いくつか方法があると思うのですが、私は普段次のコードを実行していました。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(magrittr)
-library(ggplot2)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;quartzFonts(YuGo = quartzFont(rep(&amp;quot;YuGo-Medium&amp;quot;, 4)))
-theme_set(theme_classic(base_size = 12, base_family = &amp;quot;YuGo&amp;quot;))
-
-iris %&amp;gt;% ggplot(aes(Sepal.Length, Petal.Width)) +
-  geom_point() +
-  xlab(&amp;quot;萼片長&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;基本的にはこれで日本語を組み込んだggplot2の図が描けるのですが、最近これだと&lt;strong&gt;&lt;code&gt;{bookdown}&lt;/code&gt;&lt;/strong&gt;によるPDF生成時にうまく表示されないという問題に直面しました。どうしたものかと悩んだ時に出てきたのが&lt;strong&gt;&lt;code&gt;{extrafont}&lt;/code&gt;&lt;/strong&gt;で、これを使うと無事に問題が解決したのでメモを残しておきます。ちなみにタイトルにあるように&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;のバージョンは現行の2.2.0です。&lt;/p&gt;
-&lt;div id=&#34;extrafont&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;extrafontを使用する準備&lt;/h2&gt;
-&lt;p&gt;まずパッケージがないと始まらないのでインストールします。&lt;strong&gt;&lt;code&gt;{extrafont}&lt;/code&gt;&lt;/strong&gt;をインストールすると、フォント管理用に&lt;strong&gt;&lt;code&gt;{extrafontdb}&lt;/code&gt;&lt;/strong&gt;というパッケージもインストールされます。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;install.packages(&amp;quot;extrafont&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;パッケージを読み込みます。&lt;strong&gt;&lt;code&gt;{extrafont}&lt;/code&gt;&lt;/strong&gt;を初めて使う際やフォントを追加した場合には&lt;code&gt;font_import()&lt;/code&gt;を実行してフォントを登録します。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(extrafont)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## Registering fonts with R&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# font_import()&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;strong&gt;&lt;code&gt;{extrafont}&lt;/code&gt;&lt;/strong&gt;はRで標準的に利用可能なPostScriptのフォントに対してTrueTypeフォントを利用可能にするパッケージで、これを使うことで多様なフォントをグラフに埋め込むことができます。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;fonts()&lt;/code&gt;を実行して登録済み（利用可能な）フォント名を確認してみましょう。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;myfonts &amp;lt;- fonts()
-myfonts %&amp;gt;% length()&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] 104&lt;/code&gt;&lt;/pre&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;myfonts %&amp;gt;% sample(5)&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code&gt;## [1] &amp;quot;Tw Cen MT&amp;quot;   &amp;quot;MS PGothic&amp;quot;  &amp;quot;Consolas&amp;quot;    &amp;quot;Batang&amp;quot;      &amp;quot;DejaVu Sans&amp;quot;&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;グラフの各要素に対し、フォントを設定するには次のような使い分けを行います&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;em&gt;family&lt;/em&gt;引数に使いたいフォント名を与える。
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;の&lt;code&gt;geom_*()&lt;/code&gt;で&lt;em&gt;family&lt;/em&gt;引数があればこっちで指定&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;タイトルや軸のラベルには&lt;code&gt;theme(... = element_text(base_family = ))&lt;/code&gt;で指定しておく&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(ggplot2)
-loadfonts(quiet = TRUE)
-
-library(ggrepel)
-mtcars$label &amp;lt;- rownames(mtcars)
-mtcars$label[1:15] &amp;lt;- &amp;quot;&amp;quot;
-
-p &amp;lt;- ggplot(mtcars,
-  aes(wt, mpg, label = label, colour = factor(cyl))) +
-  geom_point()
-
-p +  
-  geom_text(aes(wt, mpg, colour = factor(cyl)),
-              label = &amp;quot;\uf1b9&amp;quot;,
-              family = &amp;quot;FontAwesome&amp;quot;,
-              size = 4) +
-  geom_text_repel(data = mtcars, aes(wt, mpg, label = label, family = &amp;quot;xkcd&amp;quot;)) +
-  xlab(&amp;quot;重量&amp;quot;) +
-  ylab(&amp;quot;マイル / ガロン&amp;quot;) +
-  theme(text = element_text(size = 16, family = &amp;quot;IPAexMincho&amp;quot;))&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;これで冒頭の矛盾系AAのような図を作れます。&lt;strong&gt;&lt;code&gt;{bookdown}&lt;/code&gt;&lt;/strong&gt;に埋め込む図もこれでOK&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Windows?知らん &lt;code&gt;skip_on_os(&amp;quot;windows)&amp;quot;&lt;/code&gt;&lt;/strong&gt;（環境がないので試せていない）。&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section level2&#34;&gt;
-&lt;h2&gt;参考&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://qiita.com/miiton@github/items/1e50ab643653b7a58954&#34;&gt;Rでpdfに好きな日本語フォントを使用する - Qiita&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://notchained.hatenablog.com/entry/2015/06/02/235436&#34;&gt;ggplot2でFont Awesomeのアイコンを使ってプロット&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://kenpg2.seesaa.net/article/414814562.html&#34;&gt;R + extrafont パッケージで数式を PDF に埋め込む : 研究に使うポスグレ&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-
-
-
-&lt;!-- BLOGDOWN-HEAD
-
-
-
-
-
-
-/BLOGDOWN-HEAD --&gt;
-</description>
+      <guid>https://suryu.me/post/visualization_advent_calendar_day2/</guid>
+      <description>ggplot2でタイトルや軸名に日本語を扱いたい場合にextrafontを使うのがモダンっぽいという話。</description>
     </item>
     
     <item>
       <title>Rで方位記号を描く (ggsn版)</title>
-      <link>/post/rgis_advent_calendar_day2/</link>
+      <link>https://suryu.me/post/rgis_advent_calendar_day2/</link>
       <pubDate>Sat, 03 Dec 2016 07:00:00 +0000</pubDate>
       
-      <guid>/post/rgis_advent_calendar_day2/</guid>
-      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
-
-/BLOGDOWN-BODY-BEFORE --&gt;
-
-&lt;p&gt;読んでいるブログの中でこんな記事を見ました。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;http://garageit.blog.so-net.ne.jp/2016-12-01&#34;&gt;Rで方位記号を描く&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;この記事では&lt;strong&gt;&lt;code&gt;{prettymapr}&lt;/code&gt;&lt;/strong&gt;というパッケージが使われているのですが、ちょうど最近 &lt;strong&gt;&lt;code&gt;{ggsn}&lt;/code&gt;&lt;/strong&gt;というパッケージを発見し、このパッケージでも 方位記号が書けるので紹介したいと思います。&lt;/p&gt;
-&lt;div id=&#34;ggsn-ggplo2ggmap&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;ggsn: ggplo2、ggmapベースの図に方位記号・縮尺を追加する&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&#34;https://suryu.me/post/rgis_advent_calendar_day1/&#34;&gt;先日も紹介した&lt;/a&gt;行政区域境界を含めた国内の地図を描画する&lt;strong&gt;&lt;code&gt;{jpndistrict}&lt;/code&gt;&lt;/strong&gt;を使った例を示します。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# 北海道のデータを取得します
-d1 &amp;lt;- spdf_jpn_pref(1, district = FALSE)
-
-# 一旦地図を作成します。
-p &amp;lt;- gg_jpn_district(d1, ghost = FALSE)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;方位記号を追加する関数は&lt;code&gt;north()&lt;/code&gt;および&lt;code&gt;north2()&lt;/code&gt;です。出力位置の細かな調整を行いたい祭は&lt;code&gt;north2()&lt;/code&gt;の方が簡単な気がします。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;north2(p, x = 0.65, y = 0.9, scale = 0.12, symbol = 3)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;このとき方位記号の種類を引数&lt;em&gt;symbol&lt;/em&gt;で変更できます。これらの方位記号はQGISで使われているものなのだとか。&lt;/p&gt;
-&lt;p&gt;では次に縮尺を追加します。&lt;code&gt;scalebar()&lt;/code&gt;を加えます。&lt;/p&gt;
-&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;# 神奈川県の行政区域データを取得します
-d14 &amp;lt;- spdf_jpn_pref(14)
-d14.fortify &amp;lt;- fortify(d14)
-
-ggplot() + 
-  geom_polygon(data = d14.fortify, 
-               aes(x = long, y = lat, group = group), fill = &amp;#39;#d0d0d0&amp;#39;) + 
-  geom_map(data = d14, map = d14.fortify, 
-           aes(group = group, map_id = id),
-           color = &amp;quot;black&amp;quot;, fill = &amp;quot;white&amp;quot;) +
-  ggthemes::theme_map() + 
-  coord_equal() + 
-  scalebar(data = d14.fortify, dist = 5, dd2km = TRUE, model = &amp;quot;WGS84&amp;quot;, location = &amp;quot;bottomleft&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&#34;../../img/161203-pref14map-scalebar.png&#34; style=&#34;display: block; margin: auto;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;というわけで&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;ベースの地図で方位記号を加えたい・出力位置の調整をしたいときに便利そうです。（コードの説明がきちんとできていない…）&lt;/p&gt;
-&lt;/div&gt;
-
-
-
-&lt;!-- BLOGDOWN-HEAD
-
-
-
-
-
-
-/BLOGDOWN-HEAD --&gt;
-</description>
+      <guid>https://suryu.me/post/rgis_advent_calendar_day2/</guid>
+      <description>ggsnパッケージを利用した、ggplot2ベースの地図に方位記号と縮尺を加える方法です</description>
     </item>
     
     <item>
       <title>plotly流行れ</title>
-      <link>/post/visualization_advent_calendar_day1/</link>
+      <link>https://suryu.me/post/visualization_advent_calendar_day1/</link>
       <pubDate>Thu, 01 Dec 2016 01:00:00 +0000</pubDate>
       
-      <guid>/post/visualization_advent_calendar_day1/</guid>
-      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
-
-/BLOGDOWN-BODY-BEFORE --&gt;
-
-&lt;p&gt;plotly &lt;a href=&#34;https://plot.ly/&#34; class=&#34;uri&#34;&gt;https://plot.ly/&lt;/a&gt; をご存知でしょうか。plotlyはカナダのモントリオールにある企業なのですが、活動の一つに、データの可視化のためのJavaSctiptライブラリである Plotly.js の開発があります。Plotly.jsはオープンソースで提供されており、このPlotly.jsのラッパーがR, Python, Matlabといった環境のために用意されています。&lt;/p&gt;
-&lt;div id=&#34;plotly&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;plotlyでできること&lt;/h2&gt;
-&lt;p&gt;plotlyでどのようなグラフが作成できるかは、&lt;a href=&#34;https://plot.ly/r/&#34;&gt;本家&lt;/a&gt;を見てもらえば、たくさんの種類があることがわかると思います。&lt;strong&gt;&lt;code&gt;{plotly}&lt;/code&gt;&lt;/strong&gt;の文法は&lt;strong&gt;&lt;code&gt;{ggplot2}&lt;/code&gt;&lt;/strong&gt;と似ている点がありますが、これはこれで独特な書き方をします。plotlyで作図可能なグラフの種類を簡単に取り上げてみます。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;これらのグラフをRで作成する方法や、plotlyを使った細かな機能・技術に関しては、このアドカレの中で紹介予定です。&lt;/strong&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;基本
-&lt;ul&gt;
-&lt;li&gt;散布図、バブルチャート&lt;/li&gt;
-&lt;li&gt;折れ線グラフ、時系列グラフ&lt;/li&gt;
-&lt;li&gt;棒グラフ、円グラフ&lt;/li&gt;
-&lt;li&gt;ヒストグラム&lt;/li&gt;
-&lt;li&gt;箱ひげ図&lt;/li&gt;
-&lt;li&gt;ヒートマップ&lt;/li&gt;
-&lt;li&gt;ネットワーク図&lt;/li&gt;
-&lt;li&gt;等高線図&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;li&gt;応用
-&lt;ul&gt;
-&lt;li&gt;地図&lt;/li&gt;
-&lt;li&gt;立体図&lt;/li&gt;
-&lt;li&gt;ダッシュボード&lt;/li&gt;
-&lt;li&gt;ガントチャート&lt;/li&gt;
-&lt;li&gt;…&lt;/li&gt;
-&lt;/ul&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/div&gt;
-&lt;div id=&#34;plotly&#34; class=&#34;section level2&#34;&gt;
-&lt;h2&gt;plotlyを選ぶ理由&lt;/h2&gt;
-&lt;p&gt;plotlyはまだ開発途中のライブラリです。ですがその将来は明るく、現段階でも十分な実用性を備えていると思います。というのも、Rを使ったデータ分析環境を提供する&lt;a href=&#34;https://exploratory.io&#34;&gt;exploratory&lt;/a&gt;でもグラフ作成の機能にplotlyが採用されているからです。また、&lt;strong&gt;Shinyのようなサーバーが必要なインタクティブグラフと比べて、plotlyは静的なウェブページにもインタラクティブな操作を追加できます&lt;/strong&gt;。グラフを作っておいて、利用者の側で見たいデータのみを表示させたり、逆に不要なデータを削除することができます。これは同様の画像描画ライブラリのhighchartsでも実現可能なのですが、&lt;strong&gt;Rとの親和性やライセンスの面からもplotlyに軍配が上がる&lt;/strong&gt;のではないでしょうか。というわけで、plotlyがもっと流行ると良いなと思うのでした。&lt;/p&gt;
-&lt;/div&gt;
-
-
-
-&lt;!-- BLOGDOWN-HEAD
-
-
-
-
-
-
-/BLOGDOWN-HEAD --&gt;
-</description>
+      <guid>https://suryu.me/post/visualization_advent_calendar_day1/</guid>
+      <description>plotlyについてとても簡単に紹介</description>
     </item>
     
     <item>
       <title>【予告】Rに関する一人アドベントカレンダー2016</title>
-      <link>/post/r_advent_calendar_2016/</link>
+      <link>https://suryu.me/post/r_advent_calendar_2016/</link>
       <pubDate>Tue, 29 Nov 2016 05:20:00 +0000</pubDate>
       
-      <guid>/post/r_advent_calendar_2016/</guid>
-      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
-
-/BLOGDOWN-BODY-BEFORE --&gt;
-
-&lt;p&gt;明後日から12月になる。12月といえば最近はもっぱら「アドベントカレンダー」の月という認識がある。今年はRに関するアドベントカレンダーが2つQiitaに上がっていて、そっちも盛り上がりを見せている。が、俺は一人でRアドベントカレンダーをやる。&lt;em&gt;5つくらいやる&lt;/em&gt;。&lt;/p&gt;
-&lt;p&gt;と、これだけ大口を叩いておいて、ネタのストックが豊富にあるのかというとそんなことはない。頭にはいくつかあるが文章やコードになっているものは皆無だ。25日完走できる気はしない。でもやらないと0日しかないので、1日でも多く書けるようにしたい。(完走できたら寿司でも肉でもケーキでもご馳走してくれ！！！)&lt;/p&gt;
-&lt;div class=&#34;section level2&#34;&gt;
-&lt;h2&gt;やろうとしているもの&lt;/h2&gt;
-&lt;ol style=&#34;list-style-type: decimal&#34;&gt;
-&lt;li&gt;R一般 (パッケージ、データ操作、小ネタ)&lt;/li&gt;
-&lt;li&gt;Shiny&lt;/li&gt;
-&lt;li&gt;visualization (ggplot2, plotly, …)&lt;/li&gt;
-&lt;li&gt;R + GIS&lt;/li&gt;
-&lt;li&gt;Rパッケージ開発&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section level2&#34;&gt;
-&lt;h2&gt;どこでやるか&lt;/h2&gt;
-&lt;p&gt;たぶんここ。あるいはQiita。Shinyアプリであればデモが必要なのでどっかのサーバーあるいはshinyapp.ioにするかも。&lt;/p&gt;
-&lt;/div&gt;
-&lt;div class=&#34;section level2&#34;&gt;
-&lt;h2&gt;進捗どうですか&lt;/h2&gt;
-&lt;p&gt;にゃおす&lt;/p&gt;
-&lt;/div&gt;
-
-
-
-&lt;!-- BLOGDOWN-HEAD
-
-
-
-
-
-
-/BLOGDOWN-HEAD --&gt;
-</description>
+      <guid>https://suryu.me/post/r_advent_calendar_2016/</guid>
+      <description>一人アドベントカレンダーを5つ、完走したい。</description>
     </item>
     
   </channel>
