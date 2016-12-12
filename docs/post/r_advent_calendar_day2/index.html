@@ -87,6 +87,12 @@
         
             
         
+
+
+
+
+
+
     </head>
     <body>
 
@@ -228,6 +234,10 @@
 
                 
                     <li>
+                        <a href="../../post/visualization_advent_calendar_day3/"><p>都道府県の市区町村を人口で2分割するやつ: 岡山県版</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/r_advent_calendar_day3/"><p>tidyverse脳になって階層構造のあるデータフレームを使いこなそう</p></a>
                     </li>
                 
@@ -237,10 +247,6 @@
                 
                     <li>
                         <a href="../../post/visualization_advent_calendar_day2/"><p>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/rgis_advent_calendar_day2/"><p>Rで方位記号を描く (ggsn版)</p></a>
                     </li>
                 
             </ul>
@@ -340,9 +346,7 @@
     
 
     <div id="content">
-        <!-- BLOGDOWN-BODY-BEFORE
 
-/BLOGDOWN-BODY-BEFORE -->
 
 <p>みなさん、Rの環境変数についてどのように管理されていますか？<code>.Rprofile</code>ですか？それも良い方法です。ただ、Rprojectによるプロジェクト単位での分析作業がメインとなっている昨今では、プロジェクトごとに環境変数を設定したり、プロジェクトで頻繁に利用する値を環境変数としたい場合などがあると思います。そのような時に、今回紹介する<strong><code>{config}</code></strong>が役立ちます。</p>
 <p><strong><code>{config}</code></strong>を一言で説明すると、<strong>作業スペース規模で利用可能な環境変数の呼び出し</strong>です。作業スペースというのは、Rでは<code>getwd()</code>で得られるディレクトリであり、<code>.Rproj</code>ファイルのあるディレクトリです。</p>
@@ -378,14 +382,6 @@ config::get(&quot;var&quot;)
 
 
 
-<!-- BLOGDOWN-HEAD
-
-
-
-
-
-
-/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -567,6 +563,20 @@ config::get(&quot;var&quot;)
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-13'>
+                                    December 13, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/r_advent_calendar_day3/">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></h3>
                                 
                                     
@@ -602,20 +612,6 @@ config::get(&quot;var&quot;)
                                 <time class="published" datetime=
                                     '2016-12-04'>
                                     December 4, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/rgis_advent_calendar_day2/">Rで方位記号を描く (ggsn版)</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-03'>
-                                    December 3, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -663,7 +659,7 @@ config::get(&quot;var&quot;)
                         <article>
                             <header>
                                 <a href="../../categories/visualization/">visualization</a>
-                                <span style="float:right;">4</span>
+                                <span style="float:right;">5</span>
                             </header>
                         </article>
                     </li>

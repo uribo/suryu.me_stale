@@ -87,6 +87,27 @@
         
             
         
+
+<script src="../../rmarkdown-libs/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="../../rmarkdown-libs/jquery-1.12.4/jquery.min.js"></script>
+<link href="../../rmarkdown-libs/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/leaflet-0.7.7/leaflet.js"></script>
+<link href="../../rmarkdown-libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<link href="../../rmarkdown-libs/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/leaflet-label-0.2.2/leaflet.label.js"></script>
+<script src="../../rmarkdown-libs/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
+<script src="../../rmarkdown-libs/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
+<script src="../../rmarkdown-libs/leaflet-binding-1.0.2.9006/leaflet.js"></script>
+<link href="../../rmarkdown-libs/leaflet-markercluster-0.5.0/MarkerCluster.css" rel="stylesheet" />
+<link href="../../rmarkdown-libs/leaflet-markercluster-0.5.0/MarkerCluster.Default.css" rel="stylesheet" />
+<script src="../../rmarkdown-libs/leaflet-markercluster-0.5.0/leaflet.markercluster.js"></script>
+<script src="../../rmarkdown-libs/leaflet-markercluster-0.5.0/leaflet.markercluster.layersupport-src.js"></script>
+<script src="../../rmarkdown-libs/leaflet-markercluster-0.5.0/leaflet.markercluster.freezable-src.js"></script>
+
+
+
+
+
     </head>
     <body>
 
@@ -228,6 +249,10 @@
 
                 
                     <li>
+                        <a href="../../post/visualization_advent_calendar_day3/"><p>都道府県の市区町村を人口で2分割するやつ: 岡山県版</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/r_advent_calendar_day3/"><p>tidyverse脳になって階層構造のあるデータフレームを使いこなそう</p></a>
                     </li>
                 
@@ -237,10 +262,6 @@
                 
                     <li>
                         <a href="../../post/visualization_advent_calendar_day2/"><p>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/rgis_advent_calendar_day2/"><p>Rで方位記号を描く (ggsn版)</p></a>
                     </li>
                 
             </ul>
@@ -340,9 +361,7 @@
     
 
     <div id="content">
-        <!-- BLOGDOWN-BODY-BEFORE
 
-/BLOGDOWN-BODY-BEFORE -->
 
 <pre class="r"><code>library(magrittr)</code></pre>
 <div id="geohash" class="section level2">
@@ -651,29 +670,6 @@ df.refuge %&lt;&gt;% select(
 
 
 
-<!-- BLOGDOWN-HEAD
-
-<script src="#####../content/post/geohash_files/htmlwidgets-0.8/htmlwidgets.js"></script>
-<script src="#####../content/post/geohash_files/jquery-1.12.4/jquery.min.js"></script>
-<link href="#####../content/post/geohash_files/leaflet-0.7.7/leaflet.css" rel="stylesheet" />
-<script src="#####../content/post/geohash_files/leaflet-0.7.7/leaflet.js"></script>
-<link href="#####../content/post/geohash_files/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
-<link href="#####../content/post/geohash_files/leaflet-label-0.2.2/leaflet.label.css" rel="stylesheet" />
-<script src="#####../content/post/geohash_files/leaflet-label-0.2.2/leaflet.label.js"></script>
-<script src="#####../content/post/geohash_files/Proj4Leaflet-0.7.2/proj4-compressed.js"></script>
-<script src="#####../content/post/geohash_files/Proj4Leaflet-0.7.2/proj4leaflet.js"></script>
-<script src="#####../content/post/geohash_files/leaflet-binding-1.0.2.9006/leaflet.js"></script>
-<link href="#####../content/post/geohash_files/leaflet-markercluster-0.5.0/MarkerCluster.css" rel="stylesheet" />
-<link href="#####../content/post/geohash_files/leaflet-markercluster-0.5.0/MarkerCluster.Default.css" rel="stylesheet" />
-<script src="#####../content/post/geohash_files/leaflet-markercluster-0.5.0/leaflet.markercluster.js"></script>
-<script src="#####../content/post/geohash_files/leaflet-markercluster-0.5.0/leaflet.markercluster.layersupport-src.js"></script>
-<script src="#####../content/post/geohash_files/leaflet-markercluster-0.5.0/leaflet.markercluster.freezable-src.js"></script>
-
-
-
-
-
-/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -831,6 +827,20 @@ df.refuge %&lt;&gt;% select(
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-13'>
+                                    December 13, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/r_advent_calendar_day3/">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></h3>
                                 
                                     
@@ -866,20 +876,6 @@ df.refuge %&lt;&gt;% select(
                                 <time class="published" datetime=
                                     '2016-12-04'>
                                     December 4, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/rgis_advent_calendar_day2/">Rで方位記号を描く (ggsn版)</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-03'>
-                                    December 3, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -927,7 +923,7 @@ df.refuge %&lt;&gt;% select(
                         <article>
                             <header>
                                 <a href="../../categories/visualization/">visualization</a>
-                                <span style="float:right;">4</span>
+                                <span style="float:right;">5</span>
                             </header>
                         </article>
                     </li>

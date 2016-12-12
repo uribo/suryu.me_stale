@@ -29,7 +29,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-12-06T08:45:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-13T05:22:00&#43;00:00"/>
 
 
 
@@ -216,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/visualization_advent_calendar_day3/"><p>都道府県の市区町村を人口で2分割するやつ: 岡山県版</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/r_advent_calendar_day3/"><p>tidyverse脳になって階層構造のあるデータフレームを使いこなそう</p></a>
                     </li>
                 
@@ -225,10 +229,6 @@
                 
                     <li>
                         <a href="./post/visualization_advent_calendar_day2/"><p>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/rgis_advent_calendar_day2/"><p>Rで方位記号を描く (ggsn版)</p></a>
                     </li>
                 
             </ul>
@@ -245,10 +245,10 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/r_advent_calendar_day3/">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></h2>
+            <h2><a href="./post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h2>
         
         
-            <p>tidyverseには欠かせない階層構造のあるデータフレームに関する解説です</p>
+            <p>市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで</p>
         
     </div>
     <div class="meta">
@@ -257,11 +257,11 @@
         
 
         <time class="published"
-            datetime='2016-12-06'>
-            December 6, 2016</time>
+            datetime='2016-12-13'>
+            December 13, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>8 minute read</p>
+            <p>4 minute read</p>
         
         
     </div>
@@ -287,8 +287,8 @@
 
         
 
-        <a href="./post/r_advent_calendar_day3/" class="image featured">
-            <img src="./img/2016/12/161206-nested-data-frame.png" alt="" />
+        <a href="./post/visualization_advent_calendar_day3/" class="image featured">
+            <img src="./img/2016/12/161213-pref-33-populations-1.png" alt="" />
         </a>
     
 
@@ -296,186 +296,121 @@
     <div id="content">
 
 
-<p><span class="citation">@yutannihilationが書いた</span><strong>tidyverse</strong>の<a href="http://notchained.hatenablog.com/entry/tidyverse">記事</a>を眠気眼の状態で読んでしまって、眠気も吹き飛んで3時起きしました。訴訟。</p>
-<p>さて、Rアドベントカレンダーの中で <span class="citation">@yutannihilation</span> や <span class="citation">@takeshi0406</span> が<strong>tidyverse</strong>についての記事を<a href="http://kiito.hatenablog.com/entry/2016/12/04/195835">続けて書いている</a>ことからも、<strong>tidyverse</strong>の普及具合がわかる昨今ですが、これらの記事の中であまり言及されていないことがあります。それはtidyverseに含まれるパッケージの一つである<strong><code>{dplyr}</code></strong>や<strong><code>{tidyr}</code></strong>が提供する<strong>nested data frame</strong>です。私個人はこれを<strong>階層構造のあるデータフレーム</strong>と呼んでいます。</p>
-<p>一人Rアドベントカレンダーの3日目では、tidyverseに欠かせない思想である、この階層構造のあるデータフレームについて説明をしたいと思います。といっても春先に書いたこの記事の再放送的な感じでもあります。</p>
-<p>参考) <a href="http://uribo.hatenablog.com/entry/2016/03/27/070000" class="uri">http://uribo.hatenablog.com/entry/2016/03/27/070000</a></p>
-<p>Rにはデータフレームとリストというオブジェクトがあるのはみなさんご存知の通りです。データフレームは特に利用機会の多いオブジェクトで、csvやexcelから読み込んだオブジェクトはデータフレームに変換されます。統計処理やモデリングを実行する関数の多くがデータフレームの変数を対象としており、<strong><code>{dplyr}</code></strong>もデータフレームの操作を前提としています。その特徴は、列をなす変数と行を構成する表構造をとることでしょう。そのためデータフレームでは、1列目は3つの要素、2列目は4つの要素…といった<strong>サイズの異なるデータを扱えません</strong>。加えて列を構成するのはベクトルオブジェクトであるため、異なる種類のオブジェクトを一つの列の中で扱うことはできません。対して<strong>リストオブジェクトはデータフレームと比べると自由度の高いデータ格納形式</strong>です。リストには、ベクトルやデータフレーム、行列、さらにはリストまで、Rのオブジェクトを含めることができます。一方でその自由度の高さから、やや扱いに困ることがあります。データフレームと比べるとやはり操作性が悪いです。これらの<strong>データフレーム、リストのそれぞれの特徴を備えたのが階層構造のあるデータフレーム</strong>となります。その特徴を見ていきましょう。</p>
-<p>階層構造のあるデータフレームでは、変数にリストやデータフレームを含めることが可能です。データフレームの中にデータフレーム、データフレームの中にリスト、このことがnestedの由縁です。具体的にどういうことかというのを<strong><code>{dplyr}</code></strong>と<strong><code>{tidyr}</code></strong>を使って示します。またデータの例として<strong><code>{gapminder}</code></strong>パッケージの世界各国の出生時平均余命に関するデータセットを利用します。まずはパッケージを読み込み、<strong>gapminder</strong>データセットの大きさを確認しておきましょう。</p>
-<pre class="r"><code>library(tidyverse)
-library(gapminder)
+<p>少し前によく見かけたやつ。Rでやってみる。人口データはユタニーの<strong><a href="https://cran.r-project.org/web/packages/estatapi/index.html"><code>{estatapi}</code></a></strong>でe-Statから取得する。マッピングは手前味噌ながら、<strong><a href="https://cran.r-project.org/web/packages/jpndistrict/index.html"><code>{jpndistrict}</code></a></strong>パッケージを使うと楽。</p>
+<p>必要なパッケージを読み込んで、データを取得、可視化までを行う。</p>
+<pre class="r"><code># データ取得・操作
+library(estatapi)
+library(jpndistrict)
+library(magrittr)
+library(spdplyr)
+library(dplyr)
+# library(tidyr)
 
-dim(gapminder)
-## [1] 1704    6
-head(gapminder)
-## # A tibble: 6 × 6
-##       country continent  year lifeExp      pop gdpPercap
-##        &lt;fctr&gt;    &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
-## 1 Afghanistan      Asia  1952  28.801  8425333  779.4453
-## 2 Afghanistan      Asia  1957  30.332  9240934  820.8530
-## 3 Afghanistan      Asia  1962  31.997 10267083  853.1007
-## 4 Afghanistan      Asia  1967  34.020 11537966  836.1971
-## 5 Afghanistan      Asia  1972  36.088 13079460  739.9811
-## 6 Afghanistan      Asia  1977  38.438 14880372  786.1134</code></pre>
-<p>1704行、結構大きなデータサイズですね。一方でこのデータセットは国ごとの5年ごとの人口、出生時平均余命について記録したデータであるので、国 countryをキーとして入れ子にすることが可能です。</p>
-<pre class="r"><code>gapminder %&gt;% count(continent, country)
-## Source: local data frame [142 x 3]
-## Groups: continent [?]
-## 
-##    continent                  country     n
-##       &lt;fctr&gt;                   &lt;fctr&gt; &lt;int&gt;
-## 1     Africa                  Algeria    12
-## 2     Africa                   Angola    12
-## 3     Africa                    Benin    12
-## 4     Africa                 Botswana    12
-## 5     Africa             Burkina Faso    12
-## 6     Africa                  Burundi    12
-## 7     Africa                 Cameroon    12
-## 8     Africa Central African Republic    12
-## 9     Africa                     Chad    12
-## 10    Africa                  Comoros    12
-## # ... with 132 more rows</code></pre>
-<pre class="r"><code>nest_by_country &lt;- gapminder %&gt;% 
-  group_by(country) %&gt;% 
-  nest()</code></pre>
-<p>階層構造のあるデータフレームを作る方法はいくつかあるのですが、上記のように<code>dplyr::group_by()</code>によるグループ化を行ったのち、<code>tidyr::nest()</code>を使うのが最も簡単です。あるいは、<code>gapminder %&gt;% tidyr::nest(-country)</code>で直接グループネストを作っても良いかもしれません。</p>
-<p>さて、上記で作成した<strong>nest_by_country</strong>というオブジェクトを出力すると次の結果が得られます。</p>
-<pre class="r"><code>nest_by_country
-## # A tibble: 142 × 2
-##        country               data
-##         &lt;fctr&gt;             &lt;list&gt;
-## 1  Afghanistan &lt;tibble [12 × 5]&gt;
-## 2      Albania &lt;tibble [12 × 5]&gt;
-## 3      Algeria &lt;tibble [12 × 5]&gt;
-## 4       Angola &lt;tibble [12 × 5]&gt;
-## 5    Argentina &lt;tibble [12 × 5]&gt;
-## 6    Australia &lt;tibble [12 × 5]&gt;
-## 7      Austria &lt;tibble [12 × 5]&gt;
-## 8      Bahrain &lt;tibble [12 × 5]&gt;
-## 9   Bangladesh &lt;tibble [12 × 5]&gt;
-## 10     Belgium &lt;tibble [12 × 5]&gt;
-## # ... with 132 more rows</code></pre>
-<p>countryというのはグループ化に用いたキーですが、dataというのは何を示しているのでしょう。また、どうしてデータサイズが変わっているのでしょうか。これこそが階層構造のあるデータフレームの特徴となります。</p>
-<p>nest_by_countryオブジェクト自体はデータフレームなので、変数の値を参照することができます。試しにdata変数の第一要素を参照してみましょう。</p>
-<pre class="r"><code>nest_by_country$data[[1]]
-## # A tibble: 12 × 5
-##    continent  year lifeExp      pop gdpPercap
-##       &lt;fctr&gt; &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
-## 1       Asia  1952  28.801  8425333  779.4453
-## 2       Asia  1957  30.332  9240934  820.8530
-## 3       Asia  1962  31.997 10267083  853.1007
-## 4       Asia  1967  34.020 11537966  836.1971
-## 5       Asia  1972  36.088 13079460  739.9811
-## 6       Asia  1977  38.438 14880372  786.1134
-## 7       Asia  1982  39.854 12881816  978.0114
-## 8       Asia  1987  40.822 13867957  852.3959
-## 9       Asia  1992  41.674 16317921  649.3414
-## 10      Asia  1997  41.763 22227415  635.3414
-## 11      Asia  2002  42.129 25268405  726.7341
-## 12      Asia  2007  43.828 31889923  974.5803</code></pre>
-<p>元のgapminderデータが持っていたデータに近い値が出力されました。この値は実は、<code>nest_by_country$country[1]</code>のAfghanistanに含まれるデータを抽出したものとなっています。それは<strong><code>{dplyr}</code></strong>の次のコードを実行することで確認できます。</p>
-<pre class="r"><code>nest_by_country$country[1]
-## [1] Afghanistan
-## 142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe
+# 可視化
+library(ggplot2)
+library(ggrepel)</code></pre>
+<div class="section level2">
+<h2>データの用意</h2>
+<p>まずはデータを用意する。人口データと地図データを用意する。</p>
+<div id="-27-" class="section level3">
+<h3>人口データ （平成27年国勢調査 人口等基本集計）</h3>
+<p><code>estatapi::estat_getStatsList()</code>で「人口」をキーワードにして検索を行う。<em>appId</em>に与えるe-Statのトークンは各自で取得したものを使う。</p>
+<pre class="r"><code>d.list &lt;- estat_getStatsList(appId = Sys.getenv(&quot;ESTAT_TOKEN&quot;), searchWord = &quot;人口&quot;)
+nrow(d.list)
+## [1] 14380</code></pre>
+<p>「人口」で検索すると複数の項目がヒットするのだけど、そこから「平成27年国勢調査 人口等基本集計」のデータを選択する。</p>
+<pre class="r"><code>d.list %&gt;% filter(`@id` == &quot;0003148500&quot;) %&gt;% 
+  select(`@id`, STAT_NAME, STATISTICS_NAME, TITLE, SURVEY_DATE)
+## # A tibble: 1 × 5
+##        `@id` STAT_NAME
+##        &lt;chr&gt;     &lt;chr&gt;
+## 1 0003148500  国勢調査
+## # ... with 3 more variables: STATISTICS_NAME &lt;chr&gt;, TITLE &lt;chr&gt;,
+## #   SURVEY_DATE &lt;chr&gt;
 
-identical(nest_by_country$data[[1]],
-          gapminder %&gt;% filter(country == &quot;Afghanistan&quot;) %&gt;% 
-  select(-country))
-## [1] TRUE</code></pre>
-<p>つまり階層構造のあるデータフレームとは、データフレームに含まれる任意の変数をキーとし、そのキーに含まれる値を別のオブジェクトとし、キーと紐づいた変数に格納することを示しているのです。</p>
-<p>多くのデータは、1つ以上のキーあるいはカテゴリ変数をもっています。そしてこれらのキーに応じて、キーに含まれる項目の数を集計したり、キーごとに処理を行ったり、統計モデリングを適用したりといったことが頻繁に行われます。これらの出力形式はさまざまですが、キーを基準としている以上、処理結果をキーと紐づけることが可能です。ですが、格納形式が厳密なデータフレームではそれができません。そのため、階層構造のあるデータフレームはリストのようにデータフレームの中にさらにオブジェクトを含めることを可能としています。これにより、元のデータ（キー）と処理結果を簡単に紐付け、再びデータフレームとして操作することができます。</p>
-<p>また上記で、入れ子にされるオブジェクトを別のオブジェクトと書きましたが、これは先のようにデータフレームでなく、リストや統計解析のためのオブジェクトであってもネスト可能であることを示しています。今度は<code>dplyr::do()</code>を用いて線形回帰を行ってみましょう。<code>dplyr::do()</code>はグループに対し共通の処理を施すのに適しています。</p>
-<pre class="r"><code>(do_by_country &lt;- gapminder %&gt;% 
-  group_by(country) %&gt;% 
-  do(data = lm(lifeExp ~ year, data = .)))
-## Source: local data frame [142 x 2]
-## Groups: &lt;by row&gt;
-## 
-## # A tibble: 142 × 2
-##        country     data
-## *       &lt;fctr&gt;   &lt;list&gt;
-## 1  Afghanistan &lt;S3: lm&gt;
-## 2      Albania &lt;S3: lm&gt;
-## 3      Algeria &lt;S3: lm&gt;
-## 4       Angola &lt;S3: lm&gt;
-## 5    Argentina &lt;S3: lm&gt;
-## 6    Australia &lt;S3: lm&gt;
-## 7      Austria &lt;S3: lm&gt;
-## 8      Bahrain &lt;S3: lm&gt;
-## 9   Bangladesh &lt;S3: lm&gt;
-## 10     Belgium &lt;S3: lm&gt;
-## # ... with 132 more rows</code></pre>
-<p>countryごとに<code>lm()</code>を適用した結果が格納されました。</p>
-<pre class="r"><code>all.equal(
-  do_by_country$data[[1]],
-  gapminder %&gt;% filter(country == &quot;Afghanistan&quot;) %&gt;% 
-  select(-country) %&gt;% 
-  lm(lifeExp ~ year, data = .)
-)
-## [1] TRUE</code></pre>
-<p>入れ子構造を解除するにはどうするのでしょうか。ご心配なく。<strong><code>{tidyr}</code></strong>には<code>nest()</code>と対をなす<code>unnest()</code>という関数が用意されています。しかしそれには入れ子となっているオブジェクトがデータフレームである必要があります。なので先の線形回帰の結果を<strong><code>{broom}</code></strong>パッケージの<code>tidy()</code>によりデータフレームとして扱えるようにしてから入れ子構造を解除します。</p>
-<p><strong><code>{broom}</code></strong>パッケージは、Rの統計解析の関数の出力結果を扱いやすいデータフレームへと整形してくれる便利なパッケージです。例えば<code>lm()</code>の結果に対し<code>broom::tidy()</code>を実行すると切片や係数、p値などをデータフレーム形式で取得できます。</p>
-<pre class="r"><code>do_by_country &lt;- gapminder %&gt;% 
-  group_by(country) %&gt;% 
-  do(data = lm(lifeExp ~ year, data = .) %&gt;% broom::tidy()) %&gt;% 
-  tidyr::unnest()
-
-do_by_country %&gt;% colnames()
-## [1] &quot;country&quot;   &quot;term&quot;      &quot;estimate&quot;  &quot;std.error&quot; &quot;statistic&quot; &quot;p.value&quot;</code></pre>
-<p>データフレームなので、<strong><code>{dplyr}</code></strong>の関数を使って特定の国の結果のみを取り出すことができます。</p>
-<pre class="r"><code>do_by_country %&gt;% filter(country == &quot;Afghanistan&quot;)
-## # A tibble: 2 × 6
-##       country        term     estimate   std.error statistic
-##        &lt;fctr&gt;       &lt;chr&gt;        &lt;dbl&gt;       &lt;dbl&gt;     &lt;dbl&gt;
-## 1 Afghanistan (Intercept) -507.5342716 40.48416195 -12.53661
-## 2 Afghanistan        year    0.2753287  0.02045093  13.46289
-## # ... with 1 more variables: p.value &lt;dbl&gt;</code></pre>
-<p>しかし、全ての入れ子がデータフレームにできるわけではありません。そのような時には<strong><code>{purrr}</code></strong>による関数型プログラミングによるデータ操作が効果を発揮します。</p>
-<pre class="r"><code>by_country &lt;- nest_by_country %&gt;% 
-  dplyr::mutate(model = purrr::map(data, ~ lm(lifeExp ~ year, data = .)))
-
-by_country %&gt;% unnest(model %&gt;% purrr::map(broom::tidy))
-## # A tibble: 284 × 6
-##        country        term      estimate    std.error  statistic
-##         &lt;fctr&gt;       &lt;chr&gt;         &lt;dbl&gt;        &lt;dbl&gt;      &lt;dbl&gt;
-## 1  Afghanistan (Intercept)  -507.5342716 40.484161954 -12.536613
-## 2  Afghanistan        year     0.2753287  0.020450934  13.462890
-## 3      Albania (Intercept)  -594.0725110 65.655359062  -9.048348
-## 4      Albania        year     0.3346832  0.033166387  10.091036
-## 5      Algeria (Intercept) -1067.8590396 43.802200843 -24.379118
-## 6      Algeria        year     0.5692797  0.022127070  25.727749
-## 7       Angola (Intercept)  -376.5047531 46.583370599  -8.082385
-## 8       Angola        year     0.2093399  0.023532003   8.895964
-## 9    Argentina (Intercept)  -389.6063445  9.677729641 -40.258031
-## 10   Argentina        year     0.2317084  0.004888791  47.395847
-## # ... with 274 more rows, and 1 more variables: p.value &lt;dbl&gt;
-by_country %&gt;% unnest(model %&gt;% purrr::map(broom::augment))
-## # A tibble: 1,704 × 10
-##        country lifeExp  year  .fitted   .se.fit      .resid       .hat
-##         &lt;fctr&gt;   &lt;dbl&gt; &lt;int&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;      &lt;dbl&gt;
-## 1  Afghanistan  28.801  1952 29.90729 0.6639995 -1.10629487 0.29487179
-## 2  Afghanistan  30.332  1957 31.28394 0.5799442 -0.95193823 0.22494172
-## 3  Afghanistan  31.997  1962 32.66058 0.5026799 -0.66358159 0.16899767
-## 4  Afghanistan  34.020  1967 34.03722 0.4358337 -0.01722494 0.12703963
-## 5  Afghanistan  36.088  1972 35.41387 0.3848726  0.67413170 0.09906760
-## 6  Afghanistan  38.438  1977 36.79051 0.3566719  1.64748834 0.08508159
-## 7  Afghanistan  39.854  1982 38.16716 0.3566719  1.68684499 0.08508159
-## 8  Afghanistan  40.822  1987 39.54380 0.3848726  1.27820163 0.09906760
-## 9  Afghanistan  41.674  1992 40.92044 0.4358337  0.75355828 0.12703963
-## 10 Afghanistan  41.763  1997 42.29709 0.5026799 -0.53408508 0.16899767
-## # ... with 1,694 more rows, and 3 more variables: .sigma &lt;dbl&gt;,
-## #   .cooksd &lt;dbl&gt;, .std.resid &lt;dbl&gt;</code></pre>
-<p>あるいは次のように<code>split()</code>でグループを分割し、各グループに対して<code>lm() %&gt;% broom::tidy()</code>を適用するのも一つの方法です。</p>
-<pre class="r"><code>map_by_country &lt;- gapminder %&gt;% 
-  split(.$country) %&gt;% 
-  purrr::map(., ~ lm(lifeExp ~ year, data = .) %&gt;% broom::tidy())
-
-map_by_country$Afghanistan
-##          term     estimate   std.error statistic          p.value
-## 1 (Intercept) -507.5342716 40.48416195 -12.53661 0.00000019340553
-## 2        year    0.2753287  0.02045093  13.46289 0.00000009835213</code></pre>
-<p>今回紹介したパッケージは、データセットを提供した<strong><code>{gapminder}</code></strong>をのぞいて、<strong><code>{tidyverse}</code></strong>に含まれているものです。すごい設計思想ですね。俺たちのtidyverseはこれからだ！</p>
-<p>Enjoy!</p>
+# 全国のデータを取得
+d.pops &lt;- estat_getStatsData(
+  appId = Sys.getenv(&quot;ESTAT_TOKEN&quot;),
+  statsDataId = &quot;0003148500&quot;,
+  cdCat01     = c(&quot;00710&quot;)
+)</code></pre>
+<pre class="r"><code>d.pops %&gt;% head()
+## # A tibble: 6 × 10
+##   tab_code 表章項目 cat01_code `全域・人口集中地区（2015）` area_code
+##      &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;                        &lt;chr&gt;     &lt;chr&gt;
+## 1      020     人口      00710                         全域     00000
+## 2      020     人口      00710                         全域     00001
+## 3      020     人口      00710                         全域     00002
+## 4      020     人口      00710                         全域     01000
+## 5      020     人口      00710                         全域     01001
+## 6      020     人口      00710                         全域     01002
+## # ... with 5 more variables: `地域（2015）` &lt;chr&gt;, time_code &lt;chr&gt;,
+## #   `時間軸(年次)` &lt;chr&gt;, unit &lt;chr&gt;, value &lt;dbl&gt;</code></pre>
+<p>データはこんな感じになっている。<em>地域（2015）</em>という列が行政区域の名称で、都道府県全体だったり市区町村だったりする。またそれにともなって<em>area_code</em>が割り振られている。人口の値は<em>value</em>に記録されている。使いやすいように少し処理を加える。</p>
+<ol style="list-style-type: decimal">
+<li><em>area_code</em>の先頭2桁は都道府県コードなので、都道府県のデータを抽出できるように<code>mutate()</code>で都道府県コードの列を作成する。</li>
+<li>合併前の行政区域でのデータも含まれるため、市町村のデータに限定する（旧行政名は括弧で括られている）。この時、「区」のデータもあるのだが、区が含まれる「市」のデータがあるのでそれを利用するようにする。</li>
+<li>都道府県（1で作成した都道府県コードで<code>group_by()</code>）ごとに都道府県人口の過半数以上・未満で市町村を区分する。各市町村の人口数を都道府県の総人口で割り、人口数の少ない市町村から累積し、5割以上となる市町村をmajority、5割未満をminorityとして扱う。</li>
+</ol>
+<pre class="r"><code>d.pops %&lt;&gt;% 
+  # 都道府県コードの列を追加
+  mutate(pref_code = substr(area_code, 1, 2)) %&gt;% 
+  # 市町村のデータを抽出（区は除外する）
+  filter(`表章項目` == &quot;人口&quot;,
+         grepl(&quot;(市|町|村)$&quot;, `地域（2015）`)) %&gt;% 
+  # 必要な列だけを選択
+  select(area_code, `地域（2015）`, value, pref_code) %&gt;% 
+  group_by(pref_code) %&gt;% 
+  do(aaa = arrange(., value) %&gt;% 
+       mutate(sum_value = value / sum(value),
+         harf      = cumsum(sum_value)) %&gt;% 
+  mutate(type = if_else(harf &lt;= 0.50, &quot;minority&quot;, &quot;majority&quot;),
+         type = ifelse(is.na(type), &quot;minority&quot;, type)) %&gt;% 
+    select(-pref_code)) %&gt;% 
+  tidyr::unnest()</code></pre>
+</div>
+<div class="section level3">
+<h3>地図データ</h3>
+<p>国土数値情報の行政区域 平成27年4月1日時点のデータ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html</a> を利用してSpatialPolygonDataframeを作成する。ここでも区は市にまとめ、行政コードも市のものを採用するという処理をする。</p>
+<pre class="r"><code>d33 &lt;- spdf_jpn_pref(code = 33, district = TRUE) %&gt;% 
+  mutate(city_name = if_else(grepl(&quot;区$&quot;, city_name_full), city_name_, city_name),
+                    city_code = ifelse(grepl(&quot;区$&quot;, city_name_full), 
+                                         paste0(substr(city_code, 1, 3), &quot;00&quot;),
+         as.character(city_code))) %&gt;% 
+  select(city_name, city_code)</code></pre>
+</div>
+<div class="section level3">
+<h3>行政名ラベルと位置データ（市区町村役場データ）</h3>
+<p>地図を作る際、市区町村ごとにラベルをふりたいので用意する。<code>jpndistrict::spdf_jpn_admins()</code>により、国土数値情報 市区町村役場データ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html</a> からデータをダウンロードする（すでにShapefileがあれば<em>path</em>引数でディレクトリを指定）</p>
+<pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(path = &quot;/Users/uri/Dropbox/maps/shapefile/国土数値情報/P34/P34-14_33_GML/&quot;) %&gt;% 
+  mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
+  filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
+<pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(code = 33) %&gt;% 
+      dplyr::mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
+  dplyr::filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2>プロット</h2>
+<p>あらかじめ、地図データを<strong><code>{ggplot2}</code></strong>ベースの地図として描画するために<code>ggplot2::fortify()</code>にかけ、人口データと結合させておく。あとは<code>geom_map</code>でデータをのせるだけ。</p>
+<pre class="r"><code>d.map &lt;- d33 %&gt;% 
+    ggplot2::fortify(region = &quot;city_code&quot;) %&gt;% 
+    dplyr::left_join(d.pops, by = c(&quot;id&quot; = &quot;area_code&quot;))</code></pre>
+<pre class="r"><code>p &lt;- ggplot() +
+  geom_map(data = d.map,
+           map = d.map,
+           aes(x = long, y = lat, group = group, map_id = id, fill = type),
+           color = &quot;#FFFFFF&quot;, size = 0.1) + 
+  coord_map() +
+  ggthemes::theme_map(base_size = 12, base_family = &quot;YuGo&quot;) +
+    guides(fill = FALSE)</code></pre>
+<p>ラベルは<strong><code>{ggrepel}</code></strong>の関数を使うとよしなに位置を調整してくれるので便利。</p>
+<pre class="r"><code># family は適当に変更
+p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) +
+      ggrepel::geom_text_repel(data = d.admin33@data, 
+                               aes(longitude, latitude, label = name, family = &quot;IPAexGothic&quot;))</code></pre>
+<p>岡山、倉敷論争に終止符が打たれる日はいつになるやら。</p>
+</div>
 
 
 
@@ -501,7 +436,7 @@ map_by_country$Afghanistan
                     
 
                     
-                        Categories
+                        Category
                     
                 
             </li>
@@ -510,11 +445,7 @@ map_by_country$Afghanistan
 
     
     
-        <li><a href='./categoriesr'>R</a></li>
-    
-        <li><a href='./categoriesdata-manipulation'>data-manipulation</a></li>
-    
-        <li><a href='./categoriestidyverse'>tidyverse</a></li>
+        <li><a href='./categoriesvisualization'>visualization</a></li>
     
 </ul>
 
@@ -522,8 +453,8 @@ map_by_country$Afghanistan
 </article>
 <ul class="actions pagination">
     
-        <li><a href="./post/r_advent_calendar_day2/"
-                class="button big previous">configパッケージで楽々環境変数の管理</a></li>
+        <li><a href="./post/r_advent_calendar_day3/"
+                class="button big previous">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></li>
     
 
     
@@ -536,9 +467,9 @@ map_by_country$Afghanistan
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/r_advent_calendar_day3\/';
-    var disqus_title = 'tidyverse脳になって階層構造のあるデータフレームを使いこなそう';
-    var disqus_url = '\/post\/r_advent_calendar_day3\/';
+    var disqus_identifier = '\/post\/visualization_advent_calendar_day3\/';
+    var disqus_title = '都道府県の市区町村を人口で2分割するやつ: 岡山県版';
+    var disqus_url = '\/post\/visualization_advent_calendar_day3\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -562,43 +493,43 @@ map_by_country$Afghanistan
             
 
 
-<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fr_advent_calendar_day3%2f&text=tidyverse%e8%84%b3%e3%81%ab%e3%81%aa%e3%81%a3%e3%81%a6%e9%9a%8e%e5%b1%a4%e6%a7%8b%e9%80%a0%e3%81%ae%e3%81%82%e3%82%8b%e3%83%87%e3%83%bc%e3%82%bf%e3%83%95%e3%83%ac%e3%83%bc%e3%83%a0%e3%82%92%e4%bd%bf%e3%81%84%e3%81%93%e3%81%aa%e3%81%9d%e3%81%86&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f&text=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%b2%a1%e5%b1%b1%e7%9c%8c%e7%89%88&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fr_advent_calendar_day3%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fr_advent_calendar_day3%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fr_advent_calendar_day3%2f&title=tidyverse%e8%84%b3%e3%81%ab%e3%81%aa%e3%81%a3%e3%81%a6%e9%9a%8e%e5%b1%a4%e6%a7%8b%e9%80%a0%e3%81%ae%e3%81%82%e3%82%8b%e3%83%87%e3%83%bc%e3%82%bf%e3%83%95%e3%83%ac%e3%83%bc%e3%83%a0%e3%82%92%e4%bd%bf%e3%81%84%e3%81%93%e3%81%aa%e3%81%9d%e3%81%86" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%b2%a1%e5%b1%b1%e7%9c%8c%e7%89%88" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fr_advent_calendar_day3%2f&title=tidyverse%e8%84%b3%e3%81%ab%e3%81%aa%e3%81%a3%e3%81%a6%e9%9a%8e%e5%b1%a4%e6%a7%8b%e9%80%a0%e3%81%ae%e3%81%82%e3%82%8b%e3%83%87%e3%83%bc%e3%82%bf%e3%83%95%e3%83%ac%e3%83%bc%e3%83%a0%e3%82%92%e4%bd%bf%e3%81%84%e3%81%93%e3%81%aa%e3%81%9d%e3%81%86" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%b2%a1%e5%b1%b1%e7%9c%8c%e7%89%88" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fr_advent_calendar_day3%2f&title=tidyverse%e8%84%b3%e3%81%ab%e3%81%aa%e3%81%a3%e3%81%a6%e9%9a%8e%e5%b1%a4%e6%a7%8b%e9%80%a0%e3%81%ae%e3%81%82%e3%82%8b%e3%83%87%e3%83%bc%e3%82%bf%e3%83%95%e3%83%ac%e3%83%bc%e3%83%a0%e3%82%92%e4%bd%bf%e3%81%84%e3%81%93%e3%81%aa%e3%81%9d%e3%81%86" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%b2%a1%e5%b1%b1%e7%9c%8c%e7%89%88" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fr_advent_calendar_day3%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -720,6 +651,20 @@ map_by_country$Afghanistan
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-13'>
+                                    December 13, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/r_advent_calendar_day3/">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></h3>
                                 
                                     
@@ -755,20 +700,6 @@ map_by_country$Afghanistan
                                 <time class="published" datetime=
                                     '2016-12-04'>
                                     December 4, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/rgis_advent_calendar_day2/">Rで方位記号を描く (ggsn版)</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-03'>
-                                    December 3, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -816,7 +747,7 @@ map_by_country$Afghanistan
                         <article>
                             <header>
                                 <a href="./categories/visualization/">visualization</a>
-                                <span style="float:right;">4</span>
+                                <span style="float:right;">5</span>
                             </header>
                         </article>
                     </li>

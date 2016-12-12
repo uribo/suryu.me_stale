@@ -87,6 +87,12 @@
         
             
         
+
+
+
+
+
+
     </head>
     <body>
 
@@ -228,6 +234,10 @@
 
                 
                     <li>
+                        <a href="../../post/visualization_advent_calendar_day3/"><p>都道府県の市区町村を人口で2分割するやつ: 岡山県版</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/r_advent_calendar_day3/"><p>tidyverse脳になって階層構造のあるデータフレームを使いこなそう</p></a>
                     </li>
                 
@@ -237,10 +247,6 @@
                 
                     <li>
                         <a href="../../post/visualization_advent_calendar_day2/"><p>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/rgis_advent_calendar_day2/"><p>Rで方位記号を描く (ggsn版)</p></a>
                     </li>
                 
             </ul>
@@ -340,9 +346,7 @@
     
 
     <div id="content">
-        <!-- BLOGDOWN-BODY-BEFORE
 
-/BLOGDOWN-BODY-BEFORE -->
 
 <p>ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。<a href="https://github.com/ropenscilabs/tabulizer"><strong><code>{tabulizer}</code></strong></a>というものだ。このパッケージは<a href="http://tabula.technology">Tabula</a>というオープンソースツールの機能を利用して、PDF中に含まれる表から、値を取り出すというもの。</p>
 <p>政府や企業の報告書はPDFであることが多く（二次利用を想定していないのだろうが）、表としてデータが収められていることがしばしばある。PDFからのデータ取得方法として、Rでは <strong><code>{tm}</code></strong>を<a href="http://uribo.hatenablog.com/entry/2015/11/29/140000">使う方法</a>や<strong><code>{pdftools}</code></strong>を<a href="http://uribo.hatenablog.com/entry/2016/02/27/195500">利用する方法</a>がそれぞれあるが、<strong><code>{pdftools}</code></strong>ではテキストベースでの抽出となるため、表データの抽出からRの特徴とも言えるデータフレーム形式への変換が困難であった。そこでこの<strong><code>{tabulizer}</code></strong>を使うことで、PDFに含まれる表データの抽出が可能となり、Rで扱えるデータの幅が広がることが考えられる。</p>
@@ -445,14 +449,6 @@ merge_pdfs(sf, &quot;merge.pdf&quot;)</code></pre>
 
 
 
-<!-- BLOGDOWN-HEAD
-
-
-
-
-
-
-/BLOGDOWN-HEAD -->
 
     </div>
 
@@ -610,6 +606,20 @@ merge_pdfs(sf, &quot;merge.pdf&quot;)</code></pre>
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-13'>
+                                    December 13, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/r_advent_calendar_day3/">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></h3>
                                 
                                     
@@ -645,20 +655,6 @@ merge_pdfs(sf, &quot;merge.pdf&quot;)</code></pre>
                                 <time class="published" datetime=
                                     '2016-12-04'>
                                     December 4, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/rgis_advent_calendar_day2/">Rで方位記号を描く (ggsn版)</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-03'>
-                                    December 3, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -706,7 +702,7 @@ merge_pdfs(sf, &quot;merge.pdf&quot;)</code></pre>
                         <article>
                             <header>
                                 <a href="../../categories/visualization/">visualization</a>
-                                <span style="float:right;">4</span>
+                                <span style="float:right;">5</span>
                             </header>
                         </article>
                     </li>
