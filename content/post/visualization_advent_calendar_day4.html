@@ -1,0 +1,194 @@
+---
+title: "都道府県の市区町村を人口で2分割するやつ: 全国版"
+author: "Shinya Uryu"
+date: 2016-12-13T07:48:00
+categories: ["visualization"]
+description:
+    市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる、の全国版
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>前回、<a href="https://suryu.me/post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ</a>のコードを書いたので、関数化して全国版の地図を作ってみる。</p>
+<p>あらかじめ人口データだけは用意しておく必要があるので、前回同様<strong><code>{estatapi}</code></strong>でデータをダウンロードして加工しておく。</p>
+<p><code>gg_pref_split()</code>という関数がそれ。<em>pref_code</em>で対象の都道府県（コード）を指定する。プロットおよびラベルの描画は引数で変更可能。フォントも適当に変えられる。</p>
+<pre class="r"><code>gg_pref_split &lt;- function(pref_code = 33, plot = TRUE, label = TRUE, label_font = &quot;IPAexGothic&quot;) {
+  
+  p.code &lt;- sprintf(&quot;%02d&quot;, pref_code)
+  
+  data.result &lt;- d.pops %&gt;% 
+    dplyr::filter(pref_code == p.code)
+  
+  res &lt;- list(data = data.result)
+  
+  if (plot == TRUE) {
+    
+    sp.pref &lt;- jpndistrict::spdf_jpn_pref(code = p.code, district = TRUE) %&gt;% 
+      dplyr::mutate(city_name = dplyr::if_else(grepl(&quot;区$&quot;, city_name_full), city_name_, city_name),
+                    city_code = ifelse(grepl(&quot;区$&quot;, city_name_full), 
+                                         paste0(substr(city_code, 1, 3), &quot;00&quot;),
+         as.character(city_code))) %&gt;% 
+  dplyr::select(city_name, city_code)
+    d.admin &lt;- jpndistrict::spdf_jpn_admins(code = p.code) %&gt;% 
+      dplyr::mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;%
+      dplyr::filter(type == 1, !grepl(&quot;区$&quot;, name)) 
+    
+  d.map &lt;- sp.pref %&gt;% 
+    ggplot2::fortify(region = &quot;city_code&quot;) %&gt;% 
+    dplyr::left_join(data.result, by = c(&quot;id&quot; = &quot;area_code&quot;))
+  
+  plot.result &lt;- ggplot() +
+  ggplot2::geom_map(data = d.map,
+           map = d.map,
+           aes(x = long, y = lat, group = group, map_id = id, fill = type),
+           color = &quot;#FFFFFF&quot;, size = 0.1) + 
+  ggplot2::coord_map() +
+  ggthemes::theme_map(base_size = 12, base_family = label_font) +
+    ggplot2::guides(fill = FALSE)
+  
+  if (label == TRUE) {
+    plot.result &lt;- plot.result + 
+      ggplot2::geom_point(data = d.admin@data, aes(x = longitude, y = latitude)) +
+      ggrepel::geom_text_repel(data = d.admin@data, aes(longitude, latitude, label = name, family = label_font))
+  
+  }
+  
+  res &lt;- list(data = data.result,
+              plot = plot.result)
+  }
+  return(res)
+    
+}</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(ggrepel)
+# library(gridExtra)</code></pre>
+<pre class="r"><code>gg_pref_split(13)</code></pre>
+<p>のように実行すれば都道府県の人口2分割図が描画される。赤い行政区が都道府県人口の5割以上を占め、青い行政区は5割未満となっている。</p>
+<p>というわけで<strong><code>{purrr}</code></strong>を使い47都道府県の結果を見てみる。地方別に表示するが、北海道と東北、九州と沖縄はそれぞれ同一のグループとして扱う。</p>
+<pre class="r"><code>library(purrr)
+data(&quot;jpnprefs&quot;, package = &quot;jpndistrict&quot;)
+plots &lt;- jpnprefs %&gt;% 
+  split(.$jis_code) %&gt;% 
+  map2(., names(.), ~ gg_pref_split(pref_code = as.numeric(.y), plot = TRUE, label = FALSE) %&gt;% use_series(plot))
+
+gg_pref_split_region &lt;- function(regions = NULL) {
+  
+  pref.range &lt;- jpnprefs %&gt;% dplyr::filter(region %in% regions) %&gt;% use_series(jis_code) %&gt;% as.numeric() %&gt;% range()
+  
+  tmp &lt;- plots %&gt;% as.vector()
+  
+  res &lt;- do.call(gridExtra::grid.arrange, c(tmp[min(pref.range):max(pref.range)], list(nrow = 2)), quote = TRUE)
+
+  return(res)
+}</code></pre>
+<div class="section level2">
+<h2>北海道・東北</h2>
+<pre class="r"><code>gg_pref_split_region(c(&quot;北海道&quot;, &quot;東北&quot;))</code></pre>
+<p><img src="#####../content/post/visualization_advent_calendar_day4_files/figure-html/hokkaido-tohoku-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
+##    z     cells    name           grob
+## 01 1 (1-1,1-1) arrange gtable[layout]
+## 02 2 (1-1,2-2) arrange gtable[layout]
+## 03 3 (1-1,3-3) arrange gtable[layout]
+## 04 4 (1-1,4-4) arrange gtable[layout]
+## 05 5 (2-2,1-1) arrange gtable[layout]
+## 06 6 (2-2,2-2) arrange gtable[layout]
+## 07 7 (2-2,3-3) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>関東</h2>
+<p>東京のデータもあるのだけど、本州と小笠原諸島、伊豆諸島などを切り離す必要がある…（今は非表示）</p>
+<pre class="r"><code>gg_pref_split_region(&quot;関東&quot;)</code></pre>
+<p><img src="#####../content/post/visualization_advent_calendar_day4_files/figure-html/kanto-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
+##    z     cells    name           grob
+## 08 1 (1-1,1-1) arrange gtable[layout]
+## 09 2 (1-1,2-2) arrange gtable[layout]
+## 10 3 (1-1,3-3) arrange gtable[layout]
+## 11 4 (1-1,4-4) arrange gtable[layout]
+## 12 5 (2-2,1-1) arrange gtable[layout]
+## 13 6 (2-2,2-2) arrange gtable[layout]
+## 14 7 (2-2,3-3) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>中部</h2>
+<pre class="r"><code>gg_pref_split_region(&quot;中部&quot;)</code></pre>
+<p><img src="#####../content/post/visualization_advent_calendar_day4_files/figure-html/cyubu-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 5) &quot;arrange&quot;: 9 grobs
+##    z     cells    name           grob
+## 15 1 (1-1,1-1) arrange gtable[layout]
+## 16 2 (1-1,2-2) arrange gtable[layout]
+## 17 3 (1-1,3-3) arrange gtable[layout]
+## 18 4 (1-1,4-4) arrange gtable[layout]
+## 19 5 (1-1,5-5) arrange gtable[layout]
+## 20 6 (2-2,1-1) arrange gtable[layout]
+## 21 7 (2-2,2-2) arrange gtable[layout]
+## 22 8 (2-2,3-3) arrange gtable[layout]
+## 23 9 (2-2,4-4) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>近畿</h2>
+<pre class="r"><code>gg_pref_split_region(&quot;近畿&quot;)</code></pre>
+<p><img src="#####../content/post/visualization_advent_calendar_day4_files/figure-html/kinki-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
+##    z     cells    name           grob
+## 24 1 (1-1,1-1) arrange gtable[layout]
+## 25 2 (1-1,2-2) arrange gtable[layout]
+## 26 3 (1-1,3-3) arrange gtable[layout]
+## 27 4 (1-1,4-4) arrange gtable[layout]
+## 28 5 (2-2,1-1) arrange gtable[layout]
+## 29 6 (2-2,2-2) arrange gtable[layout]
+## 30 7 (2-2,3-3) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>中国</h2>
+<pre class="r"><code>gg_pref_split_region(&quot;中国&quot;)</code></pre>
+<p><img src="#####../content/post/visualization_advent_calendar_day4_files/figure-html/chyugoku-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 3) &quot;arrange&quot;: 5 grobs
+##    z     cells    name           grob
+## 31 1 (1-1,1-1) arrange gtable[layout]
+## 32 2 (1-1,2-2) arrange gtable[layout]
+## 33 3 (1-1,3-3) arrange gtable[layout]
+## 34 4 (2-2,1-1) arrange gtable[layout]
+## 35 5 (2-2,2-2) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>四国</h2>
+<pre class="r"><code>gg_pref_split_region(&quot;四国&quot;)</code></pre>
+<p><img src="#####../content/post/visualization_advent_calendar_day4_files/figure-html/shikoku-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 2) &quot;arrange&quot;: 4 grobs
+##    z     cells    name           grob
+## 36 1 (1-1,1-1) arrange gtable[layout]
+## 37 2 (1-1,2-2) arrange gtable[layout]
+## 38 3 (2-2,1-1) arrange gtable[layout]
+## 39 4 (2-2,2-2) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>九州・沖縄</h2>
+<pre class="r"><code>gg_pref_split_region(c(&quot;九州&quot;, &quot;沖縄&quot;))</code></pre>
+<p><img src="#####../content/post/visualization_advent_calendar_day4_files/figure-html/kyusyu-okinawa-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 8 grobs
+##    z     cells    name           grob
+## 40 1 (1-1,1-1) arrange gtable[layout]
+## 41 2 (1-1,2-2) arrange gtable[layout]
+## 42 3 (1-1,3-3) arrange gtable[layout]
+## 43 4 (1-1,4-4) arrange gtable[layout]
+## 44 5 (2-2,1-1) arrange gtable[layout]
+## 45 6 (2-2,2-2) arrange gtable[layout]
+## 46 7 (2-2,3-3) arrange gtable[layout]
+## 47 8 (2-2,4-4) arrange gtable[layout]</code></pre>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->
