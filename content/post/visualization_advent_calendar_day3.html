@@ -6,7 +6,7 @@ categories: ["visualization"]
 featured: "161213-pref-33-populations-1.png"
 featuredpath: "date"
 description:
-    市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで
+    市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで
 ---
 
 
@@ -16,6 +16,7 @@ description:
 
 <p>少し前によく見かけたやつ。Rでやってみる。人口データはユタニーの<strong><a href="https://cran.r-project.org/web/packages/estatapi/index.html"><code>{estatapi}</code></a></strong>でe-Statから取得する。マッピングは手前味噌ながら、<strong><a href="https://cran.r-project.org/web/packages/jpndistrict/index.html"><code>{jpndistrict}</code></a></strong>パッケージを使うと楽。</p>
 <p>必要なパッケージを読み込んで、データを取得、可視化までを行う。</p>
+<p>**追記: <a href="https://suryu.me/post/visualization_advent_calendar_day4/">全国版</a></p>
 <pre class="r"><code># データ取得・操作
 library(estatapi)
 library(jpndistrict)
@@ -82,7 +83,7 @@ d.pops &lt;- estat_getStatsData(
   do(aaa = arrange(., value) %&gt;% 
        mutate(sum_value = value / sum(value),
          harf      = cumsum(sum_value)) %&gt;% 
-  mutate(type = if_else(harf &lt;= 0.50, &quot;minority&quot;, &quot;majority&quot;),
+  mutate(type = if_else(harf &lt; 0.50, &quot;minority&quot;, &quot;majority&quot;),
          type = ifelse(is.na(type), &quot;minority&quot;, type)) %&gt;% 
     select(-pref_code)) %&gt;% 
   tidyr::unnest()</code></pre>
@@ -100,9 +101,6 @@ d.pops &lt;- estat_getStatsData(
 <div class="section level3">
 <h3>行政名ラベルと位置データ（市区町村役場データ）</h3>
 <p>地図を作る際、市区町村ごとにラベルをふりたいので用意する。<code>jpndistrict::spdf_jpn_admins()</code>により、国土数値情報 市区町村役場データ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html</a> からデータをダウンロードする（すでにShapefileがあれば<em>path</em>引数でディレクトリを指定）</p>
-<pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(path = &quot;/Users/uri/Dropbox/maps/shapefile/国土数値情報/P34/P34-14_33_GML/&quot;) %&gt;% 
-  mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
-  filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
 <pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(code = 33) %&gt;% 
       dplyr::mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
   dplyr::filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
