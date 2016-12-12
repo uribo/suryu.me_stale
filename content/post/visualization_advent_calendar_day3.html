@@ -1,0 +1,142 @@
+---
+title: "都道府県の市区町村を人口で2分割するやつ: 岡山県版"
+author: "Shinya Uryu"
+date: 2016-12-13T05:22:00
+categories: ["visualization"]
+featured: "161213-pref-33-populations-1.png"
+featuredpath: "date"
+description:
+    市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>少し前によく見かけたやつ。Rでやってみる。人口データはユタニーの<strong><a href="https://cran.r-project.org/web/packages/estatapi/index.html"><code>{estatapi}</code></a></strong>でe-Statから取得する。マッピングは手前味噌ながら、<strong><a href="https://cran.r-project.org/web/packages/jpndistrict/index.html"><code>{jpndistrict}</code></a></strong>パッケージを使うと楽。</p>
+<p>必要なパッケージを読み込んで、データを取得、可視化までを行う。</p>
+<pre class="r"><code># データ取得・操作
+library(estatapi)
+library(jpndistrict)
+library(magrittr)
+library(spdplyr)
+library(dplyr)
+# library(tidyr)
+
+# 可視化
+library(ggplot2)
+library(ggrepel)</code></pre>
+<div class="section level2">
+<h2>データの用意</h2>
+<p>まずはデータを用意する。人口データと地図データを用意する。</p>
+<div id="-27-" class="section level3">
+<h3>人口データ （平成27年国勢調査 人口等基本集計）</h3>
+<p><code>estatapi::estat_getStatsList()</code>で「人口」をキーワードにして検索を行う。<em>appId</em>に与えるe-Statのトークンは各自で取得したものを使う。</p>
+<pre class="r"><code>d.list &lt;- estat_getStatsList(appId = Sys.getenv(&quot;ESTAT_TOKEN&quot;), searchWord = &quot;人口&quot;)
+nrow(d.list)
+## [1] 14380</code></pre>
+<p>「人口」で検索すると複数の項目がヒットするのだけど、そこから「平成27年国勢調査 人口等基本集計」のデータを選択する。</p>
+<pre class="r"><code>d.list %&gt;% filter(`@id` == &quot;0003148500&quot;) %&gt;% 
+  select(`@id`, STAT_NAME, STATISTICS_NAME, TITLE, SURVEY_DATE)
+## # A tibble: 1 × 5
+##        `@id` STAT_NAME
+##        &lt;chr&gt;     &lt;chr&gt;
+## 1 0003148500  国勢調査
+## # ... with 3 more variables: STATISTICS_NAME &lt;chr&gt;, TITLE &lt;chr&gt;,
+## #   SURVEY_DATE &lt;chr&gt;
+
+# 全国のデータを取得
+d.pops &lt;- estat_getStatsData(
+  appId = Sys.getenv(&quot;ESTAT_TOKEN&quot;),
+  statsDataId = &quot;0003148500&quot;,
+  cdCat01     = c(&quot;00710&quot;)
+)</code></pre>
+<pre class="r"><code>d.pops %&gt;% head()
+## # A tibble: 6 × 10
+##   tab_code 表章項目 cat01_code `全域・人口集中地区（2015）` area_code
+##      &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;                        &lt;chr&gt;     &lt;chr&gt;
+## 1      020     人口      00710                         全域     00000
+## 2      020     人口      00710                         全域     00001
+## 3      020     人口      00710                         全域     00002
+## 4      020     人口      00710                         全域     01000
+## 5      020     人口      00710                         全域     01001
+## 6      020     人口      00710                         全域     01002
+## # ... with 5 more variables: `地域（2015）` &lt;chr&gt;, time_code &lt;chr&gt;,
+## #   `時間軸(年次)` &lt;chr&gt;, unit &lt;chr&gt;, value &lt;dbl&gt;</code></pre>
+<p>データはこんな感じになっている。<em>地域（2015）</em>という列が行政区域の名称で、都道府県全体だったり市区町村だったりする。またそれにともなって<em>area_code</em>が割り振られている。人口の値は<em>value</em>に記録されている。使いやすいように少し処理を加える。</p>
+<ol style="list-style-type: decimal">
+<li><em>area_code</em>の先頭2桁は都道府県コードなので、都道府県のデータを抽出できるように<code>mutate()</code>で都道府県コードの列を作成する。</li>
+<li>合併前の行政区域でのデータも含まれるため、市町村のデータに限定する（旧行政名は括弧で括られている）。この時、「区」のデータもあるのだが、区が含まれる「市」のデータがあるのでそれを利用するようにする。</li>
+<li>都道府県（1で作成した都道府県コードで<code>group_by()</code>）ごとに都道府県人口の過半数以上・未満で市町村を区分する。各市町村の人口数を都道府県の総人口で割り、人口数の少ない市町村から累積し、5割以上となる市町村をmajority、5割未満をminorityとして扱う。</li>
+</ol>
+<pre class="r"><code>d.pops %&lt;&gt;% 
+  # 都道府県コードの列を追加
+  mutate(pref_code = substr(area_code, 1, 2)) %&gt;% 
+  # 市町村のデータを抽出（区は除外する）
+  filter(`表章項目` == &quot;人口&quot;,
+         grepl(&quot;(市|町|村)$&quot;, `地域（2015）`)) %&gt;% 
+  # 必要な列だけを選択
+  select(area_code, `地域（2015）`, value, pref_code) %&gt;% 
+  group_by(pref_code) %&gt;% 
+  do(aaa = arrange(., value) %&gt;% 
+       mutate(sum_value = value / sum(value),
+         harf      = cumsum(sum_value)) %&gt;% 
+  mutate(type = if_else(harf &lt;= 0.50, &quot;minority&quot;, &quot;majority&quot;),
+         type = ifelse(is.na(type), &quot;minority&quot;, type)) %&gt;% 
+    select(-pref_code)) %&gt;% 
+  tidyr::unnest()</code></pre>
+</div>
+<div class="section level3">
+<h3>地図データ</h3>
+<p>国土数値情報の行政区域 平成27年4月1日時点のデータ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html</a> を利用してSpatialPolygonDataframeを作成する。ここでも区は市にまとめ、行政コードも市のものを採用するという処理をする。</p>
+<pre class="r"><code>d33 &lt;- spdf_jpn_pref(code = 33, district = TRUE) %&gt;% 
+  mutate(city_name = if_else(grepl(&quot;区$&quot;, city_name_full), city_name_, city_name),
+                    city_code = ifelse(grepl(&quot;区$&quot;, city_name_full), 
+                                         paste0(substr(city_code, 1, 3), &quot;00&quot;),
+         as.character(city_code))) %&gt;% 
+  select(city_name, city_code)</code></pre>
+</div>
+<div class="section level3">
+<h3>行政名ラベルと位置データ（市区町村役場データ）</h3>
+<p>地図を作る際、市区町村ごとにラベルをふりたいので用意する。<code>jpndistrict::spdf_jpn_admins()</code>により、国土数値情報 市区町村役場データ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html</a> からデータをダウンロードする（すでにShapefileがあれば<em>path</em>引数でディレクトリを指定）</p>
+<pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(path = &quot;/Users/uri/Dropbox/maps/shapefile/国土数値情報/P34/P34-14_33_GML/&quot;) %&gt;% 
+  mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
+  filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
+<pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(code = 33) %&gt;% 
+      dplyr::mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
+  dplyr::filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
+</div>
+</div>
+<div class="section level2">
+<h2>プロット</h2>
+<p>あらかじめ、地図データを<strong><code>{ggplot2}</code></strong>ベースの地図として描画するために<code>ggplot2::fortify()</code>にかけ、人口データと結合させておく。あとは<code>geom_map</code>でデータをのせるだけ。</p>
+<pre class="r"><code>d.map &lt;- d33 %&gt;% 
+    ggplot2::fortify(region = &quot;city_code&quot;) %&gt;% 
+    dplyr::left_join(d.pops, by = c(&quot;id&quot; = &quot;area_code&quot;))</code></pre>
+<pre class="r"><code>p &lt;- ggplot() +
+  geom_map(data = d.map,
+           map = d.map,
+           aes(x = long, y = lat, group = group, map_id = id, fill = type),
+           color = &quot;#FFFFFF&quot;, size = 0.1) + 
+  coord_map() +
+  ggthemes::theme_map(base_size = 12, base_family = &quot;YuGo&quot;) +
+    guides(fill = FALSE)</code></pre>
+<p>ラベルは<strong><code>{ggrepel}</code></strong>の関数を使うとよしなに位置を調整してくれるので便利。</p>
+<pre class="r"><code># family は適当に変更
+p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) +
+      ggrepel::geom_text_repel(data = d.admin33@data, 
+                               aes(longitude, latitude, label = name, family = &quot;IPAexGothic&quot;))</code></pre>
+<p>岡山、倉敷論争に終止符が打たれる日はいつになるやら。</p>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->
