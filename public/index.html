@@ -29,7 +29,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-12-13T05:22:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-13T07:48:00&#43;00:00"/>
 
 
 
@@ -216,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/visualization_advent_calendar_day4/"><p>都道府県の市区町村を人口で2分割するやつ: 全国版</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/visualization_advent_calendar_day3/"><p>都道府県の市区町村を人口で2分割するやつ: 岡山県版</p></a>
                     </li>
                 
@@ -225,10 +229,6 @@
                 
                     <li>
                         <a href="./post/r_advent_calendar_day2/"><p>configパッケージで楽々環境変数の管理</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/visualization_advent_calendar_day2/"><p>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</p></a>
                     </li>
                 
             </ul>
@@ -245,10 +245,10 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h2>
+            <h2><a href="./post/visualization_advent_calendar_day4/">都道府県の市区町村を人口で2分割するやつ: 全国版</a></h2>
         
         
-            <p>市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで</p>
+            <p>市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる、の全国版</p>
         
     </div>
     <div class="meta">
@@ -261,7 +261,7 @@
             December 13, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>4 minute read</p>
+            <p>3 minute read</p>
         
         
     </div>
@@ -270,146 +270,178 @@
 
 
     
-    
-
-    
-        
-        
-
-
-
-
-    
-    
-        
-    
-
-
-        
-
-        <a href="./post/visualization_advent_calendar_day3/" class="image featured">
-            <img src="./img/2016/12/161213-pref-33-populations-1.png" alt="" />
-        </a>
-    
-
 
     <div id="content">
 
 
-<p>少し前によく見かけたやつ。Rでやってみる。人口データはユタニーの<strong><a href="https://cran.r-project.org/web/packages/estatapi/index.html"><code>{estatapi}</code></a></strong>でe-Statから取得する。マッピングは手前味噌ながら、<strong><a href="https://cran.r-project.org/web/packages/jpndistrict/index.html"><code>{jpndistrict}</code></a></strong>パッケージを使うと楽。</p>
-<p>必要なパッケージを読み込んで、データを取得、可視化までを行う。</p>
-<pre class="r"><code># データ取得・操作
-library(estatapi)
-library(jpndistrict)
-library(magrittr)
-library(spdplyr)
-library(dplyr)
-# library(tidyr)
-
-# 可視化
-library(ggplot2)
-library(ggrepel)</code></pre>
-<div class="section level2">
-<h2>データの用意</h2>
-<p>まずはデータを用意する。人口データと地図データを用意する。</p>
-<div id="-27-" class="section level3">
-<h3>人口データ （平成27年国勢調査 人口等基本集計）</h3>
-<p><code>estatapi::estat_getStatsList()</code>で「人口」をキーワードにして検索を行う。<em>appId</em>に与えるe-Statのトークンは各自で取得したものを使う。</p>
-<pre class="r"><code>d.list &lt;- estat_getStatsList(appId = Sys.getenv(&quot;ESTAT_TOKEN&quot;), searchWord = &quot;人口&quot;)
-nrow(d.list)
-## [1] 14380</code></pre>
-<p>「人口」で検索すると複数の項目がヒットするのだけど、そこから「平成27年国勢調査 人口等基本集計」のデータを選択する。</p>
-<pre class="r"><code>d.list %&gt;% filter(`@id` == &quot;0003148500&quot;) %&gt;% 
-  select(`@id`, STAT_NAME, STATISTICS_NAME, TITLE, SURVEY_DATE)
-## # A tibble: 1 × 5
-##        `@id` STAT_NAME
-##        &lt;chr&gt;     &lt;chr&gt;
-## 1 0003148500  国勢調査
-## # ... with 3 more variables: STATISTICS_NAME &lt;chr&gt;, TITLE &lt;chr&gt;,
-## #   SURVEY_DATE &lt;chr&gt;
-
-# 全国のデータを取得
-d.pops &lt;- estat_getStatsData(
-  appId = Sys.getenv(&quot;ESTAT_TOKEN&quot;),
-  statsDataId = &quot;0003148500&quot;,
-  cdCat01     = c(&quot;00710&quot;)
-)</code></pre>
-<pre class="r"><code>d.pops %&gt;% head()
-## # A tibble: 6 × 10
-##   tab_code 表章項目 cat01_code `全域・人口集中地区（2015）` area_code
-##      &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;                        &lt;chr&gt;     &lt;chr&gt;
-## 1      020     人口      00710                         全域     00000
-## 2      020     人口      00710                         全域     00001
-## 3      020     人口      00710                         全域     00002
-## 4      020     人口      00710                         全域     01000
-## 5      020     人口      00710                         全域     01001
-## 6      020     人口      00710                         全域     01002
-## # ... with 5 more variables: `地域（2015）` &lt;chr&gt;, time_code &lt;chr&gt;,
-## #   `時間軸(年次)` &lt;chr&gt;, unit &lt;chr&gt;, value &lt;dbl&gt;</code></pre>
-<p>データはこんな感じになっている。<em>地域（2015）</em>という列が行政区域の名称で、都道府県全体だったり市区町村だったりする。またそれにともなって<em>area_code</em>が割り振られている。人口の値は<em>value</em>に記録されている。使いやすいように少し処理を加える。</p>
-<ol style="list-style-type: decimal">
-<li><em>area_code</em>の先頭2桁は都道府県コードなので、都道府県のデータを抽出できるように<code>mutate()</code>で都道府県コードの列を作成する。</li>
-<li>合併前の行政区域でのデータも含まれるため、市町村のデータに限定する（旧行政名は括弧で括られている）。この時、「区」のデータもあるのだが、区が含まれる「市」のデータがあるのでそれを利用するようにする。</li>
-<li>都道府県（1で作成した都道府県コードで<code>group_by()</code>）ごとに都道府県人口の過半数以上・未満で市町村を区分する。各市町村の人口数を都道府県の総人口で割り、人口数の少ない市町村から累積し、5割以上となる市町村をmajority、5割未満をminorityとして扱う。</li>
-</ol>
-<pre class="r"><code>d.pops %&lt;&gt;% 
-  # 都道府県コードの列を追加
-  mutate(pref_code = substr(area_code, 1, 2)) %&gt;% 
-  # 市町村のデータを抽出（区は除外する）
-  filter(`表章項目` == &quot;人口&quot;,
-         grepl(&quot;(市|町|村)$&quot;, `地域（2015）`)) %&gt;% 
-  # 必要な列だけを選択
-  select(area_code, `地域（2015）`, value, pref_code) %&gt;% 
-  group_by(pref_code) %&gt;% 
-  do(aaa = arrange(., value) %&gt;% 
-       mutate(sum_value = value / sum(value),
-         harf      = cumsum(sum_value)) %&gt;% 
-  mutate(type = if_else(harf &lt;= 0.50, &quot;minority&quot;, &quot;majority&quot;),
-         type = ifelse(is.na(type), &quot;minority&quot;, type)) %&gt;% 
-    select(-pref_code)) %&gt;% 
-  tidyr::unnest()</code></pre>
-</div>
-<div class="section level3">
-<h3>地図データ</h3>
-<p>国土数値情報の行政区域 平成27年4月1日時点のデータ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03.html</a> を利用してSpatialPolygonDataframeを作成する。ここでも区は市にまとめ、行政コードも市のものを採用するという処理をする。</p>
-<pre class="r"><code>d33 &lt;- spdf_jpn_pref(code = 33, district = TRUE) %&gt;% 
-  mutate(city_name = if_else(grepl(&quot;区$&quot;, city_name_full), city_name_, city_name),
+<p>前回、<a href="https://suryu.me/post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ</a>のコードを書いたので、関数化して全国版の地図を作ってみる。</p>
+<p>あらかじめ人口データだけは用意しておく必要があるので、前回同様<strong><code>{estatapi}</code></strong>でデータをダウンロードして加工しておく。</p>
+<p><code>gg_pref_split()</code>という関数がそれ。<em>pref_code</em>で対象の都道府県（コード）を指定する。プロットおよびラベルの描画は引数で変更可能。フォントも適当に変えられる。</p>
+<pre class="r"><code>gg_pref_split &lt;- function(pref_code = 33, plot = TRUE, label = TRUE, label_font = &quot;IPAexGothic&quot;) {
+  
+  p.code &lt;- sprintf(&quot;%02d&quot;, pref_code)
+  
+  data.result &lt;- d.pops %&gt;% 
+    dplyr::filter(pref_code == p.code)
+  
+  res &lt;- list(data = data.result)
+  
+  if (plot == TRUE) {
+    
+    sp.pref &lt;- jpndistrict::spdf_jpn_pref(code = p.code, district = TRUE) %&gt;% 
+      dplyr::mutate(city_name = dplyr::if_else(grepl(&quot;区$&quot;, city_name_full), city_name_, city_name),
                     city_code = ifelse(grepl(&quot;区$&quot;, city_name_full), 
                                          paste0(substr(city_code, 1, 3), &quot;00&quot;),
          as.character(city_code))) %&gt;% 
-  select(city_name, city_code)</code></pre>
-</div>
-<div class="section level3">
-<h3>行政名ラベルと位置データ（市区町村役場データ）</h3>
-<p>地図を作る際、市区町村ごとにラベルをふりたいので用意する。<code>jpndistrict::spdf_jpn_admins()</code>により、国土数値情報 市区町村役場データ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html</a> からデータをダウンロードする（すでにShapefileがあれば<em>path</em>引数でディレクトリを指定）</p>
-<pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(path = &quot;/Users/uri/Dropbox/maps/shapefile/国土数値情報/P34/P34-14_33_GML/&quot;) %&gt;% 
-  mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
-  filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
-<pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(code = 33) %&gt;% 
-      dplyr::mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
-  dplyr::filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
-</div>
-</div>
-<div class="section level2">
-<h2>プロット</h2>
-<p>あらかじめ、地図データを<strong><code>{ggplot2}</code></strong>ベースの地図として描画するために<code>ggplot2::fortify()</code>にかけ、人口データと結合させておく。あとは<code>geom_map</code>でデータをのせるだけ。</p>
-<pre class="r"><code>d.map &lt;- d33 %&gt;% 
+  dplyr::select(city_name, city_code)
+    d.admin &lt;- jpndistrict::spdf_jpn_admins(code = p.code) %&gt;% 
+      dplyr::mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;%
+      dplyr::filter(type == 1, !grepl(&quot;区$&quot;, name)) 
+    
+  d.map &lt;- sp.pref %&gt;% 
     ggplot2::fortify(region = &quot;city_code&quot;) %&gt;% 
-    dplyr::left_join(d.pops, by = c(&quot;id&quot; = &quot;area_code&quot;))</code></pre>
-<pre class="r"><code>p &lt;- ggplot() +
-  geom_map(data = d.map,
+    dplyr::left_join(data.result, by = c(&quot;id&quot; = &quot;area_code&quot;))
+  
+  plot.result &lt;- ggplot() +
+  ggplot2::geom_map(data = d.map,
            map = d.map,
            aes(x = long, y = lat, group = group, map_id = id, fill = type),
            color = &quot;#FFFFFF&quot;, size = 0.1) + 
-  coord_map() +
-  ggthemes::theme_map(base_size = 12, base_family = &quot;YuGo&quot;) +
-    guides(fill = FALSE)</code></pre>
-<p>ラベルは<strong><code>{ggrepel}</code></strong>の関数を使うとよしなに位置を調整してくれるので便利。</p>
-<pre class="r"><code># family は適当に変更
-p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) +
-      ggrepel::geom_text_repel(data = d.admin33@data, 
-                               aes(longitude, latitude, label = name, family = &quot;IPAexGothic&quot;))</code></pre>
-<p>岡山、倉敷論争に終止符が打たれる日はいつになるやら。</p>
+  ggplot2::coord_map() +
+  ggthemes::theme_map(base_size = 12, base_family = label_font) +
+    ggplot2::guides(fill = FALSE)
+  
+  if (label == TRUE) {
+    plot.result &lt;- plot.result + 
+      ggplot2::geom_point(data = d.admin@data, aes(x = longitude, y = latitude)) +
+      ggrepel::geom_text_repel(data = d.admin@data, aes(longitude, latitude, label = name, family = label_font))
+  
+  }
+  
+  res &lt;- list(data = data.result,
+              plot = plot.result)
+  }
+  return(res)
+    
+}</code></pre>
+<pre class="r"><code>library(ggplot2)
+library(ggrepel)
+# library(gridExtra)</code></pre>
+<pre class="r"><code>gg_pref_split(13)</code></pre>
+<p>のように実行すれば都道府県の人口2分割図が描画される。赤い行政区が都道府県人口の5割以上を占め、青い行政区は5割未満となっている。</p>
+<p>というわけで<strong><code>{purrr}</code></strong>を使い47都道府県の結果を見てみる。地方別に表示するが、北海道と東北、九州と沖縄はそれぞれ同一のグループとして扱う。</p>
+<pre class="r"><code>library(purrr)
+data(&quot;jpnprefs&quot;, package = &quot;jpndistrict&quot;)
+plots &lt;- jpnprefs %&gt;% 
+  split(.$jis_code) %&gt;% 
+  map2(., names(.), ~ gg_pref_split(pref_code = as.numeric(.y), plot = TRUE, label = FALSE) %&gt;% use_series(plot))
+
+gg_pref_split_region &lt;- function(regions = NULL) {
+  
+  pref.range &lt;- jpnprefs %&gt;% dplyr::filter(region %in% regions) %&gt;% use_series(jis_code) %&gt;% as.numeric() %&gt;% range()
+  
+  tmp &lt;- plots %&gt;% as.vector()
+  
+  res &lt;- do.call(gridExtra::grid.arrange, c(tmp[min(pref.range):max(pref.range)], list(nrow = 2)), quote = TRUE)
+
+  return(res)
+}</code></pre>
+<div class="section level2">
+<h2>北海道・東北</h2>
+<pre class="r"><code>gg_pref_split_region(c(&quot;北海道&quot;, &quot;東北&quot;))</code></pre>
+<p><img src="figures/hokkaido-tohoku-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
+##    z     cells    name           grob
+## 01 1 (1-1,1-1) arrange gtable[layout]
+## 02 2 (1-1,2-2) arrange gtable[layout]
+## 03 3 (1-1,3-3) arrange gtable[layout]
+## 04 4 (1-1,4-4) arrange gtable[layout]
+## 05 5 (2-2,1-1) arrange gtable[layout]
+## 06 6 (2-2,2-2) arrange gtable[layout]
+## 07 7 (2-2,3-3) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>関東</h2>
+<p>東京のデータもあるのだけど、本州と小笠原諸島、伊豆諸島などを切り離す必要がある…（今は非表示）</p>
+<pre class="r"><code>gg_pref_split_region(&quot;関東&quot;)</code></pre>
+<p><img src="figures/kanto-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
+##    z     cells    name           grob
+## 08 1 (1-1,1-1) arrange gtable[layout]
+## 09 2 (1-1,2-2) arrange gtable[layout]
+## 10 3 (1-1,3-3) arrange gtable[layout]
+## 11 4 (1-1,4-4) arrange gtable[layout]
+## 12 5 (2-2,1-1) arrange gtable[layout]
+## 13 6 (2-2,2-2) arrange gtable[layout]
+## 14 7 (2-2,3-3) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>中部</h2>
+<pre class="r"><code>gg_pref_split_region(&quot;中部&quot;)</code></pre>
+<p><img src="figures/cyubu-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 5) &quot;arrange&quot;: 9 grobs
+##    z     cells    name           grob
+## 15 1 (1-1,1-1) arrange gtable[layout]
+## 16 2 (1-1,2-2) arrange gtable[layout]
+## 17 3 (1-1,3-3) arrange gtable[layout]
+## 18 4 (1-1,4-4) arrange gtable[layout]
+## 19 5 (1-1,5-5) arrange gtable[layout]
+## 20 6 (2-2,1-1) arrange gtable[layout]
+## 21 7 (2-2,2-2) arrange gtable[layout]
+## 22 8 (2-2,3-3) arrange gtable[layout]
+## 23 9 (2-2,4-4) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>近畿</h2>
+<pre class="r"><code>gg_pref_split_region(&quot;近畿&quot;)</code></pre>
+<p><img src="figures/kinki-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
+##    z     cells    name           grob
+## 24 1 (1-1,1-1) arrange gtable[layout]
+## 25 2 (1-1,2-2) arrange gtable[layout]
+## 26 3 (1-1,3-3) arrange gtable[layout]
+## 27 4 (1-1,4-4) arrange gtable[layout]
+## 28 5 (2-2,1-1) arrange gtable[layout]
+## 29 6 (2-2,2-2) arrange gtable[layout]
+## 30 7 (2-2,3-3) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>中国</h2>
+<pre class="r"><code>gg_pref_split_region(&quot;中国&quot;)</code></pre>
+<p><img src="figures/chyugoku-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 3) &quot;arrange&quot;: 5 grobs
+##    z     cells    name           grob
+## 31 1 (1-1,1-1) arrange gtable[layout]
+## 32 2 (1-1,2-2) arrange gtable[layout]
+## 33 3 (1-1,3-3) arrange gtable[layout]
+## 34 4 (2-2,1-1) arrange gtable[layout]
+## 35 5 (2-2,2-2) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>四国</h2>
+<pre class="r"><code>gg_pref_split_region(&quot;四国&quot;)</code></pre>
+<p><img src="figures/shikoku-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 2) &quot;arrange&quot;: 4 grobs
+##    z     cells    name           grob
+## 36 1 (1-1,1-1) arrange gtable[layout]
+## 37 2 (1-1,2-2) arrange gtable[layout]
+## 38 3 (2-2,1-1) arrange gtable[layout]
+## 39 4 (2-2,2-2) arrange gtable[layout]</code></pre>
+</div>
+<div class="section level2">
+<h2>九州・沖縄</h2>
+<pre class="r"><code>gg_pref_split_region(c(&quot;九州&quot;, &quot;沖縄&quot;))</code></pre>
+<p><img src="figures/kyusyu-okinawa-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 8 grobs
+##    z     cells    name           grob
+## 40 1 (1-1,1-1) arrange gtable[layout]
+## 41 2 (1-1,2-2) arrange gtable[layout]
+## 42 3 (1-1,3-3) arrange gtable[layout]
+## 43 4 (1-1,4-4) arrange gtable[layout]
+## 44 5 (2-2,1-1) arrange gtable[layout]
+## 45 6 (2-2,2-2) arrange gtable[layout]
+## 46 7 (2-2,3-3) arrange gtable[layout]
+## 47 8 (2-2,4-4) arrange gtable[layout]</code></pre>
 </div>
 
 
@@ -453,8 +485,8 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
 </article>
 <ul class="actions pagination">
     
-        <li><a href="./post/r_advent_calendar_day3/"
-                class="button big previous">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></li>
+        <li><a href="./post/visualization_advent_calendar_day3/"
+                class="button big previous">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></li>
     
 
     
@@ -467,9 +499,9 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/visualization_advent_calendar_day3\/';
-    var disqus_title = '都道府県の市区町村を人口で2分割するやつ: 岡山県版';
-    var disqus_url = '\/post\/visualization_advent_calendar_day3\/';
+    var disqus_identifier = '\/post\/visualization_advent_calendar_day4\/';
+    var disqus_title = '都道府県の市区町村を人口で2分割するやつ: 全国版';
+    var disqus_url = '\/post\/visualization_advent_calendar_day4\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -493,43 +525,43 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
             
 
 
-<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f&text=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%b2%a1%e5%b1%b1%e7%9c%8c%e7%89%88&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f&text=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%85%a8%e5%9b%bd%e7%89%88&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%b2%a1%e5%b1%b1%e7%9c%8c%e7%89%88" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%85%a8%e5%9b%bd%e7%89%88" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%b2%a1%e5%b1%b1%e7%9c%8c%e7%89%88" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%85%a8%e5%9b%bd%e7%89%88" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%b2%a1%e5%b1%b1%e7%9c%8c%e7%89%88" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%85%a8%e5%9b%bd%e7%89%88" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fvisualization_advent_calendar_day3%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -651,6 +683,20 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/visualization_advent_calendar_day4/">都道府県の市区町村を人口で2分割するやつ: 全国版</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-13'>
+                                    December 13, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h3>
                                 
                                     
@@ -686,20 +732,6 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
                                 <time class="published" datetime=
                                     '2016-12-05'>
                                     December 5, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/visualization_advent_calendar_day2/">extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-04'>
-                                    December 4, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -747,7 +779,7 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
                         <article>
                             <header>
                                 <a href="./categories/visualization/">visualization</a>
-                                <span style="float:right;">5</span>
+                                <span style="float:right;">6</span>
                             </header>
                         </article>
                     </li>

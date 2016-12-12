@@ -6,8 +6,17 @@
     <description>Recent content in Post-rsses on suryu.me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Tue, 13 Dec 2016 05:22:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 13 Dec 2016 07:48:00 +0000</lastBuildDate>
     <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>都道府県の市区町村を人口で2分割するやつ: 全国版</title>
+      <link>https://suryu.me/post/visualization_advent_calendar_day4/</link>
+      <pubDate>Tue, 13 Dec 2016 07:48:00 +0000</pubDate>
+      
+      <guid>https://suryu.me/post/visualization_advent_calendar_day4/</guid>
+      <description>市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる、の全国版</description>
+    </item>
     
     <item>
       <title>都道府県の市区町村を人口で2分割するやつ: 岡山県版</title>
@@ -15,7 +24,7 @@
       <pubDate>Tue, 13 Dec 2016 05:22:00 +0000</pubDate>
       
       <guid>https://suryu.me/post/visualization_advent_calendar_day3/</guid>
-      <description>市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで</description>
+      <description>市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで</description>
     </item>
     
     <item>
@@ -133,15 +142,6 @@
       
       <guid>https://suryu.me/post/datacamp_tutorial/</guid>
       <description>DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。</description>
-    </item>
-    
-    <item>
-      <title>tabulizerパッケージによるPDF表データからのデータ取得</title>
-      <link>https://suryu.me/post/tabulizer_fantastic_extract_data_from_pdf/</link>
-      <pubDate>Wed, 24 Aug 2016 08:10:00 +0000</pubDate>
-      
-      <guid>https://suryu.me/post/tabulizer_fantastic_extract_data_from_pdf/</guid>
-      <description>ROpenSciの実験的パッケージリポジトリropenscilabsで、便利そうなパッケージを見つけた。使ってみた感じ、PDFからのデータ取得の決定版となりそうな大変便利なパッケージであることがわかったので、その機能を試しておく。</description>
     </item>
     
   </channel>

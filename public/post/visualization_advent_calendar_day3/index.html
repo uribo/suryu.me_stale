@@ -18,7 +18,7 @@
             <meta name="author" content="Shinya Uryu">
         
         
-            <meta name="description" content="市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで">
+            <meta name="description" content="市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで">
         
 
         
@@ -28,13 +28,13 @@
 
 
 <meta name="twitter:title" content="都道府県の市区町村を人口で2分割するやつ: 岡山県版"/>
-<meta name="twitter:description" content="市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで"/>
+<meta name="twitter:description" content="市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで"/>
 <meta name="twitter:site" content="@u_ribo"/>
 
 
         <meta name="twitter:image" content="https://suryu.me/img/banner.png"/>
         <meta property="og:title" content="都道府県の市区町村を人口で2分割するやつ: 岡山県版" />
-<meta property="og:description" content="市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで" />
+<meta property="og:description" content="市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/visualization_advent_calendar_day3/" />
 
@@ -52,11 +52,11 @@
 
         
 <meta itemprop="name" content="都道府県の市区町村を人口で2分割するやつ: 岡山県版">
-<meta itemprop="description" content="市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで">
+<meta itemprop="description" content="市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで">
 
 
 <meta itemprop="dateModified" content="2016-12-13T05:22:00&#43;00:00" />
-<meta itemprop="wordCount" content="1941">
+<meta itemprop="wordCount" content="1807">
 
 
 
@@ -234,6 +234,10 @@
 
                 
                     <li>
+                        <a href="../../post/visualization_advent_calendar_day4/"><p>都道府県の市区町村を人口で2分割するやつ: 全国版</p></a>
+                    </li>
+                
+                    <li>
                         <a href="../../post/visualization_advent_calendar_day3/"><p>都道府県の市区町村を人口で2分割するやつ: 岡山県版</p></a>
                     </li>
                 
@@ -243,10 +247,6 @@
                 
                     <li>
                         <a href="../../post/r_advent_calendar_day2/"><p>configパッケージで楽々環境変数の管理</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="../../post/visualization_advent_calendar_day2/"><p>extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</p></a>
                     </li>
                 
             </ul>
@@ -322,7 +322,7 @@
             
         
         
-            <p>市区町村ごとのの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで</p>
+            <p>市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる。全国版はあとで</p>
         
     </div>
     <div class="meta">
@@ -372,6 +372,7 @@
 
 <p>少し前によく見かけたやつ。Rでやってみる。人口データはユタニーの<strong><a href="https://cran.r-project.org/web/packages/estatapi/index.html"><code>{estatapi}</code></a></strong>でe-Statから取得する。マッピングは手前味噌ながら、<strong><a href="https://cran.r-project.org/web/packages/jpndistrict/index.html"><code>{jpndistrict}</code></a></strong>パッケージを使うと楽。</p>
 <p>必要なパッケージを読み込んで、データを取得、可視化までを行う。</p>
+<p>**追記: <a href="https://suryu.me/post/visualization_advent_calendar_day4/">全国版</a></p>
 <pre class="r"><code># データ取得・操作
 library(estatapi)
 library(jpndistrict)
@@ -438,7 +439,7 @@ d.pops &lt;- estat_getStatsData(
   do(aaa = arrange(., value) %&gt;% 
        mutate(sum_value = value / sum(value),
          harf      = cumsum(sum_value)) %&gt;% 
-  mutate(type = if_else(harf &lt;= 0.50, &quot;minority&quot;, &quot;majority&quot;),
+  mutate(type = if_else(harf &lt; 0.50, &quot;minority&quot;, &quot;majority&quot;),
          type = ifelse(is.na(type), &quot;minority&quot;, type)) %&gt;% 
     select(-pref_code)) %&gt;% 
   tidyr::unnest()</code></pre>
@@ -456,9 +457,6 @@ d.pops &lt;- estat_getStatsData(
 <div class="section level3">
 <h3>行政名ラベルと位置データ（市区町村役場データ）</h3>
 <p>地図を作る際、市区町村ごとにラベルをふりたいので用意する。<code>jpndistrict::spdf_jpn_admins()</code>により、国土数値情報 市区町村役場データ <a href="http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html" class="uri">http://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P34.html</a> からデータをダウンロードする（すでにShapefileがあれば<em>path</em>引数でディレクトリを指定）</p>
-<pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(path = &quot;/Users/uri/Dropbox/maps/shapefile/国土数値情報/P34/P34-14_33_GML/&quot;) %&gt;% 
-  mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
-  filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
 <pre class="r"><code>d.admin33 &lt;- spdf_jpn_admins(code = 33) %&gt;% 
       dplyr::mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;% 
   dplyr::filter(type == 1, !grepl(&quot;区$&quot;, name)) </code></pre>
@@ -531,6 +529,9 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
                 class="button big previous">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></li>
     
 
+    
+        <li><a href="../../post/visualization_advent_calendar_day4/"
+                class="button big next">都道府県の市区町村を人口で2分割するやつ: 全国版</a></li>
     
 </ul>
 
@@ -666,6 +667,20 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
                     <li>
                         <article>
                             <header>
+                                <h3><a href="../../post/visualization_advent_calendar_day4/">都道府県の市区町村を人口で2分割するやつ: 全国版</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-13'>
+                                    December 13, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="../../post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h3>
                                 
                                     
@@ -701,20 +716,6 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
                                 <time class="published" datetime=
                                     '2016-12-05'>
                                     December 5, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="../../post/visualization_advent_calendar_day2/">extrafont ggplot2で日本語ラベル (ver. 2.2.0 向け)</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-04'>
-                                    December 4, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -762,7 +763,7 @@ p &lt;- p + geom_point(data = d.admin33@data, aes(x = longitude, y = latitude)) 
                         <article>
                             <header>
                                 <a href="../../categories/visualization/">visualization</a>
-                                <span style="float:right;">5</span>
+                                <span style="float:right;">6</span>
                             </header>
                         </article>
                     </li>

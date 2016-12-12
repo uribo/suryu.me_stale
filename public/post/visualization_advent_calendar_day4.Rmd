@@ -1,0 +1,225 @@
+---
+title: "都道府県の市区町村を人口で2分割するやつ: 全国版"
+author: "Shinya Uryu"
+date: 2016-12-13T07:48:00
+categories: ["visualization"]
+description:
+    市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる、の全国版
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+前回、[都道府県の市区町村を人口で2分割するやつ](https://suryu.me/post/visualization_advent_calendar_day3/)のコードを書いたので、関数化して全国版の地図を作ってみる。
+
+あらかじめ人口データだけは用意しておく必要があるので、前回同様**`{estatapi}`**でデータをダウンロードして加工しておく。
+
+```{r, eval = TRUE, echo = FALSE}
+library(magrittr)
+library(estatapi)
+library(spdplyr)
+library(dplyr)
+# library(tidyr)
+
+d.pops <- estat_getStatsData(
+  appId = Sys.getenv("ESTAT_TOKEN"),
+  statsDataId = "0003148500",
+  cdCat01     = c("00710")
+)
+
+d.pops %<>% 
+  # 都道府県コードの列を追加
+  mutate(pref_code = substr(area_code, 1, 2)) %>% 
+  # 市町村のデータを抽出（区は除外する）
+  filter(`表章項目` == "人口",
+         grepl("(市|町|村)$", `地域（2015）`)) %>% 
+  # 必要な列だけを選択
+  select(area_code, `地域（2015）`, value, pref_code) %>% 
+  group_by(pref_code) %>% 
+  do(aaa = arrange(., value) %>% 
+       mutate(sum_value = value / sum(value),
+         harf      = cumsum(sum_value)) %>% 
+  mutate(type = if_else(harf < 0.50, "minority", "majority"),
+         type = ifelse(is.na(type), "minority", type)) %>% 
+    select(-pref_code)) %>% 
+  tidyr::unnest()
+```
+
+`gg_pref_split()`という関数がそれ。*pref_code*で対象の都道府県（コード）を指定する。プロットおよびラベルの描画は引数で変更可能。フォントも適当に変えられる。
+
+```{r, eval = TRUE, echo = FALSE}
+gg_pref_split <- function(pref_code = 33, plot = TRUE, label = TRUE, label_font = "IPAexGothic") {
+  
+  p.code <- sprintf("%02d", pref_code)
+  
+  data.result <- d.pops %>% 
+    dplyr::filter(pref_code == p.code)
+  
+  res <- list(data = data.result)
+  
+  if (plot == TRUE) {
+    
+    sp.pref <- jpndistrict::spdf_jpn_pref(code = p.code, district = TRUE) %>% 
+      dplyr::mutate(city_name = dplyr::if_else(grepl("区$", city_name_full), city_name_, city_name),
+                    city_code = ifelse(grepl("区$", city_name_full), 
+                                         paste0(substr(city_code, 1, 3), "00"),
+         as.character(city_code))) %>% 
+  dplyr::select(city_name, city_code)
+    d.admin <- jpndistrict::spdf_jpn_admins(path = paste0("/Users/uri/Dropbox/maps/shapefile/国土数値情報/P34/P34-14_", p.code , "_GML/")) %>% 
+      dplyr::mutate(name = gsub("(役所|役場|役場（移転中）)$", "", name)) %>%
+      dplyr::filter(type == 1, !grepl("区$", name)) 
+    
+  d.map <- sp.pref %>% 
+    ggplot2::fortify(region = "city_code") %>% 
+    dplyr::left_join(data.result, by = c("id" = "area_code"))
+  
+  plot.result <- ggplot() +
+  ggplot2::geom_map(data = d.map,
+           map = d.map,
+           aes(x = long, y = lat, group = group, map_id = id, fill = type),
+           color = "#FFFFFF", size = 0.1) + 
+  ggplot2::coord_map() +
+  ggthemes::theme_map(base_size = 12, base_family = label_font) +
+    ggplot2::guides(fill = FALSE)
+  
+  if (label == TRUE) {
+    plot.result <- plot.result + 
+      ggplot2::geom_point(data = d.admin@data, aes(x = longitude, y = latitude)) +
+      ggrepel::geom_text_repel(data = d.admin@data, aes(longitude, latitude, label = name, family = label_font))
+  
+  }
+  
+  res <- list(data = data.result,
+              plot = plot.result)
+  }
+  return(res)
+    
+}
+```
+
+```{r, eval = FALSE, echo = TRUE}
+gg_pref_split <- function(pref_code = 33, plot = TRUE, label = TRUE, label_font = "IPAexGothic") {
+  
+  p.code <- sprintf("%02d", pref_code)
+  
+  data.result <- d.pops %>% 
+    dplyr::filter(pref_code == p.code)
+  
+  res <- list(data = data.result)
+  
+  if (plot == TRUE) {
+    
+    sp.pref <- jpndistrict::spdf_jpn_pref(code = p.code, district = TRUE) %>% 
+      dplyr::mutate(city_name = dplyr::if_else(grepl("区$", city_name_full), city_name_, city_name),
+                    city_code = ifelse(grepl("区$", city_name_full), 
+                                         paste0(substr(city_code, 1, 3), "00"),
+         as.character(city_code))) %>% 
+  dplyr::select(city_name, city_code)
+    d.admin <- jpndistrict::spdf_jpn_admins(code = p.code) %>% 
+      dplyr::mutate(name = gsub("(役所|役場|役場（移転中）)$", "", name)) %>%
+      dplyr::filter(type == 1, !grepl("区$", name)) 
+    
+  d.map <- sp.pref %>% 
+    ggplot2::fortify(region = "city_code") %>% 
+    dplyr::left_join(data.result, by = c("id" = "area_code"))
+  
+  plot.result <- ggplot() +
+  ggplot2::geom_map(data = d.map,
+           map = d.map,
+           aes(x = long, y = lat, group = group, map_id = id, fill = type),
+           color = "#FFFFFF", size = 0.1) + 
+  ggplot2::coord_map() +
+  ggthemes::theme_map(base_size = 12, base_family = label_font) +
+    ggplot2::guides(fill = FALSE)
+  
+  if (label == TRUE) {
+    plot.result <- plot.result + 
+      ggplot2::geom_point(data = d.admin@data, aes(x = longitude, y = latitude)) +
+      ggrepel::geom_text_repel(data = d.admin@data, aes(longitude, latitude, label = name, family = label_font))
+  
+  }
+  
+  res <- list(data = data.result,
+              plot = plot.result)
+  }
+  return(res)
+    
+}
+```
+
+```{r}
+library(ggplot2)
+library(ggrepel)
+# library(gridExtra)
+```
+
+```{r, eval = FALSE, echo = TRUE}
+gg_pref_split(13)
+```
+
+のように実行すれば都道府県の人口2分割図が描画される。赤い行政区が都道府県人口の5割以上を占め、青い行政区は5割未満となっている。
+
+というわけで**`{purrr}`**を使い47都道府県の結果を見てみる。地方別に表示するが、北海道と東北、九州と沖縄はそれぞれ同一のグループとして扱う。
+
+```{r, echo = TRUE}
+library(purrr)
+data("jpnprefs", package = "jpndistrict")
+plots <- jpnprefs %>% 
+  split(.$jis_code) %>% 
+  map2(., names(.), ~ gg_pref_split(pref_code = as.numeric(.y), plot = TRUE, label = FALSE) %>% use_series(plot))
+
+gg_pref_split_region <- function(regions = NULL) {
+  
+  pref.range <- jpnprefs %>% dplyr::filter(region %in% regions) %>% use_series(jis_code) %>% as.numeric() %>% range()
+  
+  tmp <- plots %>% as.vector()
+  
+  res <- do.call(gridExtra::grid.arrange, c(tmp[min(pref.range):max(pref.range)], list(nrow = 2)), quote = TRUE)
+
+  return(res)
+}
+```
+
+## 北海道・東北
+
+```{r hokkaido-tohoku, echo = TRUE, message = FALSE, warning = FALSE}
+gg_pref_split_region(c("北海道", "東北"))
+```
+
+## 関東
+
+東京のデータもあるのだけど、本州と小笠原諸島、伊豆諸島などを切り離す必要がある...（今は非表示）
+
+```{r kanto, echo = TRUE, message = FALSE, warning = FALSE}
+gg_pref_split_region("関東")
+```
+
+## 中部
+
+```{r cyubu, echo = TRUE, message = FALSE, warning = FALSE}
+gg_pref_split_region("中部")
+```
+
+## 近畿
+
+```{r kinki, echo = TRUE, message = FALSE, warning = FALSE}
+gg_pref_split_region("近畿")
+```
+
+## 中国
+
+```{r chyugoku, echo = TRUE, message = FALSE, warning = FALSE}
+gg_pref_split_region("中国")
+```
+
+## 四国
+
+```{r shikoku, echo = TRUE, message = FALSE, warning = FALSE}
+gg_pref_split_region("四国")
+```
+
+## 九州・沖縄
+
+```{r kyusyu-okinawa, echo = TRUE, message = FALSE, warning = FALSE}
+gg_pref_split_region(c("九州", "沖縄"))
+```
