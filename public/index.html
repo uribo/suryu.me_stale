@@ -29,7 +29,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-12-13T07:48:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-18T22:20:00&#43;00:00"/>
 
 
 
@@ -216,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/rjava_for_sierra/"><p>rJavaが動かなくて困ったので試したコード</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/visualization_advent_calendar_day4/"><p>都道府県の市区町村を人口で2分割するやつ: 全国版</p></a>
                     </li>
                 
@@ -225,10 +229,6 @@
                 
                     <li>
                         <a href="./post/r_advent_calendar_day3/"><p>tidyverse脳になって階層構造のあるデータフレームを使いこなそう</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/r_advent_calendar_day2/"><p>configパッケージで楽々環境変数の管理</p></a>
                     </li>
                 
             </ul>
@@ -245,10 +245,10 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/visualization_advent_calendar_day4/">都道府県の市区町村を人口で2分割するやつ: 全国版</a></h2>
+            <h2><a href="./post/rjava_for_sierra/">rJavaが動かなくて困ったので試したコード</a></h2>
         
         
-            <p>市区町村ごとの人口数によって、都道府県を2分割するというやつをRでやってみる、の全国版</p>
+            <p>Mac OS X (Sierra)でrJavaに依存したパッケージが動かなかったのでなんとかした</p>
         
     </div>
     <div class="meta">
@@ -257,11 +257,11 @@
         
 
         <time class="published"
-            datetime='2016-12-13'>
-            December 13, 2016</time>
+            datetime='2016-12-18'>
+            December 18, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>3 minute read</p>
+            <p>1 minute read</p>
         
         
     </div>
@@ -274,175 +274,20 @@
     <div id="content">
 
 
-<p>前回、<a href="https://suryu.me/post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ</a>のコードを書いたので、関数化して全国版の地図を作ってみる。</p>
-<p>あらかじめ人口データだけは用意しておく必要があるので、前回同様<strong><code>{estatapi}</code></strong>でデータをダウンロードして加工しておく。</p>
-<p><code>gg_pref_split()</code>という関数がそれ。<em>pref_code</em>で対象の都道府県（コード）を指定する。プロットおよびラベルの描画は引数で変更可能。フォントも適当に変えられる。</p>
-<pre class="r"><code>gg_pref_split &lt;- function(pref_code = 33, plot = TRUE, label = TRUE, label_font = &quot;IPAexGothic&quot;) {
-  
-  p.code &lt;- sprintf(&quot;%02d&quot;, pref_code)
-  
-  data.result &lt;- d.pops %&gt;% 
-    dplyr::filter(pref_code == p.code)
-  
-  res &lt;- list(data = data.result)
-  
-  if (plot == TRUE) {
-    
-    sp.pref &lt;- jpndistrict::spdf_jpn_pref(code = p.code, district = TRUE) %&gt;% 
-      dplyr::mutate(city_name = dplyr::if_else(grepl(&quot;区$&quot;, city_name_full), city_name_, city_name),
-                    city_code = ifelse(grepl(&quot;区$&quot;, city_name_full), 
-                                         paste0(substr(city_code, 1, 3), &quot;00&quot;),
-         as.character(city_code))) %&gt;% 
-  dplyr::select(city_name, city_code)
-    d.admin &lt;- jpndistrict::spdf_jpn_admins(code = p.code) %&gt;% 
-      dplyr::mutate(name = gsub(&quot;(役所|役場|役場（移転中）)$&quot;, &quot;&quot;, name)) %&gt;%
-      dplyr::filter(type == 1, !grepl(&quot;区$&quot;, name)) 
-    
-  d.map &lt;- sp.pref %&gt;% 
-    ggplot2::fortify(region = &quot;city_code&quot;) %&gt;% 
-    dplyr::left_join(data.result, by = c(&quot;id&quot; = &quot;area_code&quot;))
-  
-  plot.result &lt;- ggplot() +
-  ggplot2::geom_map(data = d.map,
-           map = d.map,
-           aes(x = long, y = lat, group = group, map_id = id, fill = type),
-           color = &quot;#FFFFFF&quot;, size = 0.1) + 
-  ggplot2::coord_map() +
-  ggthemes::theme_map(base_size = 12, base_family = label_font) +
-    ggplot2::guides(fill = FALSE)
-  
-  if (label == TRUE) {
-    plot.result &lt;- plot.result + 
-      ggplot2::geom_point(data = d.admin@data, aes(x = longitude, y = latitude)) +
-      ggrepel::geom_text_repel(data = d.admin@data, aes(longitude, latitude, label = name, family = label_font))
-  
-  }
-  
-  res &lt;- list(data = data.result,
-              plot = plot.result)
-  }
-  return(res)
-    
-}</code></pre>
-<pre class="r"><code>library(ggplot2)
-library(ggrepel)
-# library(gridExtra)</code></pre>
-<pre class="r"><code>gg_pref_split(13)</code></pre>
-<p>のように実行すれば都道府県の人口2分割図が描画される。赤い行政区が都道府県人口の5割以上を占め、青い行政区は5割未満となっている。</p>
-<p>というわけで<strong><code>{purrr}</code></strong>を使い47都道府県の結果を見てみる。地方別に表示するが、北海道と東北、九州と沖縄はそれぞれ同一のグループとして扱う。</p>
-<pre class="r"><code>library(purrr)
-data(&quot;jpnprefs&quot;, package = &quot;jpndistrict&quot;)
-plots &lt;- jpnprefs %&gt;% 
-  split(.$jis_code) %&gt;% 
-  map2(., names(.), ~ gg_pref_split(pref_code = as.numeric(.y), plot = TRUE, label = FALSE) %&gt;% use_series(plot))
-
-gg_pref_split_region &lt;- function(regions = NULL) {
-  
-  pref.range &lt;- jpnprefs %&gt;% dplyr::filter(region %in% regions) %&gt;% use_series(jis_code) %&gt;% as.numeric() %&gt;% range()
-  
-  tmp &lt;- plots %&gt;% as.vector()
-  
-  res &lt;- do.call(gridExtra::grid.arrange, c(tmp[min(pref.range):max(pref.range)], list(nrow = 2)), quote = TRUE)
-
-  return(res)
-}</code></pre>
-<div class="section level2">
-<h2>北海道・東北</h2>
-<pre class="r"><code>gg_pref_split_region(c(&quot;北海道&quot;, &quot;東北&quot;))</code></pre>
-<p><img src="figures/hokkaido-tohoku-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
-##    z     cells    name           grob
-## 01 1 (1-1,1-1) arrange gtable[layout]
-## 02 2 (1-1,2-2) arrange gtable[layout]
-## 03 3 (1-1,3-3) arrange gtable[layout]
-## 04 4 (1-1,4-4) arrange gtable[layout]
-## 05 5 (2-2,1-1) arrange gtable[layout]
-## 06 6 (2-2,2-2) arrange gtable[layout]
-## 07 7 (2-2,3-3) arrange gtable[layout]</code></pre>
-</div>
-<div class="section level2">
-<h2>関東</h2>
-<p>東京のデータもあるのだけど、本州と小笠原諸島、伊豆諸島などを切り離す必要がある…（今は非表示）</p>
-<pre class="r"><code>gg_pref_split_region(&quot;関東&quot;)</code></pre>
-<p><img src="figures/kanto-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
-##    z     cells    name           grob
-## 08 1 (1-1,1-1) arrange gtable[layout]
-## 09 2 (1-1,2-2) arrange gtable[layout]
-## 10 3 (1-1,3-3) arrange gtable[layout]
-## 11 4 (1-1,4-4) arrange gtable[layout]
-## 12 5 (2-2,1-1) arrange gtable[layout]
-## 13 6 (2-2,2-2) arrange gtable[layout]
-## 14 7 (2-2,3-3) arrange gtable[layout]</code></pre>
-</div>
-<div class="section level2">
-<h2>中部</h2>
-<pre class="r"><code>gg_pref_split_region(&quot;中部&quot;)</code></pre>
-<p><img src="figures/cyubu-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>## TableGrob (2 x 5) &quot;arrange&quot;: 9 grobs
-##    z     cells    name           grob
-## 15 1 (1-1,1-1) arrange gtable[layout]
-## 16 2 (1-1,2-2) arrange gtable[layout]
-## 17 3 (1-1,3-3) arrange gtable[layout]
-## 18 4 (1-1,4-4) arrange gtable[layout]
-## 19 5 (1-1,5-5) arrange gtable[layout]
-## 20 6 (2-2,1-1) arrange gtable[layout]
-## 21 7 (2-2,2-2) arrange gtable[layout]
-## 22 8 (2-2,3-3) arrange gtable[layout]
-## 23 9 (2-2,4-4) arrange gtable[layout]</code></pre>
-</div>
-<div class="section level2">
-<h2>近畿</h2>
-<pre class="r"><code>gg_pref_split_region(&quot;近畿&quot;)</code></pre>
-<p><img src="figures/kinki-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 7 grobs
-##    z     cells    name           grob
-## 24 1 (1-1,1-1) arrange gtable[layout]
-## 25 2 (1-1,2-2) arrange gtable[layout]
-## 26 3 (1-1,3-3) arrange gtable[layout]
-## 27 4 (1-1,4-4) arrange gtable[layout]
-## 28 5 (2-2,1-1) arrange gtable[layout]
-## 29 6 (2-2,2-2) arrange gtable[layout]
-## 30 7 (2-2,3-3) arrange gtable[layout]</code></pre>
-</div>
-<div class="section level2">
-<h2>中国</h2>
-<pre class="r"><code>gg_pref_split_region(&quot;中国&quot;)</code></pre>
-<p><img src="figures/chyugoku-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>## TableGrob (2 x 3) &quot;arrange&quot;: 5 grobs
-##    z     cells    name           grob
-## 31 1 (1-1,1-1) arrange gtable[layout]
-## 32 2 (1-1,2-2) arrange gtable[layout]
-## 33 3 (1-1,3-3) arrange gtable[layout]
-## 34 4 (2-2,1-1) arrange gtable[layout]
-## 35 5 (2-2,2-2) arrange gtable[layout]</code></pre>
-</div>
-<div class="section level2">
-<h2>四国</h2>
-<pre class="r"><code>gg_pref_split_region(&quot;四国&quot;)</code></pre>
-<p><img src="figures/shikoku-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>## TableGrob (2 x 2) &quot;arrange&quot;: 4 grobs
-##    z     cells    name           grob
-## 36 1 (1-1,1-1) arrange gtable[layout]
-## 37 2 (1-1,2-2) arrange gtable[layout]
-## 38 3 (2-2,1-1) arrange gtable[layout]
-## 39 4 (2-2,2-2) arrange gtable[layout]</code></pre>
-</div>
-<div class="section level2">
-<h2>九州・沖縄</h2>
-<pre class="r"><code>gg_pref_split_region(c(&quot;九州&quot;, &quot;沖縄&quot;))</code></pre>
-<p><img src="figures/kyusyu-okinawa-1.png" width="672" style="display: block; margin: auto;" /></p>
-<pre><code>## TableGrob (2 x 4) &quot;arrange&quot;: 8 grobs
-##    z     cells    name           grob
-## 40 1 (1-1,1-1) arrange gtable[layout]
-## 41 2 (1-1,2-2) arrange gtable[layout]
-## 42 3 (1-1,3-3) arrange gtable[layout]
-## 43 4 (1-1,4-4) arrange gtable[layout]
-## 44 5 (2-2,1-1) arrange gtable[layout]
-## 45 6 (2-2,2-2) arrange gtable[layout]
-## 46 7 (2-2,3-3) arrange gtable[layout]
-## 47 8 (2-2,4-4) arrange gtable[layout]</code></pre>
-</div>
+<p>時々Javaに依存したライブラリを利用することがある。<a href="https://suryu.me/post/tabulizer_fantastic_extract_data_from_pdf/">前に書いた</a><strong><code>{tabulizer}</code></strong>や、えくせるで出力したい時なんかに使う<strong><code>{xlsx}</code></strong>パッケージなどは<strong><code>{rJava}</code></strong>パッケージを利用しているので、Javaが動かせる環境でないと使えない。</p>
+<p>それで先日、<strong><code>{tabulizer}</code></strong>を読み込もうとしたら次のエラーが出た。</p>
+<pre><code>Error : .onLoad failed in loadNamespace() for &#39;rJava&#39;, details:
+  call: dyn.load(file, DLLpath = DLLpath, ...)
+  error: unable to load shared object &#39;/Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so&#39;:
+  dlopen(/Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so, 6): Library not loaded: @rpath/libjvm.dylib
+  Referenced from: /Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so
+  Reason: image not found
+Error: package or namespace load failed for ‘tabulizer’</code></pre>
+<p>Stack Overflowで解決策を探していたのだけど、<a href="http://stackoverflow.com/a/34488965/3291555">このコメント</a>が有効だった。感謝感謝。</p>
+<pre class="r"><code>dyn.load(&quot;/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/server/libjvm.dylib&quot;)
+library(tabulizer)</code></pre>
+<p><code>dyn.load()</code>という関数はR外部の関数の呼び出しに使われるやつで、エラーメッセージで<code>Library not loaded: @rpath/libjvm.dylib</code>と言われているのでインストールされている<code>libjvm.dylib</code>のパスを指定するというもの。</p>
+<p>実行環境はMac OS 10.12.1。R version 3.3.2。<strong><code>{rJava}</code></strong> 0.9-8、<strong><code>{tabulizer}</code></strong> 0.1.22</p>
 
 
 
@@ -468,7 +313,7 @@ gg_pref_split_region &lt;- function(regions = NULL) {
                     
 
                     
-                        Category
+                        Categories
                     
                 
             </li>
@@ -477,7 +322,9 @@ gg_pref_split_region &lt;- function(regions = NULL) {
 
     
     
-        <li><a href='./categoriesvisualization'>visualization</a></li>
+        <li><a href='./categoriesmiscellaneous'>miscellaneous</a></li>
+    
+        <li><a href='./categoriestrouble'>trouble</a></li>
     
 </ul>
 
@@ -485,8 +332,8 @@ gg_pref_split_region &lt;- function(regions = NULL) {
 </article>
 <ul class="actions pagination">
     
-        <li><a href="./post/visualization_advent_calendar_day3/"
-                class="button big previous">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></li>
+        <li><a href="./post/visualization_advent_calendar_day4/"
+                class="button big previous">都道府県の市区町村を人口で2分割するやつ: 全国版</a></li>
     
 
     
@@ -499,9 +346,9 @@ gg_pref_split_region &lt;- function(regions = NULL) {
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/visualization_advent_calendar_day4\/';
-    var disqus_title = '都道府県の市区町村を人口で2分割するやつ: 全国版';
-    var disqus_url = '\/post\/visualization_advent_calendar_day4\/';
+    var disqus_identifier = '\/post\/rjava_for_sierra\/';
+    var disqus_title = 'rJavaが動かなくて困ったので試したコード';
+    var disqus_url = '\/post\/rjava_for_sierra\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -525,43 +372,43 @@ gg_pref_split_region &lt;- function(regions = NULL) {
             
 
 
-<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f&text=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%85%a8%e5%9b%bd%e7%89%88&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2frjava_for_sierra%2f&text=rJava%e3%81%8c%e5%8b%95%e3%81%8b%e3%81%aa%e3%81%8f%e3%81%a6%e5%9b%b0%e3%81%a3%e3%81%9f%e3%81%ae%e3%81%a7%e8%a9%a6%e3%81%97%e3%81%9f%e3%82%b3%e3%83%bc%e3%83%89&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2frjava_for_sierra%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2frjava_for_sierra%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%85%a8%e5%9b%bd%e7%89%88" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2frjava_for_sierra%2f&title=rJava%e3%81%8c%e5%8b%95%e3%81%8b%e3%81%aa%e3%81%8f%e3%81%a6%e5%9b%b0%e3%81%a3%e3%81%9f%e3%81%ae%e3%81%a7%e8%a9%a6%e3%81%97%e3%81%9f%e3%82%b3%e3%83%bc%e3%83%89" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%85%a8%e5%9b%bd%e7%89%88" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2frjava_for_sierra%2f&title=rJava%e3%81%8c%e5%8b%95%e3%81%8b%e3%81%aa%e3%81%8f%e3%81%a6%e5%9b%b0%e3%81%a3%e3%81%9f%e3%81%ae%e3%81%a7%e8%a9%a6%e3%81%97%e3%81%9f%e3%82%b3%e3%83%bc%e3%83%89" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f&title=%e9%83%bd%e9%81%93%e5%ba%9c%e7%9c%8c%e3%81%ae%e5%b8%82%e5%8c%ba%e7%94%ba%e6%9d%91%e3%82%92%e4%ba%ba%e5%8f%a3%e3%81%a72%e5%88%86%e5%89%b2%e3%81%99%e3%82%8b%e3%82%84%e3%81%a4%3a%20%e5%85%a8%e5%9b%bd%e7%89%88" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2frjava_for_sierra%2f&title=rJava%e3%81%8c%e5%8b%95%e3%81%8b%e3%81%aa%e3%81%8f%e3%81%a6%e5%9b%b0%e3%81%a3%e3%81%9f%e3%81%ae%e3%81%a7%e8%a9%a6%e3%81%97%e3%81%9f%e3%82%b3%e3%83%bc%e3%83%89" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fvisualization_advent_calendar_day4%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2frjava_for_sierra%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -683,6 +530,20 @@ gg_pref_split_region &lt;- function(regions = NULL) {
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/rjava_for_sierra/">rJavaが動かなくて困ったので試したコード</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-18'>
+                                    December 18, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/visualization_advent_calendar_day4/">都道府県の市区町村を人口で2分割するやつ: 全国版</a></h3>
                                 
                                     
@@ -718,20 +579,6 @@ gg_pref_split_region &lt;- function(regions = NULL) {
                                 <time class="published" datetime=
                                     '2016-12-06'>
                                     December 6, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/r_advent_calendar_day2/">configパッケージで楽々環境変数の管理</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-05'>
-                                    December 5, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -850,6 +697,15 @@ gg_pref_split_region &lt;- function(regions = NULL) {
                     <li>
                         <article>
                             <header>
+                                <a href="./categories/miscellaneous/">miscellaneous</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <a href="./categories/oss/">oss</a>
                                 <span style="float:right;">1</span>
                             </header>
@@ -887,6 +743,15 @@ gg_pref_split_region &lt;- function(regions = NULL) {
                         <article>
                             <header>
                                 <a href="./categories/tidyverse/">tidyverse</a>
+                                <span style="float:right;">1</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
+                                <a href="./categories/trouble/">trouble</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>

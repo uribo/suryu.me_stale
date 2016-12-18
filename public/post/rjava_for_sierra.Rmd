@@ -1,0 +1,36 @@
+---
+title: "rJavaが動かなくて困ったので試したコード"
+author: "Shinya Uryu"
+date: 2016-12-18T22:20:00
+categories: ["miscellaneous", "trouble"]
+description:
+    Mac OS X (Sierra)でrJavaに依存したパッケージが動かなかったのでなんとかした
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+時々Javaに依存したライブラリを利用することがある。[前に書いた](https://suryu.me/post/tabulizer_fantastic_extract_data_from_pdf/)**`{tabulizer}`**や、えくせるで出力したい時なんかに使う**`{xlsx}`**パッケージなどは**`{rJava}`**パッケージを利用しているので、Javaが動かせる環境でないと使えない。
+
+それで先日、**`{tabulizer}`**を読み込もうとしたら次のエラーが出た。
+
+```
+Error : .onLoad failed in loadNamespace() for 'rJava', details:
+  call: dyn.load(file, DLLpath = DLLpath, ...)
+  error: unable to load shared object '/Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so':
+  dlopen(/Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so, 6): Library not loaded: @rpath/libjvm.dylib
+  Referenced from: /Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so
+  Reason: image not found
+Error: package or namespace load failed for ‘tabulizer’
+```
+
+Stack Overflowで解決策を探していたのだけど、[このコメント](http://stackoverflow.com/a/34488965/3291555)が有効だった。感謝感謝。
+
+```{r, eval = FALSE, echo = TRUE}
+dyn.load("/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/server/libjvm.dylib")
+library(tabulizer)
+```
+
+`dyn.load()`という関数はR外部の関数の呼び出しに使われるやつで、エラーメッセージで`Library not loaded: @rpath/libjvm.dylib`と言われているのでインストールされている`libjvm.dylib`のパスを指定するというもの。
+
+実行環境はMac OS 10.12.1。R version 3.3.2。**`{rJava}`** 0.9-8、**`{tabulizer}`** 0.1.22

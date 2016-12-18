@@ -6,8 +6,17 @@
     <description>Recent content in Post-rsses on suryu.me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Tue, 13 Dec 2016 07:48:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 18 Dec 2016 22:20:00 +0000</lastBuildDate>
     <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>rJavaが動かなくて困ったので試したコード</title>
+      <link>https://suryu.me/post/rjava_for_sierra/</link>
+      <pubDate>Sun, 18 Dec 2016 22:20:00 +0000</pubDate>
+      
+      <guid>https://suryu.me/post/rjava_for_sierra/</guid>
+      <description>Mac OS X (Sierra)でrJavaに依存したパッケージが動かなかったのでなんとかした</description>
+    </item>
     
     <item>
       <title>都道府県の市区町村を人口で2分割するやつ: 全国版</title>
@@ -133,15 +142,6 @@
       
       <guid>https://suryu.me/post/dplyr_recode/</guid>
       <description>dplyrパッケージの現行バージョン (0.5.0)ではデータ操作の中で値を変更するための関数がいくつか用意されている。これらの関数の使い道と使い分けについてメモしておく。</description>
-    </item>
-    
-    <item>
-      <title>DataCampの力を借りてR学習ページを作る</title>
-      <link>https://suryu.me/post/datacamp_tutorial/</link>
-      <pubDate>Sun, 11 Sep 2016 09:20:00 +0000</pubDate>
-      
-      <guid>https://suryu.me/post/datacamp_tutorial/</guid>
-      <description>DataCampではRやPythonのコードをユーザーに入力させ、問題を解かせるという仕組みが取られているが、この問題をRMarkdown上に導入できるtutorialパッケージを試してみた。</description>
     </item>
     
   </channel>
