@@ -1,0 +1,54 @@
+---
+title: "purrr::map_dfで全ての変数を取り出したいときに楽する"
+author: "Shinya Uryu"
+date: 2016-12-21T21:14:00
+categories: ["miscellaneous"]
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+TIL
+
+これまで、`purrr::map_df()`でリストからデータフレームで値を得たいときは`c()`を使いながら対象の変数名を与えていたのだけど、それは面倒だなーと思っていたりもした。
+
+こういうやつ。
+
+```{r}
+library(broom)
+library(purrr)
+
+lm.res <- mtcars %>%
+  split(.$cyl) %>%
+  map(~ lm(mpg ~ wt, data = .x)) %>% 
+  map(tidy)
+
+lm.res %>% 
+  map_df(~ .[c("estimate", "statistic", "p.value")])
+```
+
+で、全ての変数を取り出すには、わざわざ`c()`を使う必要はなくて`map_df(~ .[])`で良いことに気がついた。さらにいうと`[`すらも不要で`map_df(~ .)`だけで良い。
+
+```{r}
+lm.res %>% 
+  map_df(~ .[])
+```
+
+```{r,eval = FALSE, echo = TRUE}
+# これでも良い
+lm.res %>% 
+  map_df(~ .)
+```
+
+なんでかというと、リストの特定の要素を参照するときは添え字か名前を次のようにする（`map_df(~ .[c("hoge")])`のパターン）が、全て出力するにはこれらが不要になるのと同じ理由（で良いだろうか）。
+
+```{r}
+lm.res[[2]][c("estimate", "statistic", "p.value")]
+
+# [[1]]と[[1]][] は等しい（全ての要素を参照する)
+all.equal(lm.res[[1]], lm.res[[1]][])
+```
+
+直接関係しないけど、Jennifer Bryan ( [jennybc](https://github.com/jennybc) )のpurrrやリストデータの[チュートリアル](https://jennybc.github.io/purrr-tutorial/index.html)を読んでいると、なるほどなあと関心するものが多い。これを読んでいると自分は`[`や`[[`の使い方が理解できていないのかもしれないとも思う。まだまだR力のなさを感じる。...というわけで、purrr、奥が深いぜ
+
+Enjoy!

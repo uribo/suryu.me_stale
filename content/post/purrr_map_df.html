@@ -1,0 +1,74 @@
+---
+title: "purrr::map_dfで全ての変数を取り出したいときに楽する"
+author: "Shinya Uryu"
+date: 2016-12-21T21:14:00
+categories: ["miscellaneous"]
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>TIL</p>
+<p>これまで、<code>purrr::map_df()</code>でリストからデータフレームで値を得たいときは<code>c()</code>を使いながら対象の変数名を与えていたのだけど、それは面倒だなーと思っていたりもした。</p>
+<p>こういうやつ。</p>
+<pre class="r"><code>library(broom)
+library(purrr)
+
+lm.res &lt;- mtcars %&gt;%
+  split(.$cyl) %&gt;%
+  map(~ lm(mpg ~ wt, data = .x)) %&gt;% 
+  map(tidy)
+
+lm.res %&gt;% 
+  map_df(~ .[c(&quot;estimate&quot;, &quot;statistic&quot;, &quot;p.value&quot;)])
+##         estimate      statistic             p.value
+## 1 39.57119601304  9.10398003528 0.00000777151106938
+## 2 -5.64702526124 -3.05225052976 0.01374278198674072
+## 3 28.40884451320  6.78927837143 0.00105484419097406
+## 4 -2.78010593916 -2.08260537564 0.09175766017203653
+## 5 23.86802907600  7.94155114534 0.00000405270541503
+## 6 -2.19243792645 -2.96580257564 0.01179280975651219</code></pre>
+<p>で、全ての変数を取り出すには、わざわざ<code>c()</code>を使う必要はなくて<code>map_df(~ .[])</code>で良いことに気がついた。さらにいうと<code>[</code>すらも不要で<code>map_df(~ .)</code>だけで良い。</p>
+<pre class="r"><code>lm.res %&gt;% 
+  map_df(~ .[])
+##          term       estimate      std.error      statistic
+## 1 (Intercept) 39.57119601304 4.346582028927  9.10398003528
+## 2          wt -5.64702526124 1.850118529322 -3.05225052976
+## 3 (Intercept) 28.40884451320 4.184368788406  6.78927837143
+## 4          wt -2.78010593916 1.334917297184 -2.08260537564
+## 5 (Intercept) 23.86802907600 3.005461859929  7.94155114534
+## 6          wt -2.19243792645 0.739239335908 -2.96580257564
+##               p.value
+## 1 0.00000777151106938
+## 2 0.01374278198674072
+## 3 0.00105484419097406
+## 4 0.09175766017203653
+## 5 0.00000405270541503
+## 6 0.01179280975651219</code></pre>
+<pre class="r"><code># これでも良い
+lm.res %&gt;% 
+  map_df(~ .)</code></pre>
+<p>なんでかというと、リストの特定の要素を参照するときは添え字か名前を次のようにする（<code>map_df(~ .[c(&quot;hoge&quot;)])</code>のパターン）が、全て出力するにはこれらが不要になるのと同じ理由（で良いだろうか）。</p>
+<pre class="r"><code>lm.res[[2]][c(&quot;estimate&quot;, &quot;statistic&quot;, &quot;p.value&quot;)]
+##         estimate      statistic          p.value
+## 1 28.40884451320  6.78927837143 0.00105484419097
+## 2 -2.78010593916 -2.08260537564 0.09175766017204
+
+# [[1]]と[[1]][] は等しい（全ての要素を参照する)
+all.equal(lm.res[[1]], lm.res[[1]][])
+## [1] TRUE</code></pre>
+<p>直接関係しないけど、Jennifer Bryan ( <a href="https://github.com/jennybc">jennybc</a> )のpurrrやリストデータの<a href="https://jennybc.github.io/purrr-tutorial/index.html">チュートリアル</a>を読んでいると、なるほどなあと関心するものが多い。これを読んでいると自分は<code>[</code>や<code>[[</code>の使い方が理解できていないのかもしれないとも思う。まだまだR力のなさを感じる。…というわけで、purrr、奥が深いぜ</p>
+<p>Enjoy!</p>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->
