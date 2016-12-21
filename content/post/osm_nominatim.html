@@ -1,0 +1,90 @@
+---
+title: "Nominatim APIをRから利用する"
+author: "Shinya Uryu"
+date: 2016-12-21T22:14:00
+categories: ["geo"]
+description:
+    OSMが提供するAPIの一種であるNominatimをRから利用する方法とラッパーパッケージを紹介します。
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<p>この記事は<a href="http://qiita.com/advent-calendar/2016/osmjp">OpenStreetMap Advent Calendar 2016</a>の21日目です。あまりOMSについての知識がないですが、空いていたので書かせていただきました。</p>
+<p>Open Street Map (OSM)のAPIの中に<a href="http://wiki.openstreetmap.org/wiki/Nominatim">Nominatim</a>というものがあります。このAPIはOSMが所有する豊富な地理空間データの検索や、座標をリクエストに含めて実行する逆ジオコーディングツールとして利用できます。例えば、「東京タワー」の情報は<a href="http://nominatim.openstreetmap.org/search?q=東京タワー&amp;format=json" class="uri">http://nominatim.openstreetmap.org/search?q=東京タワー&amp;format=json</a>にリクエストを送ることでJSON形式で得られます。</p>
+<p>RからこのAPIを利用するには<strong><code>{httr}</code></strong>や<strong><code>{crul}</code></strong>を使って以下のようなコードを実行します。</p>
+<pre class="r"><code>library(magrittr)
+library(crul)
+
+x &lt;- crul::HttpClient$new(url = &quot;http://nominatim.openstreetmap.org/search?&quot;)
+jsonlite::fromJSON(x$get(query = list(format = &quot;json&quot;, q = &quot;東京タワー&quot;, countrycodes = &quot;jp&quot;))$parse())</code></pre>
+<p>Nominatimを利用する機会があったので、このままラッパーパッケージ化しようと思いましたが、すでにパッケージを作っている方がいましたので、今回は<a href="https://github.com/hrbrmstr/nominatim">そちらのパッケージ</a>を紹介することにします。注意点として、このパッケージを利用する際は事前にOSM API Key (Mapquestで作成)を用意しておく必要がありますので、適宜取得しておきましょう。</p>
+<p>パッケージはCRANには登録されていませんので、GitHubから開発版をインストールします。</p>
+<pre class="r"><code># GitHub上のパッケージをインストールしてきます
+# install.packages(&quot;githubinstall&quot;)
+library(githubinstall)
+gh_install_packages(&quot;nominatim&quot;)</code></pre>
+<p><strong><code>{nominatim}</code></strong>パッケージではNominatimが提供する以下のサービスをR関数として利用可能です。いくつかの関数を試してみましょう。</p>
+<ul>
+<li><code>address_lookup()</code></li>
+<li><code>osm_geocode()</code></li>
+<li><code>osm_search()</code></li>
+<li><code>osm_search_spatial()</code></li>
+<li><code>reverse_geocode_coords()</code></li>
+<li><code>reverse_geocode_osm()</code></li>
+<li><code>bb_lookup()</code></li>
+</ul>
+<pre class="r"><code>library(nominatim)</code></pre>
+<div class="section level2">
+<h2>検索</h2>
+<p>地名あるいは住所をパラメータに含めます。次のコードは、先に<strong><code>{crul}</code></strong>でリクエストしたものと同様です。</p>
+<pre class="r"><code># 日本語はエンコードしておく必要があります
+osm_search(urltools::url_encode(&quot;東京タワー&quot;), country_codes = &quot;jp&quot;, accept_language = &quot;ja;q=1.0&quot;)
+##     place_id
+## 1 2619450075
+##                                                                                licence
+## 1 Data © OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+##   osm_type  osm_id         lat           lon
+## 1 relation 4247312 35.65858645 139.745440058
+##                                                   display_name   class
+## 1 東京タワー, 祝田通り, 港区, 東京都, 関東地方, 105-0001, 日本 tourism
+##         type    importance
+## 1 attraction 0.57891275564
+##                                                                                                                     icon
+## 1 http://ip-10-116-140-74.mq-us-west-2.ec2.aolcloud.net:8000/nominatim/v1/images/mapicons/poi_point_of_interest.p.20.png
+##    bbox_left   bbox_top bbox_right bbox_bottom
+## 1 35.6580427 35.6591227 139.744746 139.7461594
+# osm_search(&quot;tokyo tower&quot;, country_codes = &quot;jp&quot;, accept_language = &quot;ja;q=1.0&quot;)</code></pre>
+<pre class="r"><code>osm_geocode(urltools::url_encode(&quot;東京タワー&quot;))</code></pre>
+</div>
+<div class="section level2">
+<h2>逆ジオコーディング</h2>
+<p>座標を与えて実行します。OSMで「東京タワー」を調べた際に得られる緯度経度を引数に指定しましょう。当然ながらOSMで表示される東京タワーの住所が返ってきます。</p>
+<pre class="r"><code>reverse_geocode_coords(lat = 35.65858, lon = 139.74545)
+##     place_id
+## 1 2619450075
+##                                                                                licence
+## 1 Data © OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+##   osm_type  osm_id         lat           lon
+## 1 relation 4247312 35.65858645 139.745440058
+##                                                      display_name
+## 1 Tokyo Tower, Iwaida Dori, Minato, Tokyo, Kanto, 105-0001, Japan
+##    attraction        road   city state_district region postcode country
+## 1 Tokyo Tower Iwaida Dori Minato          Tokyo  Kanto 105-0001   Japan
+##   country_code
+## 1           jp</code></pre>
+<p>ただ、いくつか逆ジオコーディングを試してみましたが、精度はそこまでよくないかもしれないという印象です。何か良い逆ジオコーディングがあれば教えて欲しいです。</p>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+
+
+
+
+
+/BLOGDOWN-HEAD -->
