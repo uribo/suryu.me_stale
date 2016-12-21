@@ -9,6 +9,15 @@
     <atom:link href="/categories/geo/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Nominatim APIをRから利用する</title>
+      <link>https://suryu.me/post/osm_nominatim/</link>
+      <pubDate>Wed, 21 Dec 2016 22:14:00 +0000</pubDate>
+      
+      <guid>https://suryu.me/post/osm_nominatim/</guid>
+      <description>OSMが提供するAPIの一種であるNominatimをRから利用する方法とラッパーパッケージを紹介します。</description>
+    </item>
+    
+    <item>
       <title>Rで方位記号を描く (ggsn版)</title>
       <link>https://suryu.me/post/rgis_advent_calendar_day2/</link>
       <pubDate>Sat, 03 Dec 2016 07:00:00 +0000</pubDate>

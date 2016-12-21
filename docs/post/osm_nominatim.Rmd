@@ -1,0 +1,74 @@
+---
+title: "Nominatim APIをRから利用する"
+author: "Shinya Uryu"
+date: 2016-12-21T22:14:00
+categories: ["geo"]
+description:
+    OSMが提供するAPIの一種であるNominatimをRから利用する方法とラッパーパッケージを紹介します。
+---
+
+```{r setup, child = "../../_blog_post_declare.Rmd"}
+```
+
+この記事は[OpenStreetMap Advent Calendar 2016](http://qiita.com/advent-calendar/2016/osmjp)の21日目です。あまりOMSについての知識がないですが、空いていたので書かせていただきました。
+
+Open Street Map (OSM)のAPIの中に[Nominatim](http://wiki.openstreetmap.org/wiki/Nominatim)というものがあります。このAPIはOSMが所有する豊富な地理空間データの検索や、座標をリクエストに含めて実行する逆ジオコーディングツールとして利用できます。例えば、「東京タワー」の情報は<http://nominatim.openstreetmap.org/search?q=東京タワー&format=json>にリクエストを送ることでJSON形式で得られます。
+
+RからこのAPIを利用するには**`{httr}`**や**`{crul}`**を使って以下のようなコードを実行します。
+
+```{r, results = "hide"}
+library(magrittr)
+library(crul)
+
+x <- crul::HttpClient$new(url = "http://nominatim.openstreetmap.org/search?")
+jsonlite::fromJSON(x$get(query = list(format = "json", q = "東京タワー", countrycodes = "jp"))$parse())
+```
+
+Nominatimを利用する機会があったので、このままラッパーパッケージ化しようと思いましたが、すでにパッケージを作っている方がいましたので、今回は[そちらのパッケージ](https://github.com/hrbrmstr/nominatim)を紹介することにします。注意点として、このパッケージを利用する際は事前にOSM API Key (Mapquestで作成)を用意しておく必要がありますので、適宜取得しておきましょう。
+
+パッケージはCRANには登録されていませんので、GitHubから開発版をインストールします。
+
+```{r, eval = FALSE, echo = TRUE}
+# GitHub上のパッケージをインストールしてきます
+# install.packages("githubinstall")
+library(githubinstall)
+gh_install_packages("nominatim")
+```
+
+**`{nominatim}`**パッケージではNominatimが提供する以下のサービスをR関数として利用可能です。いくつかの関数を試してみましょう。
+
+- `address_lookup()`
+- `osm_geocode()`
+- `osm_search()`
+- `osm_search_spatial()`
+- `reverse_geocode_coords()`
+- `reverse_geocode_osm()`
+- `bb_lookup()`
+
+```{r, results = 'hide'}
+library(nominatim)
+```
+
+## 検索
+
+地名あるいは住所をパラメータに含めます。次のコードは、先に**`{crul}`**でリクエストしたものと同様です。
+
+```{r}
+# 日本語はエンコードしておく必要があります
+osm_search(urltools::url_encode("東京タワー"), country_codes = "jp", accept_language = "ja;q=1.0")
+# osm_search("tokyo tower", country_codes = "jp", accept_language = "ja;q=1.0")
+```
+
+```{r, eval = FALSE, echo = TRUE}
+osm_geocode(urltools::url_encode("東京タワー"))
+```
+
+## 逆ジオコーディング
+
+座標を与えて実行します。OSMで「東京タワー」を調べた際に得られる緯度経度を引数に指定しましょう。当然ながらOSMで表示される東京タワーの住所が返ってきます。
+
+```{r}
+reverse_geocode_coords(lat = 35.65858, lon = 139.74545)
+```
+
+ただ、いくつか逆ジオコーディングを試してみましたが、精度はそこまでよくないかもしれないという印象です。何か良い逆ジオコーディングがあれば教えて欲しいです。

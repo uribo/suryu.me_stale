@@ -6,8 +6,17 @@
     <description>Recent content in Post-rsses on suryu.me</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja-JP</language>
-    <lastBuildDate>Wed, 21 Dec 2016 21:14:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 21 Dec 2016 22:14:00 +0000</lastBuildDate>
     <atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Nominatim APIをRから利用する</title>
+      <link>https://suryu.me/post/osm_nominatim/</link>
+      <pubDate>Wed, 21 Dec 2016 22:14:00 +0000</pubDate>
+      
+      <guid>https://suryu.me/post/osm_nominatim/</guid>
+      <description>OSMが提供するAPIの一種であるNominatimをRから利用する方法とラッパーパッケージを紹介します。</description>
+    </item>
     
     <item>
       <title>purrr::map_dfで全ての変数を取り出したいときに楽する</title>
@@ -133,15 +142,6 @@
       
       <guid>https://suryu.me/post/evaluate_geo_points/</guid>
       <description>Turf.jsのRラッパーであるlawnパッケージを使って、位置情報データを日本国内（陸地）とそうでないものに分ける話</description>
-    </item>
-    
-    <item>
-      <title>clipr, datapasta: データ入力を支えるパッケージ</title>
-      <link>https://suryu.me/post/input_helper_addins/</link>
-      <pubDate>Thu, 24 Nov 2016 06:30:00 +0000</pubDate>
-      
-      <guid>https://suryu.me/post/input_helper_addins/</guid>
-      <description>ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。</description>
     </item>
     
   </channel>

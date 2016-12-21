@@ -29,7 +29,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-12-21T21:14:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-21T22:14:00&#43;00:00"/>
 
 
 
@@ -216,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/osm_nominatim/"><p>Nominatim APIをRから利用する</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/purrr_map_df/"><p>purrr::map_dfで全ての変数を取り出したいときに楽する</p></a>
                     </li>
                 
@@ -225,10 +229,6 @@
                 
                     <li>
                         <a href="./post/visualization_advent_calendar_day4/"><p>都道府県の市区町村を人口で2分割するやつ: 全国版</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/visualization_advent_calendar_day3/"><p>都道府県の市区町村を人口で2分割するやつ: 岡山県版</p></a>
                     </li>
                 
             </ul>
@@ -245,8 +245,10 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/purrr_map_df/">purrr::map_dfで全ての変数を取り出したいときに楽する</a></h2>
+            <h2><a href="./post/osm_nominatim/">Nominatim APIをRから利用する</a></h2>
         
+        
+            <p>OSMが提供するAPIの一種であるNominatimをRから利用する方法とラッパーパッケージを紹介します。</p>
         
     </div>
     <div class="meta">
@@ -259,7 +261,7 @@
             December 21, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>2 minute read</p>
+            <p>3 minute read</p>
         
         
     </div>
@@ -272,57 +274,71 @@
     <div id="content">
 
 
-<p>TIL</p>
-<p>これまで、<code>purrr::map_df()</code>でリストからデータフレームで値を得たいときは<code>c()</code>を使いながら対象の変数名を与えていたのだけど、それは面倒だなーと思っていたりもした。</p>
-<p>こういうやつ。</p>
-<pre class="r"><code>library(broom)
-library(purrr)
+<p>この記事は<a href="http://qiita.com/advent-calendar/2016/osmjp">OpenStreetMap Advent Calendar 2016</a>の21日目です。あまりOMSについての知識がないですが、空いていたので書かせていただきました。</p>
+<p>Open Street Map (OSM)のAPIの中に<a href="http://wiki.openstreetmap.org/wiki/Nominatim">Nominatim</a>というものがあります。このAPIはOSMが所有する豊富な地理空間データの検索や、座標をリクエストに含めて実行する逆ジオコーディングツールとして利用できます。例えば、「東京タワー」の情報は<a href="http://nominatim.openstreetmap.org/search?q=東京タワー&amp;format=json" class="uri">http://nominatim.openstreetmap.org/search?q=東京タワー&amp;format=json</a>にリクエストを送ることでJSON形式で得られます。</p>
+<p>RからこのAPIを利用するには<strong><code>{httr}</code></strong>や<strong><code>{crul}</code></strong>を使って以下のようなコードを実行します。</p>
+<pre class="r"><code>library(magrittr)
+library(crul)
 
-lm.res &lt;- mtcars %&gt;%
-  split(.$cyl) %&gt;%
-  map(~ lm(mpg ~ wt, data = .x)) %&gt;% 
-  map(tidy)
-
-lm.res %&gt;% 
-  map_df(~ .[c(&quot;estimate&quot;, &quot;statistic&quot;, &quot;p.value&quot;)])
-##         estimate      statistic             p.value
-## 1 39.57119601304  9.10398003528 0.00000777151106938
-## 2 -5.64702526124 -3.05225052976 0.01374278198674072
-## 3 28.40884451320  6.78927837143 0.00105484419097406
-## 4 -2.78010593916 -2.08260537564 0.09175766017203653
-## 5 23.86802907600  7.94155114534 0.00000405270541503
-## 6 -2.19243792645 -2.96580257564 0.01179280975651219</code></pre>
-<p>で、全ての変数を取り出すには、わざわざ<code>c()</code>を使う必要はなくて<code>map_df(~ .[])</code>で良いことに気がついた。さらにいうと<code>[</code>すらも不要で<code>map_df(~ .)</code>だけで良い。</p>
-<pre class="r"><code>lm.res %&gt;% 
-  map_df(~ .[])
-##          term       estimate      std.error      statistic
-## 1 (Intercept) 39.57119601304 4.346582028927  9.10398003528
-## 2          wt -5.64702526124 1.850118529322 -3.05225052976
-## 3 (Intercept) 28.40884451320 4.184368788406  6.78927837143
-## 4          wt -2.78010593916 1.334917297184 -2.08260537564
-## 5 (Intercept) 23.86802907600 3.005461859929  7.94155114534
-## 6          wt -2.19243792645 0.739239335908 -2.96580257564
-##               p.value
-## 1 0.00000777151106938
-## 2 0.01374278198674072
-## 3 0.00105484419097406
-## 4 0.09175766017203653
-## 5 0.00000405270541503
-## 6 0.01179280975651219</code></pre>
-<pre class="r"><code># これでも良い
-lm.res %&gt;% 
-  map_df(~ .)</code></pre>
-<p>なんでかというと、リストの特定の要素を参照するときは添え字か名前を次のようにする（<code>map_df(~ .[c(&quot;hoge&quot;)])</code>のパターン）が、全て出力するにはこれらが不要になるのと同じ理由（で良いだろうか）。</p>
-<pre class="r"><code>lm.res[[2]][c(&quot;estimate&quot;, &quot;statistic&quot;, &quot;p.value&quot;)]
-##         estimate      statistic          p.value
-## 1 28.40884451320  6.78927837143 0.00105484419097
-## 2 -2.78010593916 -2.08260537564 0.09175766017204
-
-# [[1]]と[[1]][] は等しい（全ての要素を参照する)
-all.equal(lm.res[[1]], lm.res[[1]][])
-## [1] TRUE</code></pre>
-<p>直接関係しないけど、Jennifer Bryan ( <a href="https://github.com/jennybc">jennybc</a> )のpurrrやリストデータの<a href="https://jennybc.github.io/purrr-tutorial/index.html">チュートリアル</a>を読んでいると、なるほどなあと関心するものが多い。これを読んでいると自分は<code>[</code>や<code>[[</code>の使い方が理解できていないのかもしれないとも思う。まだまだR力のなさを感じる。…というわけで、purrr、奥が深いぜ</p>
-<p>Enjoy!</p>
+x &lt;- crul::HttpClient$new(url = &quot;http://nominatim.openstreetmap.org/search?&quot;)
+jsonlite::fromJSON(x$get(query = list(format = &quot;json&quot;, q = &quot;東京タワー&quot;, countrycodes = &quot;jp&quot;))$parse())</code></pre>
+<p>Nominatimを利用する機会があったので、このままラッパーパッケージ化しようと思いましたが、すでにパッケージを作っている方がいましたので、今回は<a href="https://github.com/hrbrmstr/nominatim">そちらのパッケージ</a>を紹介することにします。注意点として、このパッケージを利用する際は事前にOSM API Key (Mapquestで作成)を用意しておく必要がありますので、適宜取得しておきましょう。</p>
+<p>パッケージはCRANには登録されていませんので、GitHubから開発版をインストールします。</p>
+<pre class="r"><code># GitHub上のパッケージをインストールしてきます
+# install.packages(&quot;githubinstall&quot;)
+library(githubinstall)
+gh_install_packages(&quot;nominatim&quot;)</code></pre>
+<p><strong><code>{nominatim}</code></strong>パッケージではNominatimが提供する以下のサービスをR関数として利用可能です。いくつかの関数を試してみましょう。</p>
+<ul>
+<li><code>address_lookup()</code></li>
+<li><code>osm_geocode()</code></li>
+<li><code>osm_search()</code></li>
+<li><code>osm_search_spatial()</code></li>
+<li><code>reverse_geocode_coords()</code></li>
+<li><code>reverse_geocode_osm()</code></li>
+<li><code>bb_lookup()</code></li>
+</ul>
+<pre class="r"><code>library(nominatim)</code></pre>
+<div class="section level2">
+<h2>検索</h2>
+<p>地名あるいは住所をパラメータに含めます。次のコードは、先に<strong><code>{crul}</code></strong>でリクエストしたものと同様です。</p>
+<pre class="r"><code># 日本語はエンコードしておく必要があります
+osm_search(urltools::url_encode(&quot;東京タワー&quot;), country_codes = &quot;jp&quot;, accept_language = &quot;ja;q=1.0&quot;)
+##     place_id
+## 1 2619450075
+##                                                                                licence
+## 1 Data © OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+##   osm_type  osm_id         lat           lon
+## 1 relation 4247312 35.65858645 139.745440058
+##                                                   display_name   class
+## 1 東京タワー, 祝田通り, 港区, 東京都, 関東地方, 105-0001, 日本 tourism
+##         type    importance
+## 1 attraction 0.57891275564
+##                                                                                                                     icon
+## 1 http://ip-10-116-140-74.mq-us-west-2.ec2.aolcloud.net:8000/nominatim/v1/images/mapicons/poi_point_of_interest.p.20.png
+##    bbox_left   bbox_top bbox_right bbox_bottom
+## 1 35.6580427 35.6591227 139.744746 139.7461594
+# osm_search(&quot;tokyo tower&quot;, country_codes = &quot;jp&quot;, accept_language = &quot;ja;q=1.0&quot;)</code></pre>
+<pre class="r"><code>osm_geocode(urltools::url_encode(&quot;東京タワー&quot;))</code></pre>
+</div>
+<div class="section level2">
+<h2>逆ジオコーディング</h2>
+<p>座標を与えて実行します。OSMで「東京タワー」を調べた際に得られる緯度経度を引数に指定しましょう。当然ながらOSMで表示される東京タワーの住所が返ってきます。</p>
+<pre class="r"><code>reverse_geocode_coords(lat = 35.65858, lon = 139.74545)
+##     place_id
+## 1 2619450075
+##                                                                                licence
+## 1 Data © OpenStreetMap contributors, ODbL 1.0. http://www.openstreetmap.org/copyright
+##   osm_type  osm_id         lat           lon
+## 1 relation 4247312 35.65858645 139.745440058
+##                                                      display_name
+## 1 Tokyo Tower, Iwaida Dori, Minato, Tokyo, Kanto, 105-0001, Japan
+##    attraction        road   city state_district region postcode country
+## 1 Tokyo Tower Iwaida Dori Minato          Tokyo  Kanto 105-0001   Japan
+##   country_code
+## 1           jp</code></pre>
+<p>ただ、いくつか逆ジオコーディングを試してみましたが、精度はそこまでよくないかもしれないという印象です。何か良い逆ジオコーディングがあれば教えて欲しいです。</p>
+</div>
 
 
 
@@ -357,7 +373,7 @@ all.equal(lm.res[[1]], lm.res[[1]][])
 
     
     
-        <li><a href='./categoriesmiscellaneous'>miscellaneous</a></li>
+        <li><a href='./categoriesgeo'>geo</a></li>
     
 </ul>
 
@@ -365,8 +381,8 @@ all.equal(lm.res[[1]], lm.res[[1]][])
 </article>
 <ul class="actions pagination">
     
-        <li><a href="./post/rjava_for_sierra/"
-                class="button big previous">rJavaが動かなくて困ったので試したコード</a></li>
+        <li><a href="./post/purrr_map_df/"
+                class="button big previous">purrr::map_dfで全ての変数を取り出したいときに楽する</a></li>
     
 
     
@@ -379,9 +395,9 @@ all.equal(lm.res[[1]], lm.res[[1]][])
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/purrr_map_df\/';
-    var disqus_title = 'purrr::map_dfで全ての変数を取り出したいときに楽する';
-    var disqus_url = '\/post\/purrr_map_df\/';
+    var disqus_identifier = '\/post\/osm_nominatim\/';
+    var disqus_title = 'Nominatim APIをRから利用する';
+    var disqus_url = '\/post\/osm_nominatim\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -405,43 +421,43 @@ all.equal(lm.res[[1]], lm.res[[1]][])
             
 
 
-<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&text=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fosm_nominatim%2f&text=Nominatim%20API%e3%82%92R%e3%81%8b%e3%82%89%e5%88%a9%e7%94%a8%e3%81%99%e3%82%8b&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fosm_nominatim%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fosm_nominatim%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fosm_nominatim%2f&title=Nominatim%20API%e3%82%92R%e3%81%8b%e3%82%89%e5%88%a9%e7%94%a8%e3%81%99%e3%82%8b" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fosm_nominatim%2f&title=Nominatim%20API%e3%82%92R%e3%81%8b%e3%82%89%e5%88%a9%e7%94%a8%e3%81%99%e3%82%8b" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fosm_nominatim%2f&title=Nominatim%20API%e3%82%92R%e3%81%8b%e3%82%89%e5%88%a9%e7%94%a8%e3%81%99%e3%82%8b" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fosm_nominatim%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -563,6 +579,20 @@ all.equal(lm.res[[1]], lm.res[[1]][])
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/osm_nominatim/">Nominatim APIをRから利用する</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-21'>
+                                    December 21, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/purrr_map_df/">purrr::map_dfで全ての変数を取り出したいときに楽する</a></h3>
                                 
                                     
@@ -592,20 +622,6 @@ all.equal(lm.res[[1]], lm.res[[1]][])
                         <article>
                             <header>
                                 <h3><a href="./post/visualization_advent_calendar_day4/">都道府県の市区町村を人口で2分割するやつ: 全国版</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-13'>
-                                    December 13, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/visualization_advent_calendar_day3/">都道府県の市区町村を人口で2分割するやつ: 岡山県版</a></h3>
                                 
                                     
                                 
@@ -667,8 +683,8 @@ all.equal(lm.res[[1]], lm.res[[1]][])
                     <li>
                         <article>
                             <header>
-                                <a href="./categories/advent_calendar/">advent_calendar</a>
-                                <span style="float:right;">2</span>
+                                <a href="./categories/geo/">geo</a>
+                                <span style="float:right;">3</span>
                             </header>
                         </article>
                     </li>
@@ -676,7 +692,7 @@ all.equal(lm.res[[1]], lm.res[[1]][])
                     <li>
                         <article>
                             <header>
-                                <a href="./categories/geo/">geo</a>
+                                <a href="./categories/advent_calendar/">advent_calendar</a>
                                 <span style="float:right;">2</span>
                             </header>
                         </article>
