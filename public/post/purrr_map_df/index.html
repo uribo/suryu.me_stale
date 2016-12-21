@@ -1,19 +1,11 @@
-
-
-
-    
-        
-    
-
-
-
-
 <!DOCTYPE HTML>
 
 <html>
     <head>
         
-            <title>utility Posts - suryu.me</title>
+            
+                <title>purrr::map_dfで全ての変数を取り出したいときに楽する</title>
+            
         
 
         <meta charset="utf-8" />
@@ -23,6 +15,8 @@
 
 
         
+            <meta name="author" content="Shinya Uryu">
+        
         
             
                 <meta name="description" content="Tips for R and Python">
@@ -30,14 +24,25 @@
         
 
         
+
+  <meta name="twitter:card" content="summary"/>
+
+
+
+<meta name="twitter:title" content="purrr::map_dfで全ての変数を取り出したいときに楽する"/>
+<meta name="twitter:description" content="TIL これまで、purrr::map_df()でリストからデータフレームで値を得たいときはc()を使いながら対象の変数名を与えていたのだけど、そ"/>
+<meta name="twitter:site" content="@u_ribo"/>
+
+
         <meta name="twitter:image" content="https://suryu.me/img/banner.png"/>
-        <meta property="og:title" content="utility" />
-<meta property="og:description" content="Tips for R and Python" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/categories/utility/" />
+        <meta property="og:title" content="purrr::map_dfで全ての変数を取り出したいときに楽する" />
+<meta property="og:description" content="TIL これまで、purrr::map_df()でリストからデータフレームで値を得たいときはc()を使いながら対象の変数名を与えていたのだけど、そ" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/purrr_map_df/" />
 
 
-<meta property="og:updated_time" content="2016-11-24T06:30:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-21T21:14:00&#43;00:00"/>
+
 
 
 
@@ -48,9 +53,16 @@
 
 
         
-<meta itemprop="name" content="utility">
-<meta itemprop="description" content="Tips for R and Python">
+<meta itemprop="name" content="purrr::map_dfで全ての変数を取り出したいときに楽する">
+<meta itemprop="description" content="TIL これまで、purrr::map_df()でリストからデータフレームで値を得たいときはc()を使いながら対象の変数名を与えていたのだけど、そ">
 
+
+<meta itemprop="dateModified" content="2016-12-21T21:14:00&#43;00:00" />
+<meta itemprop="wordCount" content="602">
+
+
+
+<meta itemprop="keywords" content="R,Shiny,advent_calendar,data-manipulation,data_manipulation,geo,ggplot2,miscellaneous,oss,package,plotly,poem,shiny,tidyverse,trouble,utility,visualization," />
 
         
 
@@ -77,12 +89,19 @@
         
             
         
+
+
+
+
+
+
     </head>
     <body>
 
         
         <div id="wrapper">
 
+    
     
 <header id="header">
     
@@ -124,6 +143,10 @@
     </nav>
     <nav class="main">
         <ul>
+            
+            <li id="share-nav" class="share-menu" style="display:none;">
+                <a class="fa-share-alt" href="#share-menu">Share</a>
+            </li>
             
             <li class="search">
                 <a class="fa-search" href="#search">Search</a>
@@ -235,19 +258,71 @@
         
 </section>
 
+    <section id="share-menu">
+    <section id="social-share-nav">
+        <ul class="links">
+            <header>
+                <h3>Share this post <i class="fa fa-smile-o"></i></h3>
+            </header>
+            
+
+
+<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&text=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b&via=u_ribo" target="_blank" class="share-btn twitter">
+    <i class="fa fa-twitter"></i>
+    <p>Twitter</p>
+</a></li>
+
+
+<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn google-plus">
+    <i class="fa fa-google-plus"></i>
+    <p>Google+</p>
+</a></li>
+
+
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn facebook">
+    <i class="fa fa-facebook"></i>
+    <p>Facebook</p>
+</a></li>
+
+
+<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn reddit">
+    <i class="fa fa-reddit-alien"></i>
+    <p>Reddit</p>
+</a></li>
+
+
+<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn linkedin">
+    <i class="fa fa-linkedin"></i>
+    <p>LinkedIn</p>
+</a></li>
+
+
+<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn stumbleupon">
+    <i class="fa fa-stumbleupon"></i>
+    <p>StumbleUpon</p>
+</a></li>
+
+
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn email">
+    <i class="fa fa-envelope"></i>
+    <p>Email</p>
+</a></li>
+
+        </ul>
+    </section>
+</section>
+
     
     <div id="main">
-        <h1>utility</h1>
         
         
-            <article class="post">
+        <article class="post">
     <header>
     <div class="title">
         
-            <h2><a href="../../post/input_helper_addins/">clipr, datapasta: データ入力を支えるパッケージ</a></h2>
+            <h1><a href="../../post/purrr_map_df/">purrr::map_dfで全ての変数を取り出したいときに楽する</a></h1>
+            
         
-        
-            <p>ネット上のデータをコピペでRに読み込ませたい時がある。そんな時に役立つ2つのパッケージを紹介する。</p>
         
     </div>
     <div class="meta">
@@ -256,24 +331,81 @@
         
 
         <time class="published"
-            datetime='2016-11-24'>
-            November 24, 2016</time>
+            datetime='2016-12-21'>
+            December 21, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>3 minute read</p>
+            <p>2 minute read</p>
         
         
     </div>
 </header>
 
+
+
     
 
-    <p>ネット上のデータをコピペでRに読み込ませたい時がある。いや、本当にわずかなデータなので手入力したり{rvest}なりでスクレイピングすれば良</p>
+    <div id="content">
+
+
+<p>TIL</p>
+<p>これまで、<code>purrr::map_df()</code>でリストからデータフレームで値を得たいときは<code>c()</code>を使いながら対象の変数名を与えていたのだけど、それは面倒だなーと思っていたりもした。</p>
+<p>こういうやつ。</p>
+<pre class="r"><code>library(broom)
+library(purrr)
+
+lm.res &lt;- mtcars %&gt;%
+  split(.$cyl) %&gt;%
+  map(~ lm(mpg ~ wt, data = .x)) %&gt;% 
+  map(tidy)
+
+lm.res %&gt;% 
+  map_df(~ .[c(&quot;estimate&quot;, &quot;statistic&quot;, &quot;p.value&quot;)])
+##         estimate      statistic             p.value
+## 1 39.57119601304  9.10398003528 0.00000777151106938
+## 2 -5.64702526124 -3.05225052976 0.01374278198674072
+## 3 28.40884451320  6.78927837143 0.00105484419097406
+## 4 -2.78010593916 -2.08260537564 0.09175766017203653
+## 5 23.86802907600  7.94155114534 0.00000405270541503
+## 6 -2.19243792645 -2.96580257564 0.01179280975651219</code></pre>
+<p>で、全ての変数を取り出すには、わざわざ<code>c()</code>を使う必要はなくて<code>map_df(~ .[])</code>で良いことに気がついた。さらにいうと<code>[</code>すらも不要で<code>map_df(~ .)</code>だけで良い。</p>
+<pre class="r"><code>lm.res %&gt;% 
+  map_df(~ .[])
+##          term       estimate      std.error      statistic
+## 1 (Intercept) 39.57119601304 4.346582028927  9.10398003528
+## 2          wt -5.64702526124 1.850118529322 -3.05225052976
+## 3 (Intercept) 28.40884451320 4.184368788406  6.78927837143
+## 4          wt -2.78010593916 1.334917297184 -2.08260537564
+## 5 (Intercept) 23.86802907600 3.005461859929  7.94155114534
+## 6          wt -2.19243792645 0.739239335908 -2.96580257564
+##               p.value
+## 1 0.00000777151106938
+## 2 0.01374278198674072
+## 3 0.00105484419097406
+## 4 0.09175766017203653
+## 5 0.00000405270541503
+## 6 0.01179280975651219</code></pre>
+<pre class="r"><code># これでも良い
+lm.res %&gt;% 
+  map_df(~ .)</code></pre>
+<p>なんでかというと、リストの特定の要素を参照するときは添え字か名前を次のようにする（<code>map_df(~ .[c(&quot;hoge&quot;)])</code>のパターン）が、全て出力するにはこれらが不要になるのと同じ理由（で良いだろうか）。</p>
+<pre class="r"><code>lm.res[[2]][c(&quot;estimate&quot;, &quot;statistic&quot;, &quot;p.value&quot;)]
+##         estimate      statistic          p.value
+## 1 28.40884451320  6.78927837143 0.00105484419097
+## 2 -2.78010593916 -2.08260537564 0.09175766017204
+
+# [[1]]と[[1]][] は等しい（全ての要素を参照する)
+all.equal(lm.res[[1]], lm.res[[1]][])
+## [1] TRUE</code></pre>
+<p>直接関係しないけど、Jennifer Bryan ( <a href="https://github.com/jennybc">jennybc</a> )のpurrrやリストデータの<a href="https://jennybc.github.io/purrr-tutorial/index.html">チュートリアル</a>を読んでいると、なるほどなあと関心するものが多い。これを読んでいると自分は<code>[</code>や<code>[[</code>の使い方が理解できていないのかもしれないとも思う。まだまだR力のなさを感じる。…というわけで、purrr、奥が深いぜ</p>
+<p>Enjoy!</p>
+
+
+
+
+    </div>
 
     <footer>
-        <ul class="actions">
-            <li><a href="../../post/input_helper_addins/" class="button big">Continue Reading</a></li>
-        </ul>
         <ul class="stats">
     
         
@@ -292,7 +424,7 @@
                     
 
                     
-                        Categories
+                        Category
                     
                 
             </li>
@@ -301,27 +433,43 @@
 
     
     
-        <li><a href='../../categoriesutility'>utility</a></li>
-    
-        <li><a href='../../categoriespackage'>package</a></li>
+        <li><a href='../../categoriesmiscellaneous'>miscellaneous</a></li>
     
 </ul>
 
     </footer>
 </article>
-
-        
-
-        
 <ul class="actions pagination">
     
-        <li><a href="#" class="disabled button big previous">Previous Page</a></li>
+        <li><a href="../../post/rjava_for_sierra/"
+                class="button big previous">rJavaが動かなくて困ったので試したコード</a></li>
     
 
     
-        <li><a href="#" class="disabled button big next">Next Page</a></li>
-    
 </ul>
+
+
+
+    
+        <article class="post">
+            <div id="disqus_thread"></div>
+<script type="text/javascript">
+    var disqus_shortname = 'urishy';
+    var disqus_identifier = '\/post\/purrr_map_df\/';
+    var disqus_title = 'purrr::map_dfで全ての変数を取り出したいときに楽する';
+    var disqus_url = '\/post\/purrr_map_df\/';
+
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        </article>
+    
+
 
     </div>
     
@@ -342,9 +490,6 @@
                 </header>
             
             <ul class="icons">
-                
-                    <li><a href="../../categories/utility/index.xml" type="application/rss+xml"
-                        target="_blank" title="RSS" class="fa fa-rss"></a></li>
                 
                 
                     
@@ -690,9 +835,6 @@
     
         <section id="footer">
             <ul class="icons">
-                
-                    <li><a href="../../categories/utility/index.xml" type="application/rss+xml"
-                        target="_blank" title="RSS" class="fa fa-rss"></a></li>
                 
                 
             </ul>

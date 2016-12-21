@@ -29,7 +29,7 @@
 <meta property="og:url" content="/" />
 
 
-<meta property="og:updated_time" content="2016-12-18T22:20:00&#43;00:00"/>
+<meta property="og:updated_time" content="2016-12-21T21:14:00&#43;00:00"/>
 
 
 
@@ -216,6 +216,10 @@
 
                 
                     <li>
+                        <a href="./post/purrr_map_df/"><p>purrr::map_dfで全ての変数を取り出したいときに楽する</p></a>
+                    </li>
+                
+                    <li>
                         <a href="./post/rjava_for_sierra/"><p>rJavaが動かなくて困ったので試したコード</p></a>
                     </li>
                 
@@ -225,10 +229,6 @@
                 
                     <li>
                         <a href="./post/visualization_advent_calendar_day3/"><p>都道府県の市区町村を人口で2分割するやつ: 岡山県版</p></a>
-                    </li>
-                
-                    <li>
-                        <a href="./post/r_advent_calendar_day3/"><p>tidyverse脳になって階層構造のあるデータフレームを使いこなそう</p></a>
                     </li>
                 
             </ul>
@@ -245,10 +245,8 @@
     <header>
     <div class="title">
         
-            <h2><a href="./post/rjava_for_sierra/">rJavaが動かなくて困ったので試したコード</a></h2>
+            <h2><a href="./post/purrr_map_df/">purrr::map_dfで全ての変数を取り出したいときに楽する</a></h2>
         
-        
-            <p>Mac OS X (Sierra)でrJavaに依存したパッケージが動かなかったのでなんとかした</p>
         
     </div>
     <div class="meta">
@@ -257,11 +255,11 @@
         
 
         <time class="published"
-            datetime='2016-12-18'>
-            December 18, 2016</time>
+            datetime='2016-12-21'>
+            December 21, 2016</time>
         <span class="author">Shinya Uryu</span>
         
-            <p>1 minute read</p>
+            <p>2 minute read</p>
         
         
     </div>
@@ -274,20 +272,57 @@
     <div id="content">
 
 
-<p>時々Javaに依存したライブラリを利用することがある。<a href="https://suryu.me/post/tabulizer_fantastic_extract_data_from_pdf/">前に書いた</a><strong><code>{tabulizer}</code></strong>や、えくせるで出力したい時なんかに使う<strong><code>{xlsx}</code></strong>パッケージなどは<strong><code>{rJava}</code></strong>パッケージを利用しているので、Javaが動かせる環境でないと使えない。</p>
-<p>それで先日、<strong><code>{tabulizer}</code></strong>を読み込もうとしたら次のエラーが出た。</p>
-<pre><code>Error : .onLoad failed in loadNamespace() for &#39;rJava&#39;, details:
-  call: dyn.load(file, DLLpath = DLLpath, ...)
-  error: unable to load shared object &#39;/Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so&#39;:
-  dlopen(/Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so, 6): Library not loaded: @rpath/libjvm.dylib
-  Referenced from: /Library/Frameworks/R.framework/Versions/3.3/Resources/library/rJava/libs/rJava.so
-  Reason: image not found
-Error: package or namespace load failed for ‘tabulizer’</code></pre>
-<p>Stack Overflowで解決策を探していたのだけど、<a href="http://stackoverflow.com/a/34488965/3291555">このコメント</a>が有効だった。感謝感謝。</p>
-<pre class="r"><code>dyn.load(&quot;/Library/Java/JavaVirtualMachines/jdk1.8.0_65.jdk/Contents/Home/jre/lib/server/libjvm.dylib&quot;)
-library(tabulizer)</code></pre>
-<p><code>dyn.load()</code>という関数はR外部の関数の呼び出しに使われるやつで、エラーメッセージで<code>Library not loaded: @rpath/libjvm.dylib</code>と言われているのでインストールされている<code>libjvm.dylib</code>のパスを指定するというもの。</p>
-<p>実行環境はMac OS 10.12.1。R version 3.3.2。<strong><code>{rJava}</code></strong> 0.9-8、<strong><code>{tabulizer}</code></strong> 0.1.22</p>
+<p>TIL</p>
+<p>これまで、<code>purrr::map_df()</code>でリストからデータフレームで値を得たいときは<code>c()</code>を使いながら対象の変数名を与えていたのだけど、それは面倒だなーと思っていたりもした。</p>
+<p>こういうやつ。</p>
+<pre class="r"><code>library(broom)
+library(purrr)
+
+lm.res &lt;- mtcars %&gt;%
+  split(.$cyl) %&gt;%
+  map(~ lm(mpg ~ wt, data = .x)) %&gt;% 
+  map(tidy)
+
+lm.res %&gt;% 
+  map_df(~ .[c(&quot;estimate&quot;, &quot;statistic&quot;, &quot;p.value&quot;)])
+##         estimate      statistic             p.value
+## 1 39.57119601304  9.10398003528 0.00000777151106938
+## 2 -5.64702526124 -3.05225052976 0.01374278198674072
+## 3 28.40884451320  6.78927837143 0.00105484419097406
+## 4 -2.78010593916 -2.08260537564 0.09175766017203653
+## 5 23.86802907600  7.94155114534 0.00000405270541503
+## 6 -2.19243792645 -2.96580257564 0.01179280975651219</code></pre>
+<p>で、全ての変数を取り出すには、わざわざ<code>c()</code>を使う必要はなくて<code>map_df(~ .[])</code>で良いことに気がついた。さらにいうと<code>[</code>すらも不要で<code>map_df(~ .)</code>だけで良い。</p>
+<pre class="r"><code>lm.res %&gt;% 
+  map_df(~ .[])
+##          term       estimate      std.error      statistic
+## 1 (Intercept) 39.57119601304 4.346582028927  9.10398003528
+## 2          wt -5.64702526124 1.850118529322 -3.05225052976
+## 3 (Intercept) 28.40884451320 4.184368788406  6.78927837143
+## 4          wt -2.78010593916 1.334917297184 -2.08260537564
+## 5 (Intercept) 23.86802907600 3.005461859929  7.94155114534
+## 6          wt -2.19243792645 0.739239335908 -2.96580257564
+##               p.value
+## 1 0.00000777151106938
+## 2 0.01374278198674072
+## 3 0.00105484419097406
+## 4 0.09175766017203653
+## 5 0.00000405270541503
+## 6 0.01179280975651219</code></pre>
+<pre class="r"><code># これでも良い
+lm.res %&gt;% 
+  map_df(~ .)</code></pre>
+<p>なんでかというと、リストの特定の要素を参照するときは添え字か名前を次のようにする（<code>map_df(~ .[c(&quot;hoge&quot;)])</code>のパターン）が、全て出力するにはこれらが不要になるのと同じ理由（で良いだろうか）。</p>
+<pre class="r"><code>lm.res[[2]][c(&quot;estimate&quot;, &quot;statistic&quot;, &quot;p.value&quot;)]
+##         estimate      statistic          p.value
+## 1 28.40884451320  6.78927837143 0.00105484419097
+## 2 -2.78010593916 -2.08260537564 0.09175766017204
+
+# [[1]]と[[1]][] は等しい（全ての要素を参照する)
+all.equal(lm.res[[1]], lm.res[[1]][])
+## [1] TRUE</code></pre>
+<p>直接関係しないけど、Jennifer Bryan ( <a href="https://github.com/jennybc">jennybc</a> )のpurrrやリストデータの<a href="https://jennybc.github.io/purrr-tutorial/index.html">チュートリアル</a>を読んでいると、なるほどなあと関心するものが多い。これを読んでいると自分は<code>[</code>や<code>[[</code>の使い方が理解できていないのかもしれないとも思う。まだまだR力のなさを感じる。…というわけで、purrr、奥が深いぜ</p>
+<p>Enjoy!</p>
 
 
 
@@ -313,7 +348,7 @@ library(tabulizer)</code></pre>
                     
 
                     
-                        Categories
+                        Category
                     
                 
             </li>
@@ -324,16 +359,14 @@ library(tabulizer)</code></pre>
     
         <li><a href='./categoriesmiscellaneous'>miscellaneous</a></li>
     
-        <li><a href='./categoriestrouble'>trouble</a></li>
-    
 </ul>
 
     </footer>
 </article>
 <ul class="actions pagination">
     
-        <li><a href="./post/visualization_advent_calendar_day4/"
-                class="button big previous">都道府県の市区町村を人口で2分割するやつ: 全国版</a></li>
+        <li><a href="./post/rjava_for_sierra/"
+                class="button big previous">rJavaが動かなくて困ったので試したコード</a></li>
     
 
     
@@ -346,9 +379,9 @@ library(tabulizer)</code></pre>
             <div id="disqus_thread"></div>
 <script type="text/javascript">
     var disqus_shortname = 'urishy';
-    var disqus_identifier = '\/post\/rjava_for_sierra\/';
-    var disqus_title = 'rJavaが動かなくて困ったので試したコード';
-    var disqus_url = '\/post\/rjava_for_sierra\/';
+    var disqus_identifier = '\/post\/purrr_map_df\/';
+    var disqus_title = 'purrr::map_dfで全ての変数を取り出したいときに楽する';
+    var disqus_url = '\/post\/purrr_map_df\/';
 
     (function() {
         var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -372,43 +405,43 @@ library(tabulizer)</code></pre>
             
 
 
-<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2frjava_for_sierra%2f&text=rJava%e3%81%8c%e5%8b%95%e3%81%8b%e3%81%aa%e3%81%8f%e3%81%a6%e5%9b%b0%e3%81%a3%e3%81%9f%e3%81%ae%e3%81%a7%e8%a9%a6%e3%81%97%e3%81%9f%e3%82%b3%e3%83%bc%e3%83%89&via=u_ribo" target="_blank" class="share-btn twitter">
+<li><a href="//twitter.com/share?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&text=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b&via=u_ribo" target="_blank" class="share-btn twitter">
     <i class="fa fa-twitter"></i>
     <p>Twitter</p>
 </a></li>
 
 
-<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2frjava_for_sierra%2f" target="_blank" class="share-btn google-plus">
+<li><a href="//plus.google.com/share?url=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn google-plus">
     <i class="fa fa-google-plus"></i>
     <p>Google+</p>
 </a></li>
 
 
-<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2frjava_for_sierra%2f" target="_blank" class="share-btn facebook">
+<li><a href="//www.facebook.com/sharer/sharer.php?u=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn facebook">
     <i class="fa fa-facebook"></i>
     <p>Facebook</p>
 </a></li>
 
 
-<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2frjava_for_sierra%2f&title=rJava%e3%81%8c%e5%8b%95%e3%81%8b%e3%81%aa%e3%81%8f%e3%81%a6%e5%9b%b0%e3%81%a3%e3%81%9f%e3%81%ae%e3%81%a7%e8%a9%a6%e3%81%97%e3%81%9f%e3%82%b3%e3%83%bc%e3%83%89" target="_blank" class="share-btn reddit">
+<li><a href="//reddit.com/submit?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn reddit">
     <i class="fa fa-reddit-alien"></i>
     <p>Reddit</p>
 </a></li>
 
 
-<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2frjava_for_sierra%2f&title=rJava%e3%81%8c%e5%8b%95%e3%81%8b%e3%81%aa%e3%81%8f%e3%81%a6%e5%9b%b0%e3%81%a3%e3%81%9f%e3%81%ae%e3%81%a7%e8%a9%a6%e3%81%97%e3%81%9f%e3%82%b3%e3%83%bc%e3%83%89" target="_blank" class="share-btn linkedin">
+<li><a href="//www.linkedin.com/shareArticle?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn linkedin">
     <i class="fa fa-linkedin"></i>
     <p>LinkedIn</p>
 </a></li>
 
 
-<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2frjava_for_sierra%2f&title=rJava%e3%81%8c%e5%8b%95%e3%81%8b%e3%81%aa%e3%81%8f%e3%81%a6%e5%9b%b0%e3%81%a3%e3%81%9f%e3%81%ae%e3%81%a7%e8%a9%a6%e3%81%97%e3%81%9f%e3%82%b3%e3%83%bc%e3%83%89" target="_blank" class="share-btn stumbleupon">
+<li><a href="//www.stumbleupon.com/submit?url=https://suryu.me%2fpost%2fpurrr_map_df%2f&title=purrr%3a%3amap_df%e3%81%a7%e5%85%a8%e3%81%a6%e3%81%ae%e5%a4%89%e6%95%b0%e3%82%92%e5%8f%96%e3%82%8a%e5%87%ba%e3%81%97%e3%81%9f%e3%81%84%e3%81%a8%e3%81%8d%e3%81%ab%e6%a5%bd%e3%81%99%e3%82%8b" target="_blank" class="share-btn stumbleupon">
     <i class="fa fa-stumbleupon"></i>
     <p>StumbleUpon</p>
 </a></li>
 
 
-<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2frjava_for_sierra%2f" target="_blank" class="share-btn email">
+<li><a href="mailto:?subject=Check out this post by Shinya%20Uryu&body=https://suryu.me%2fpost%2fpurrr_map_df%2f" target="_blank" class="share-btn email">
     <i class="fa fa-envelope"></i>
     <p>Email</p>
 </a></li>
@@ -530,6 +563,20 @@ library(tabulizer)</code></pre>
                     <li>
                         <article>
                             <header>
+                                <h3><a href="./post/purrr_map_df/">purrr::map_dfで全ての変数を取り出したいときに楽する</a></h3>
+                                
+                                    
+                                
+                                <time class="published" datetime=
+                                    '2016-12-21'>
+                                    December 21, 2016</time>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <h3><a href="./post/rjava_for_sierra/">rJavaが動かなくて困ったので試したコード</a></h3>
                                 
                                     
@@ -565,20 +612,6 @@ library(tabulizer)</code></pre>
                                 <time class="published" datetime=
                                     '2016-12-13'>
                                     December 13, 2016</time>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <h3><a href="./post/r_advent_calendar_day3/">tidyverse脳になって階層構造のあるデータフレームを使いこなそう</a></h3>
-                                
-                                    
-                                
-                                <time class="published" datetime=
-                                    '2016-12-06'>
-                                    December 6, 2016</time>
                             </header>
                         </article>
                     </li>
@@ -652,6 +685,15 @@ library(tabulizer)</code></pre>
                     <li>
                         <article>
                             <header>
+                                <a href="./categories/miscellaneous/">miscellaneous</a>
+                                <span style="float:right;">2</span>
+                            </header>
+                        </article>
+                    </li>
+                
+                    <li>
+                        <article>
+                            <header>
                                 <a href="./categories/package/">package</a>
                                 <span style="float:right;">2</span>
                             </header>
@@ -689,15 +731,6 @@ library(tabulizer)</code></pre>
                         <article>
                             <header>
                                 <a href="./categories/ggplot2/">ggplot2</a>
-                                <span style="float:right;">1</span>
-                            </header>
-                        </article>
-                    </li>
-                
-                    <li>
-                        <article>
-                            <header>
-                                <a href="./categories/miscellaneous/">miscellaneous</a>
                                 <span style="float:right;">1</span>
                             </header>
                         </article>
